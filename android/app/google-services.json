@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "282482672251",
+    "project_id": "le-cocon-ssbe-6a4d0",
+    "storage_bucket": "le-cocon-ssbe-6a4d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282482672251:android:a4d9ab958d4a01718058de",
+        "android_client_info": {
+          "package_name": "com.example.appLecoconSsbe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPY_nMXp21PcJdh9GpNhHWHMwtamOny78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
