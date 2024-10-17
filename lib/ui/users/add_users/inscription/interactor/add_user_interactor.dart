@@ -59,4 +59,6 @@ class UserInteractor {
   Future<void> logOut() async {
     await usersRepository.logOut();
   }
+
+
 }

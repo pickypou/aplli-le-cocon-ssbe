@@ -17,8 +17,8 @@ class ViewAll extends StatelessWidget {
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Expanded(child:
+          children: [
+             Expanded(child:
             HomePage()
         )
           ],

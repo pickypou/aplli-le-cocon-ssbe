@@ -1,8 +1,7 @@
-import 'package:app_lecocon_ssbe/ui/comon/router/router_config.dart';
+import 'package:app_lecocon_ssbe/main.dart';
 import 'package:app_lecocon_ssbe/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,16 +17,47 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo_cocon.png',
-            fit: BoxFit.contain,width: size.width / 2,),
-            const SizedBox(height: 25,),
-            Text('Bienvenue sur le cocon', style: titleStyleMedium(context).copyWith(fontSize: size.width/8),),
-            const SizedBox(height: 20,),
+            Image.asset(
+              'assets/images/logo_cocon.png',
+              fit: BoxFit.contain,
+              width: size.width / 1.6,
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Text(
+              'Bienvenue sur le cocon',
+              style:
+                  titleStyleLarge(context),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             TextButton(
-                onPressed: ()=> context.go('/account/inscription'),
-                child: Text('Créer un compte',style: textStyleText(context).copyWith(fontSize:size.width/18 ),
-                ),
-            )
+              onPressed: () => context.go('/account/inscription'),
+              child: Text(
+                'Créer un compte',
+                style:
+                    textStyleText(context)//.copyWith(fontSize: size.width / 18),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.go('/account/login'),
+              child: Text(
+                'Connexion',
+                style:
+                    textStyleText(context).copyWith(fontSize: size.width / 18),
+              ),
+            ),
+            IconButton(
+          icon: const Icon(Icons.logout,color: Colors.red,),
+                onPressed: (){
+                  auth.signOut().then((_){
+                    debugPrint('Déconnexion réussie');
+                    context.go('/');
+                  });
+                },
+                )
           ],
         ),
       ),

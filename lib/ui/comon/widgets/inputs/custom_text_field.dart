@@ -10,14 +10,15 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.labelText,
     this.controller,
-     this.obscureText = false,
+    this.obscureText = false,
   });
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     double textFieldWidth = size.width * 0.8;
-    final borderColor = theme.colorScheme.onSurface ;
+    final borderColor = theme.colorScheme.onSurface;
+
     return Material(
       color: Colors.transparent,
       child: Center(
@@ -30,7 +31,7 @@ class CustomTextField extends StatelessWidget {
           child: TextField(
             controller: controller,
             style: TextStyle(
-              fontSize: size.width /30
+              fontSize: size.width / 20,
             ),
             decoration: InputDecoration(
               labelText: labelText,
@@ -48,8 +49,8 @@ class CustomTextField extends StatelessWidget {
                 ),
               ),
               contentPadding: EdgeInsets.symmetric(
-                vertical: size.width/8,
-                horizontal: size.height/ 10 ,
+                vertical: size.width / 20, // Ajuste ici pour réduire la hauteur
+                horizontal: size.height / 10,
               ),
             ),
             obscureText: obscureText,

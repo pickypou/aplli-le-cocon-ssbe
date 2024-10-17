@@ -13,6 +13,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Vérifier si un utilisateur est connecté
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
+  if (currentUser != null) {
+    debugPrint('Utilisateur déjà connecté: ${currentUser.email}');
+  } else {
+    debugPrint('Aucun utilisateur connecté.');
+  }
   runApp(const MyApp());
 }
 

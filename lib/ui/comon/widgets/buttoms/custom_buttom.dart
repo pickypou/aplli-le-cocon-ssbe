@@ -14,6 +14,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    Size size = MediaQuery.sizeOf(context);
 
     // Calculez la largeur souhaitée en fonction de la largeur de l'écran.
     double buttonWidth = screenWidth * 0.8;
@@ -28,18 +29,18 @@ class CustomButton extends StatelessWidget {
           style: ButtonStyle(
             padding: WidgetStateProperty.all<EdgeInsets>(
                 const EdgeInsets.symmetric(vertical: 30)),
-            backgroundColor: WidgetStateProperty.all(theme.colorScheme.onPrimary),
+            backgroundColor: WidgetStateProperty.all(theme.colorScheme.primary),
             shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
-                side:  BorderSide(color: theme.colorScheme.secondary),
+                side:  BorderSide(color: theme.colorScheme.onPrimary),
               ),
             ),
           ),
           onPressed: onPressed,
           child: Text(
             label,
-            style: textStyleText(context)),
+            style: textStyleText(context).copyWith(fontSize: size.width/20),),
           ),
         ),
     );
