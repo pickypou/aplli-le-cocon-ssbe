@@ -1,12 +1,9 @@
 import 'package:app_lecocon_ssbe/ui/comon/widgets/buttoms/custom_buttom.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../main.dart';
 import '../../theme.dart';
-import '../../users/login/bloc/user_login_bloc.dart';
-import '../../users/login/bloc/user_login_event.dart';
 
 
 class AccountView extends StatelessWidget {
@@ -53,7 +50,9 @@ class AccountView extends StatelessWidget {
                 const SizedBox(height: 50,),
                 CustomButton(
                     label: 'Je crée un avis client',
-                    onPressed: (){}),
+                    onPressed: (){
+                      GoRouter.of(context).go('/account/addAvisClients');
+                    }),
           ],
         ),
       ),
