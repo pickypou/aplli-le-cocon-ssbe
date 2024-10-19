@@ -1,7 +1,7 @@
 import 'package:app_lecocon_ssbe/ui/HomePage/home_page.dart';
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import '../../theme.dart';
 
 class ViewAll extends StatelessWidget {
   const ViewAll({super.key});

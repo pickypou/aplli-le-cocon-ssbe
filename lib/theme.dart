@@ -27,7 +27,7 @@ TextStyle titleStyle(BuildContext context) {
   return TextStyle(
     fontSize: titlefont,
     color: theme.colorScheme.secondary,
-    fontFamily: "Roboto", // Utilise la police Amable
+    fontFamily: "Roboto",
     decoration: TextDecoration.none,
   );
 }

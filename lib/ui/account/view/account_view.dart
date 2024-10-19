@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../main.dart';
-import '../../theme.dart';
+import '../../../theme.dart';
 
 
 class AccountView extends StatelessWidget {
@@ -46,7 +46,9 @@ class AccountView extends StatelessWidget {
 
                 CustomButton(
                     label: 'Je crée un événement',
-                    onPressed: (){}),
+                    onPressed: (){
+                      GoRouter.of(context).go('/account/addEvenement');
+                    }),
                 const SizedBox(height: 50,),
                 CustomButton(
                     label: 'Je crée un avis client',

@@ -1,15 +1,17 @@
-import 'package:app_lecocon_ssbe/ui/theme.dart';
+import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelText;
   final TextEditingController? controller;
+  final int maxLines;
   final bool obscureText;
 
   const CustomTextField({
     super.key,
     required this.labelText,
     this.controller,
+    required this.maxLines,
     this.obscureText = false,
   });
 

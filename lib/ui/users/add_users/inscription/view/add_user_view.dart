@@ -52,18 +52,18 @@ class AddUserView extends StatelessWidget {
                   const SizedBox(height: 35),
                   CustomTextField(
                     controller: userNameController,
-                    labelText: 'Prénom',
+                    labelText: 'Prénom', maxLines: 1,
                   ),
                   const SizedBox(height: 35),
                   CustomTextField(
                     controller: emailController,
-                    labelText: 'Email',
+                    labelText: 'Email', maxLines: 1,
                   ),
                   const SizedBox(height: 35),
                   CustomTextField(
                     controller: passwordController,
                     labelText: 'Mot de passe',
-                    obscureText: true,
+                    obscureText: true, maxLines: 1,
                   ),
                   const SizedBox(height: 35),
                   CustomButton(

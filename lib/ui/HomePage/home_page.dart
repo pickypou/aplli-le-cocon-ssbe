@@ -1,5 +1,5 @@
-import 'package:app_lecocon_ssbe/main.dart';
-import 'package:app_lecocon_ssbe/ui/theme.dart';
+import 'package:app_lecocon_ssbe/ui/comon/widgets/buttoms/custom_buttom.dart';
+import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,58 +8,55 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
     return Scaffold(
-      body: Container(
-        width: size.width,
-        height: size.height,
-        color: theme.primaryColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/logo_cocon.png',
-              fit: BoxFit.contain,
-              width: size.width / 1.6,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Text(
-              'Bienvenue sur le cocon',
-              style:
-                  titleStyleLarge(context),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextButton(
-              onPressed: () => context.go('/account/inscription'),
-              child: Text(
-                'Créer un compte',
-                style:
-                    textStyleText(context)//.copyWith(fontSize: size.width / 18),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Container(
+                  width: constraints.maxWidth,
+                  color: theme.primaryColor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Image.asset(
+                            'assets/images/logo_cocon.png',
+                            fit: BoxFit.contain,
+                            width: constraints.maxWidth / 2,
+                          ),
+                        ),
+                        const SizedBox(height: 70),
+                        Text(
+                          'Bienvenue sur le cocon',
+                          style: titleStyleLarge(context),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 30),
+                       CustomButton(
+                          onPressed: () => context.go('/account/inscription'),
+                          label:
+                            'Créer un compte',
+                          ),
+
+                        const SizedBox(height: 30),
+                        CustomButton(
+                          onPressed: () => context.go('/account/login'),
+                          label:
+                            'Connexion',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-            TextButton(
-              onPressed: () => context.go('/account/login'),
-              child: Text(
-                'Connexion',
-                style:
-                    textStyleText(context).copyWith(fontSize: size.width / 18),
-              ),
-            ),
-            IconButton(
-          icon: const Icon(Icons.logout,color: Colors.red,),
-                onPressed: (){
-                  auth.signOut().then((_){
-                    debugPrint('Déconnexion réussie');
-                    context.go('/');
-                  });
-                },
-                )
-          ],
-        ),
+          );
+        },
       ),
     );
   }

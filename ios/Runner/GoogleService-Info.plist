@@ -26,5 +26,8 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:282482672251:ios:324694d1005c38ff8058de</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to upload images for events.</string>
+
 </dict>
 </plist>

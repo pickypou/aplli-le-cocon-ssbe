@@ -1,14 +1,19 @@
+import 'package:app_lecocon_ssbe/data/repository/add_evenement_repository/evenement_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository/avis_client_repository.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/interactor/avis_clients_interactor.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/view/add_avis_clients_view.dart';
+import 'package:app_lecocon_ssbe/ui/add_evenement/bloc/add_evenement_bloc.dart';
+import 'package:app_lecocon_ssbe/ui/add_evenement/interactor/add_evenements_interator.dart';
+import 'package:app_lecocon_ssbe/ui/add_evenement/view/add_evenement_page.dart';
 import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/interactor/add_user_interactor.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../data/domain/usecases/user/fetch_avis_clients_data_usecase.dart';
+import '../../../data/domain/usecases/fetch_avis_clients/fetch_avis_clients_data_usecase.dart';
+import '../../../data/domain/usecases/fetch_evenement/fetch_evenement_data_usecase.dart';
 import '../../../data/repository/users_repository/users_repository.dart';
 import '../../HomePage/home_page.dart';
 import '../../account/bloc/account_bloc.dart';
@@ -48,8 +53,8 @@ final goRouter = GoRouter(
               );
             } else {
               // Si aucun utilisateur n'est connecté, on redirige vers la page de login
-              return const MaterialPage(
-                child: LoginPage(),
+              return MaterialPage(
+                child: LoginView(),
               );
             }
           },
@@ -99,10 +104,23 @@ final goRouter = GoRouter(
                 AvisClientsRepository avisClientsRepository = ConcretedAvisClientsRepository();
                 var fetchAvisClientDataUseCase = FetchAvisClientDataUseCase(avisClientsRepository);
                 var avisClientsInteractor = AvisClientsInteractor(avisClientsRepository, fetchAvisClientDataUseCase);
-               
+
                 return BlocProvider(
                   create: (context) => AddAvisClientsBloc(avisClientsInteractor),  // Créez votre bloc ici
                   child: AddAvisClientsView(),
+                );
+              },
+            ),
+            GoRoute(
+              path: '/addEvenement',
+              builder: (context, state) {
+                EvenementsRepository evenementRepository = ConcretedEvenementsRepository();
+                FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+                var fetchEvenementDataUseCase = FetchEvenementDataUseCase(evenementRepository);
+                var evenementInteractor = EvenementsInteractor(evenementRepository, fetchEvenementDataUseCase, firebaseStorage);
+                return BlocProvider(
+                    create: (context) => AddEvenementsBloc(evenementInteractor),
+                child: const AddEvenementsPage(),
                 );
               },
             ),

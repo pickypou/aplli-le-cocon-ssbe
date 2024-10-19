@@ -1,26 +1,32 @@
 
+import 'package:intl/intl.dart';
+
 class Evenements {
   final String id;
-  final String categories;
+  final String fileUrl;
+  final String fileType;
   final DateTime publishDate;
-  final String title;
-  final String pdf;
+
 
   Evenements({
     required this.id,
-    required this.categories,
-    required this.publishDate,
-    required this.title,
-    required this.pdf
+    required this.fileType,
+    required this.fileUrl,
+    required this.publishDate
 });
 
-  factory Evenements.fromMp(Map<String, dynamic> data, String id) {
+  //Formatte la date au format (DD/MM/YYYY)
+  String get formattedPublishDate {
+    return DateFormat('dd/MM/yyyy').format(publishDate);
+  }
+
+  factory Evenements.fromMap(Map<String, dynamic>? data, String id) {
     return Evenements(
         id: id,
-        categories: data['categories'] ?? '',
-        publishDate:data['publishDate'] ?? '',
-        title:data['title'] ?? '',
-        pdf:data['pdf'] ?? ''
+      fileType: data? ['fileType'] ?? '',
+      fileUrl: data? ['fileUrl'] ?? '',
+      publishDate: data? ['publishDATE']
+
     );
   }
 }

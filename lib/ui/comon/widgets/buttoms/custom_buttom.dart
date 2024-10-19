@@ -1,13 +1,13 @@
-import 'package:app_lecocon_ssbe/ui/theme.dart';
+import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed; // Rendre le callback optionnel
 
   const CustomButton({
     required this.label,
-    required this.onPressed,
+    this.onPressed, // Le callback est optionnel
     super.key,
   });
 
@@ -37,12 +37,13 @@ class CustomButton extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: onPressed,
+          onPressed: onPressed ?? () {}, // Utiliser une fonction vide par défaut
           child: Text(
             label,
-            style: textStyleText(context).copyWith(fontSize: size.width/20),),
+            style: textStyleText(context).copyWith(fontSize: size.width / 20),
           ),
         ),
+      ),
     );
   }
 }

@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import '../../../main.dart';
 import '../../comon/widgets/buttoms/custom_buttom.dart';
 import '../../comon/widgets/inputs/custom_text_field.dart';
-import '../../theme.dart';
+import '../../../theme.dart';
 
 class AddAvisClientsView extends StatelessWidget {
   final TextEditingController categoriesController = TextEditingController();
@@ -40,6 +40,7 @@ class AddAvisClientsView extends StatelessWidget {
   }
 
   Widget _buildForm(BuildContext context, String adherentId) {
+    Size size = MediaQuery.sizeOf(context);
     return Scaffold(
         appBar: AppBar(title: const Text('Mon Compte'),
           actions: [
@@ -68,6 +69,8 @@ class AddAvisClientsView extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
+                    Image.asset('assets/images/logo_cocon.png', fit: BoxFit.contain,width: size.width/1.6),
+                    const SizedBox(height: 40),
                     Wrap(
                         alignment: WrapAlignment.center,
                         spacing: 40.0,
@@ -75,18 +78,20 @@ class AddAvisClientsView extends StatelessWidget {
                         children: [
                           CustomTextField(
                             labelText: 'Catégories',
-                            controller: categoriesController,
+                            controller: categoriesController, maxLines: 1,
                           ),
                           const SizedBox(width: 40),
                           CustomTextField(
+                            labelText: 'Date du jour',
+                            controller: publishDateController, maxLines: 1,
+                          ),
+                          CustomTextField(
                             labelText: 'mon commenter',
                             controller: textController,
+                            maxLines: 5,
                           ),
                           const SizedBox(height: 20),
-                          CustomTextField(
-                            labelText: 'Date du jour',
-                            controller: publishDateController,
-                          ),
+
 
                 CustomButton(
                   onPressed: () {
