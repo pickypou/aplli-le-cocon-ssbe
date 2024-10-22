@@ -1,20 +1,27 @@
 import 'dart:io';
+import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
+import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
+import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../domain/usecases/fetch_evenement_data_usecase.dart';
-import '../../../data/repository/evenement_repository.dart';
 
 class EvenementsInteractor {
-  final EvenementsRepository evenementsRepository;
+  final EvenementsRepositoryImpl evenementsRepository;
   final FetchEvenementDataUseCase fetchEvenementDataUseCase;
-  final FirebaseStorage _firebaseStorage;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final StorageService _storageService;
+  final FirestoreService _firestore;
 
   EvenementsInteractor(
-      this.evenementsRepository, this.fetchEvenementDataUseCase, this._firebaseStorage);
+      this.evenementsRepository,
+      this.fetchEvenementDataUseCase,
+      FirebaseStorage storage,
+      FirebaseFirestore firestore, // Ajout de Firestore ici
+      ) : _storageService = StorageService(storage),
+        _firestore = FirestoreService(firestore); // Passer Firestore au constructeur de FirestoreService
 
   Future<Iterable<Evenements>> fetchEvenementData() async {
     try {
@@ -29,7 +36,7 @@ class EvenementsInteractor {
   Future<String> uploadFile(File file) async {
     try {
       String fileName = file.path.split('/').last;
-      Reference storageReference = _firebaseStorage.ref().child('evenements/$fileName');
+      Reference storageReference = _storageService.ref('evenements').child('evenements/$fileName');
       UploadTask uploadTask = storageReference.putFile(file);
 
       TaskSnapshot taskSnapshot = await uploadTask;
@@ -42,7 +49,7 @@ class EvenementsInteractor {
 
   Future<void> addEvenement(Evenements evenement) async {
     try {
-      await _firestore.collection('evenements').add({
+      await _firestore.collection('evenement').add({
         'fileUrl': evenement.fileUrl,
         'fileType': evenement.fileType,
         'publishDate': evenement.publishDate,

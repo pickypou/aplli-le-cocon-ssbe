@@ -9,26 +9,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
 final GetIt getIt = GetIt.instance;
+
 @module
 abstract class FirebaseModule {
-  @lazySingleton
-  FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
-
-  @lazySingleton
+  @singleton
   FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
-  @lazySingleton
+  @singleton
   FirebaseStorage get storage => FirebaseStorage.instance;
+
+  // Retire l'enregistrement de FirestoreService ici
+  // @singleton
+  // FirestoreService get firestoreService => FirestoreService();
+
+  @singleton
+  StorageService get storageService => StorageService(storage);
 }
+
 void setupDi() {
-  // Enregistre FirebaseAuth et FirebaseFirestore
+  // Enregistre FirebaseAuth
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+  // Enregistre FirebaseFirestore
   getIt.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+  // Enregistre FirebaseStorage
   getIt.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
 
-  // Enregistre tes autres services en les injectant
+  // Enregistre FirestoreService avec FirebaseFirestore comme argument
+  getIt.registerLazySingleton<FirestoreService>(() => FirestoreService(getIt<FirebaseFirestore>()));
+
+  // Enregistre tes autres services
   getIt.registerLazySingleton<FirebaseClient>(() => FirebaseClient());
-  getIt.registerLazySingleton<FirestoreService>(() => FirestoreService());
   getIt.registerLazySingleton<AuthService>(() => AuthService(getIt<FirebaseAuth>()));
   getIt.registerLazySingleton<StorageService>(() => StorageService(getIt<FirebaseStorage>()));
 }

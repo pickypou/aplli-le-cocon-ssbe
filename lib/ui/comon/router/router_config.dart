@@ -1,5 +1,4 @@
 import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository_impl.dart';
-import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/avis_client_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
 import 'package:app_lecocon_ssbe/data/repository/repository_module.dart';
@@ -118,17 +117,30 @@ final goRouter = GoRouter(
             ),
             GoRoute(
               path: '/addEvenement',
-              builder: (context, state) {
-                EvenementsRepository evenementRepository = getIt<EvenementsRepositoryImpl>();
-                final FirebaseStorage storage = getIt<FirebaseStorage>();
-                var fetchEvenementDataUseCase = getIt<FetchEvenementDataUseCase>();
-                var evenementInteractor = EvenementsInteractor(evenementRepository, fetchEvenementDataUseCase, storage);
-                return BlocProvider(
-                    create: (context) => AddEvenementsBloc(evenementInteractor),
-                child: const AddEvenementsPage(),
+              pageBuilder: (context, state) {
+                // Get the repository and other dependencies from GetIt
+                final evenementsRepository = getIt<EvenementsRepositoryImpl>();
+                final storage = getIt<FirebaseStorage>();
+                final fetchEvenementDataUseCase = getIt<FetchEvenementDataUseCase>();
+
+                // Instantiate EvenementsInteractor
+                final evenementInteractor = EvenementsInteractor(
+                  evenementsRepository,
+                  fetchEvenementDataUseCase,
+                  storage, // Utilisation de l'instance récupérée depuis GetIt
+                  FirebaseFirestore.instance, // L'instance de FirebaseFirestore
+                );
+
+                return MaterialPage(
+                  child: BlocProvider(
+                    create: (context) => AddEvenementsBloc(evenementInteractor), // Utilisation de l'interactor défini
+                    child: const AddEvenementsPage(),
+                  ),
                 );
               },
             ),
+
+
           ],
         ),
       ],

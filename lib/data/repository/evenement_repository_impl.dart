@@ -1,24 +1,31 @@
 
 
+import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/entity/evenements.dart';
 import 'evenement_repository.dart';
+
 @injectable
 class EvenementsRepositoryImpl extends EvenementsRepository {
-  final FirebaseFirestore _firestore ;
+  final FirestoreService _firestoreService;
+  final FirebaseFirestore _firestore;
 
-  EvenementsRepositoryImpl({FirebaseFirestore ? firestore})
-  : _firestore = firestore ?? FirebaseFirestore.instance;
+  @factoryMethod
+  EvenementsRepositoryImpl(
+      this._firestoreService,
+      @factoryParam FirebaseFirestore? firestore
+      ) : _firestore = firestore ?? FirebaseFirestore.instance;
+
   @override
   FirebaseFirestore get firestore => _firestore;
 
   @override
   Stream<Iterable<Evenements>> getEvenementStream() {
-    return firestore.collection('evenement').snapshots().map(
+    return _firestoreService.collection('evenement').snapshots().map(
           (querySnapshot) => querySnapshot.docs
-          .map((doc) => Evenements.fromMap(doc.data(), doc.id))
+          .map((doc) => Evenements.fromMap(doc.data() as Map<String, dynamic>?, doc.id))
           .toList(),
     );
   }

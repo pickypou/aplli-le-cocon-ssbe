@@ -7,6 +7,10 @@ class StorageService {
 
   StorageService(this._firebaseStorage);
 
+  Reference ref(String path){
+    return _firebaseStorage.ref(path);
+  }
+
   Future<void> uploadFile(String path, File file) async {
     try {
       await _firebaseStorage.ref(path).putFile(file);

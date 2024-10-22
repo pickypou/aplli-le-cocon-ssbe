@@ -25,6 +25,7 @@ import '../../domain/usecases/fetch_user_data_usecase.dart' as _i656;
 import 'api/auth_service.dart' as _i977;
 import 'api/firebase_client.dart' as _i703;
 import 'api/firestore_service.dart' as _i746;
+import 'api/storage_service.dart' as _i717;
 import 'di_module.dart' as _i211;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -40,15 +41,11 @@ _i174.GetIt init(
   );
   final firebaseModule = _$FirebaseModule();
   gh.factory<_i703.FirebaseClient>(() => _i703.FirebaseClient());
-  gh.factory<_i746.FirestoreService>(() => _i746.FirestoreService());
-  gh.lazySingleton<_i59.FirebaseAuth>(() => firebaseModule.firebaseAuth);
-  gh.lazySingleton<_i974.FirebaseFirestore>(() => firebaseModule.firestore);
-  gh.lazySingleton<_i457.FirebaseStorage>(() => firebaseModule.storage);
+  gh.singleton<_i974.FirebaseFirestore>(() => firebaseModule.firestore);
+  gh.singleton<_i457.FirebaseStorage>(() => firebaseModule.storage);
+  gh.singleton<_i717.StorageService>(() => firebaseModule.storageService);
   gh.factory<_i552.AvisClientsRepositoryImpl>(() =>
       _i552.AvisClientsRepositoryImpl(
-          firestore: gh<_i974.FirebaseFirestore>()));
-  gh.factory<_i1053.EvenementsRepositoryImpl>(() =>
-      _i1053.EvenementsRepositoryImpl(
           firestore: gh<_i974.FirebaseFirestore>()));
   gh.factory<_i914.FetchEvenementDataUseCase>(
       () => _i914.FetchEvenementDataUseCase(gh<_i590.EvenementsRepository>()));
@@ -60,6 +57,17 @@ _i174.GetIt init(
       () => _i57.FetchAvisClientDataUseCase(gh<_i684.AvisClientsRepository>()));
   gh.factory<_i977.AuthService>(
       () => _i977.AuthService(gh<_i59.FirebaseAuth>()));
+  gh.factory<_i746.FirestoreService>(
+      () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
+  gh.factoryParam<_i1053.EvenementsRepositoryImpl, _i974.FirebaseFirestore?,
+      dynamic>((
+    firestore,
+    _,
+  ) =>
+      _i1053.EvenementsRepositoryImpl(
+        gh<_i746.FirestoreService>(),
+        firestore,
+      ));
   gh.factory<_i656.FetchUserDataUseCase>(() => _i656.FetchUserDataUseCase(
         gh<String>(),
         gh<_i304.UsersRepositoryImpl>(),
