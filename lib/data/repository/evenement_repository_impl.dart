@@ -1,18 +1,18 @@
-import 'package:app_lecocon_ssbe/data/domain/entity/evenement/evenements.dart';
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:injectable/injectable.dart';
 
-abstract class EvenementsRepository {
-  FirebaseFirestore get firestore;
+import '../../domain/entity/evenements.dart';
+import 'evenement_repository.dart';
+@injectable
+class EvenementsRepositoryImpl extends EvenementsRepository {
+  final FirebaseFirestore _firestore ;
 
-  Stream<Iterable<Evenements>> getEvenementStream();
-  Future<Map<String, dynamic>?> getById(String evenementId);
-  Future<void> add(Map<String, dynamic> data);
-  Future<void> updateField(String evenementId, String fieldName, newValue);
-}
-
-class ConcretedEvenementsRepository extends EvenementsRepository {
+  EvenementsRepositoryImpl({FirebaseFirestore ? firestore})
+  : _firestore = firestore ?? FirebaseFirestore.instance;
   @override
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore get firestore => _firestore;
 
   @override
   Stream<Iterable<Evenements>> getEvenementStream() {
@@ -29,7 +29,7 @@ class ConcretedEvenementsRepository extends EvenementsRepository {
   @override
   Future<Map<String, dynamic>?> getById(String evenementId) async {
     final docSnapshot =
-        await firestore.collection('evenement').doc(evenementId).get();
+    await firestore.collection('evenement').doc(evenementId).get();
     return docSnapshot.data() ?? {};
   }
 
@@ -40,17 +40,16 @@ class ConcretedEvenementsRepository extends EvenementsRepository {
     }catch(e) {
       throw Exception('Erreur lors de l\'ajout de l\'evenement;$e');
     }
-    }
+  }
 
 
   @override
   Future<void> updateField(
       String evenementId, String fieldName, newValue) async {
 
-      await firestore.collection('evenement').doc(evenementId).update({
-        fieldName: newValue,
-      });
+    await firestore.collection('evenement').doc(evenementId).update({
+      fieldName: newValue,
+    });
   }
 
-  FirebaseFirestore get firebaseInstance => firestore;
 }

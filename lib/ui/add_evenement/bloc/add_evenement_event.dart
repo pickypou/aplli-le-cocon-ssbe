@@ -17,3 +17,9 @@ class AddEvenementSignUpEvent extends AddEvenementEvent {
       required this.file
       });
 }
+class AddEvenementButtonPressed extends AddEvenementEvent {
+  final File file;
+  final String fileType;
+
+  AddEvenementButtonPressed({required this.file, required this.fileType});
+}

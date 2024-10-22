@@ -1,8 +1,9 @@
-import 'package:app_lecocon_ssbe/data/domain/entity/evenement/evenements.dart';
+import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:flutter/material.dart';
-import '../../../repository/add_evenement_repository/evenement_repository.dart';
+import 'package:injectable/injectable.dart';
+import '../../data/repository/evenement_repository.dart';
 
-
+@injectable
 class FetchEvenementDataUseCase {
   final EvenementsRepository evenementsRepository;
 

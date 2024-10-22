@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-import '../../../data/domain/entity/avis_clients/avis_clients.dart';
+import '../../../domain/entity/avis_clients.dart';
 import '../interactor/avis_clients_interactor.dart';
 import 'avis_clients_event.dart';
 import 'avis_clients_state.dart';

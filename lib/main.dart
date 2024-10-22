@@ -1,3 +1,6 @@
+import 'package:app_lecocon_ssbe/core/di/di.dart';
+import 'package:app_lecocon_ssbe/data/repository/repository_module.dart';
+import 'package:app_lecocon_ssbe/domain/domain_module.dart';
 import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +12,9 @@ import 'ui/comon/router/router_config.dart';
 FirebaseAuth auth = FirebaseAuth.instance;
 final firestore = FirebaseFirestore.instance;
 void main() async {
+  setupDataModule();
+  setupDomainModule();
+  configureDependencies();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

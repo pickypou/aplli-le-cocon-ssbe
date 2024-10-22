@@ -1,23 +1,28 @@
-import 'package:app_lecocon_ssbe/data/repository/add_evenement_repository/evenement_repository.dart';
-import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository/avis_client_repository.dart';
+import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository_impl.dart';
+import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
+import 'package:app_lecocon_ssbe/data/repository/avis_client_repository.dart';
+import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
+import 'package:app_lecocon_ssbe/data/repository/repository_module.dart';
+import 'package:app_lecocon_ssbe/data/repository/users_repository_impl.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/interactor/avis_clients_interactor.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/view/add_avis_clients_view.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/bloc/add_evenement_bloc.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/interactor/add_evenements_interator.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/view/add_evenement_page.dart';
 import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/interactor/add_user_interactor.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../data/domain/usecases/fetch_avis_clients/fetch_avis_clients_data_usecase.dart';
-import '../../../data/domain/usecases/fetch_evenement/fetch_evenement_data_usecase.dart';
-import '../../../data/repository/users_repository/users_repository.dart';
+import '../../../domain/usecases/fetch_avis_clients_data_usecase.dart';
+import '../../../domain/usecases/fetch_evenement_data_usecase.dart';
+import '../../../data/repository/users_repository.dart';
 import '../../HomePage/home_page.dart';
-import '../../account/bloc/account_bloc.dart';
-import '../../account/interactor/account_interactor.dart';
+import '../../account/account_bloc.dart';
+import '../../account/account_interactor.dart';
 import '../../account/view/account_page.dart';
 import '../../add_avis_clients/bloc/avis_clients_bloc.dart';
 import '../../users/add_users/inscription/bloc/add_user_bloc.dart';
@@ -44,7 +49,7 @@ final goRouter = GoRouter(
               return MaterialPage(
                 child: BlocProvider<AccountBloc>(
                   create: (context) {
-                    UsersRepository userRepository = ConcretedUserRepository();
+                    UsersRepository userRepository = UsersRepositoryImpl(firestore: FirebaseFirestore.instance,auth: FirebaseAuth.instance);
                     var interactor = AccountInteractor(userRepository, userId);
                     return AccountBloc(accountInteractor: interactor, userId: userId);
                   },
@@ -65,7 +70,7 @@ final goRouter = GoRouter(
                 return MaterialPage(
                   child: BlocProvider<UserLoginBloc>(
                     create: (context) {
-                      UsersRepository userRepository = ConcretedUserRepository();
+                      UsersRepository userRepository = UsersRepositoryImpl(firestore: FirebaseFirestore.instance,auth: FirebaseAuth.instance);
                       final userInteractor = UserInteractor(usersRepository: userRepository); // Change selon ton implémentation
                       final userId = FirebaseAuth.instance.currentUser?.uid ?? ''; // Prends l'ID utilisateur si connecté ou un string vide
 
@@ -81,7 +86,7 @@ final goRouter = GoRouter(
               path: 'inscription',
               pageBuilder: (context, state) {
                 // Crée le UserInteractor ici
-                UsersRepository userRepository = ConcretedUserRepository();
+                UsersRepository userRepository = UsersRepositoryImpl(firestore: FirebaseFirestore.instance,auth: FirebaseAuth.instance);
                 var userInteractor = UserInteractor(usersRepository: userRepository);
 
                 // Crée le AddUserBloc sans l'ID de l'utilisateur
@@ -101,8 +106,8 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/addAvisClients',
               builder: (context, state) {
-                AvisClientsRepository avisClientsRepository = ConcretedAvisClientsRepository();
-                var fetchAvisClientDataUseCase = FetchAvisClientDataUseCase(avisClientsRepository);
+                AvisClientsRepository avisClientsRepository = AvisClientsRepositoryImpl();
+                var fetchAvisClientDataUseCase = getIt<FetchAvisClientDataUseCase>();
                 var avisClientsInteractor = AvisClientsInteractor(avisClientsRepository, fetchAvisClientDataUseCase);
 
                 return BlocProvider(
@@ -114,9 +119,9 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/addEvenement',
               builder: (context, state) {
-                EvenementsRepository evenementRepository = ConcretedEvenementsRepository();
+                EvenementsRepository evenementRepository = EvenementsRepositoryImpl();
                 FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-                var fetchEvenementDataUseCase = FetchEvenementDataUseCase(evenementRepository);
+                var fetchEvenementDataUseCase = getIt<FetchEvenementDataUseCase>();
                 var evenementInteractor = EvenementsInteractor(evenementRepository, fetchEvenementDataUseCase, firebaseStorage);
                 return BlocProvider(
                     create: (context) => AddEvenementsBloc(evenementInteractor),

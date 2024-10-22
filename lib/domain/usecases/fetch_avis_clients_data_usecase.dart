@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 
-import '../../../repository/avis_clients_repository/avis_client_repository.dart';
-import '../../entity/avis_clients/avis_clients.dart';
+import '../../data/repository/avis_client_repository.dart';
+import '../entity/avis_clients.dart';
 
+@injectable
 class FetchAvisClientDataUseCase {
   final AvisClientsRepository avisClientsRepository;
 

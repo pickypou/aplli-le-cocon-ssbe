@@ -1,4 +1,3 @@
-import 'package:app_lecocon_ssbe/ui/comon/widgets/buttoms/custom_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,14 +43,14 @@ class AccountView extends StatelessWidget {
             Image.asset('assets/images/logo_cocon.png', fit: BoxFit.contain,width: size.width/1.6,),
             const SizedBox(height: 90,),
 
-                CustomButton(
-                    label: 'Je crée un événement',
+                ElevatedButton(
+                    child:Text( 'Je crée un événement',style: textStyleText(context),),
                     onPressed: (){
                       GoRouter.of(context).go('/account/addEvenement');
                     }),
                 const SizedBox(height: 50,),
-                CustomButton(
-                    label: 'Je crée un avis client',
+                ElevatedButton(
+                    child:Text( 'Je crée un avis client',style: textStyleText(context),),
                     onPressed: (){
                       GoRouter.of(context).go('/account/addAvisClients');
                     }),

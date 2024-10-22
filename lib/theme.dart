@@ -27,7 +27,7 @@ TextStyle titleStyle(BuildContext context) {
   return TextStyle(
     fontSize: titlefont,
     color: theme.colorScheme.secondary,
-    fontFamily: "Roboto",
+    fontFamily: "Autography",
     decoration: TextDecoration.none,
   );
 }

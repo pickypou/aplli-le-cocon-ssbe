@@ -1,4 +1,3 @@
-import 'package:app_lecocon_ssbe/ui/comon/widgets/buttoms/custom_buttom.dart';
 import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -37,17 +36,18 @@ class HomePage extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 30),
-                       CustomButton(
+                       TextButton(
                           onPressed: () => context.go('/account/inscription'),
-                          label:
-                            'Créer un compte',
+                          child:Text(
+                            'Créer un compte',style: textStyleText(context),
+                          ),
                           ),
 
                         const SizedBox(height: 30),
-                        CustomButton(
+                        TextButton(
                           onPressed: () => context.go('/account/login'),
-                          label:
-                            'Connexion',
+                          child:Text(
+                            'Connexion',style: textStyleText(context),)
                         ),
                       ],
                     ),

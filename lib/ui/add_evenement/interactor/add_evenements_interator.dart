@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:app_lecocon_ssbe/data/domain/entity/evenement/evenements.dart';
+import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../../../data/domain/usecases/fetch_evenement/fetch_evenement_data_usecase.dart';
-import '../../../data/repository/add_evenement_repository/evenement_repository.dart';
+import '../../../domain/usecases/fetch_evenement_data_usecase.dart';
+import '../../../data/repository/evenement_repository.dart';
 
 class EvenementsInteractor {
   final EvenementsRepository evenementsRepository;

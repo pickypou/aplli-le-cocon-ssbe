@@ -1,13 +1,12 @@
 import 'dart:io';
-import 'package:app_lecocon_ssbe/ui/comon/widgets/buttoms/custom_buttom.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/bloc/add_evenement_bloc.dart';
-import 'package:app_lecocon_ssbe/ui/add_evenement/bloc/add_evenement_event.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/bloc/add_evenement_state.dart';
 
 import '../../../theme.dart';
+import '../bloc/add_evenement_event.dart';
 
 class AddEvenementView extends StatefulWidget {
   const AddEvenementView({super.key});
@@ -21,6 +20,7 @@ class AddEvenementView extends StatefulWidget {
 class AddEvenementViewState extends State<AddEvenementView> {
   File? file;
   String? fileType;
+  String?fileUrl;
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -60,10 +60,12 @@ class AddEvenementViewState extends State<AddEvenementView> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CustomButton(
+            ElevatedButton(
               onPressed: pickFile,
-              label: 'Choisir un fichier (PDF ou image)',
-            ),
+              child:Text( 'Choisir un fichier (PDF ou image)',style: textStyleText(context),
+              ),
+
+        ),
             if (file != null)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -74,36 +76,26 @@ class AddEvenementViewState extends State<AddEvenementView> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
+
             const SizedBox(height: 20),
-            CustomButton(
-              onPressed: state is AddEvenementsSignUpLoadingState
-                  ? null
-                  : () {
+            ElevatedButton(
+              onPressed: () {
                 if (file != null && fileType != null) {
+                  // Déclencher l'événement pour uploader le fichier
                   context.read<AddEvenementsBloc>().add(
-                    AddEvenementSignUpEvent(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    AddEvenementButtonPressed(
                       file: file!,
                       fileType: fileType!,
-                      publishDate: DateTime.now(),
-                      fileUrl: '',
                     ),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Veuillez choisir un fichier',
-                        style: textStyleText(context),
-                      ),
-                    ),
+                    const SnackBar(content: Text('Veuillez choisir un fichier')),
                   );
                 }
               },
-              label: state is AddEvenementsSignUpLoadingState
-                  ? 'Chargement...' // Texte pendant le chargement
-                  : 'Créer l\'événement', // Texte par défaut
-            ),
+              child: const Text('Uploader l\'événement'),
+            )
 
 
 

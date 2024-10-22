@@ -1,5 +1,5 @@
 
-import '../../../data/repository/users_repository/users_repository.dart';
+import '../../data/repository/users_repository.dart';
 
 class AccountInteractor {
   final UsersRepository usersRepository;

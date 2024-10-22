@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/domain/entity/avis_clients/avis_clients.dart';
-import '../../../data/domain/usecases/fetch_avis_clients/fetch_avis_clients_data_usecase.dart';
-import '../../../data/repository/avis_clients_repository/avis_client_repository.dart';
+import '../../../domain/entity/avis_clients.dart';
+import '../../../domain/usecases/fetch_avis_clients_data_usecase.dart';
+import '../../../data/repository/avis_client_repository.dart';
 
 
 
