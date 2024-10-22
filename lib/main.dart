@@ -12,13 +12,15 @@ import 'ui/comon/router/router_config.dart';
 FirebaseAuth auth = FirebaseAuth.instance;
 final firestore = FirebaseFirestore.instance;
 void main() async {
-  setupDataModule();
-  setupDomainModule();
-  configureDependencies();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  setupDataModule();
+  setupDomainModule();
+  configureDependencies();
+
   // Vérifier si un utilisateur est connecté
   User? currentUser = FirebaseAuth.instance.currentUser;
 

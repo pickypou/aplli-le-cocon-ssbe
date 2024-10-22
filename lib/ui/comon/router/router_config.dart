@@ -42,14 +42,14 @@ final goRouter = GoRouter(
           path: '/account',
           pageBuilder: (context, state) {
             // Récupération de l'ID utilisateur via Firebase Auth
-            final String? userId = FirebaseAuth.instance.currentUser?.uid;
+            final String? userId = getIt<FirebaseAuth>().currentUser?.uid;
 
             if (userId != null) {
               // Si un utilisateur est connecté, on affiche la page AccountPage
               return MaterialPage(
                 child: BlocProvider<AccountBloc>(
                   create: (context) {
-                    UsersRepository userRepository = UsersRepositoryImpl(firestore: FirebaseFirestore.instance,auth: FirebaseAuth.instance);
+                    UsersRepository userRepository = getIt<UsersRepositoryImpl>();
                     var interactor = AccountInteractor(userRepository, userId);
                     return AccountBloc(accountInteractor: interactor, userId: userId);
                   },
@@ -70,9 +70,9 @@ final goRouter = GoRouter(
                 return MaterialPage(
                   child: BlocProvider<UserLoginBloc>(
                     create: (context) {
-                      UsersRepository userRepository = UsersRepositoryImpl(firestore: FirebaseFirestore.instance,auth: FirebaseAuth.instance);
+                      UsersRepository userRepository = getIt<UsersRepositoryImpl>();
                       final userInteractor = UserInteractor(usersRepository: userRepository); // Change selon ton implémentation
-                      final userId = FirebaseAuth.instance.currentUser?.uid ?? ''; // Prends l'ID utilisateur si connecté ou un string vide
+                      final userId = getIt<FirebaseAuth>().currentUser?.uid ?? ''; // Prends l'ID utilisateur si connecté ou un string vide
 
                       return UserLoginBloc(userInteractor, userId: userId);
                     },
@@ -86,7 +86,7 @@ final goRouter = GoRouter(
               path: 'inscription',
               pageBuilder: (context, state) {
                 // Crée le UserInteractor ici
-                UsersRepository userRepository = UsersRepositoryImpl(firestore: FirebaseFirestore.instance,auth: FirebaseAuth.instance);
+                UsersRepository userRepository =getIt<UsersRepositoryImpl>();
                 var userInteractor = UserInteractor(usersRepository: userRepository);
 
                 // Crée le AddUserBloc sans l'ID de l'utilisateur
@@ -106,7 +106,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/addAvisClients',
               builder: (context, state) {
-                AvisClientsRepository avisClientsRepository = AvisClientsRepositoryImpl();
+                AvisClientsRepository avisClientsRepository = getIt<AvisClientsRepositoryImpl>();
                 var fetchAvisClientDataUseCase = getIt<FetchAvisClientDataUseCase>();
                 var avisClientsInteractor = AvisClientsInteractor(avisClientsRepository, fetchAvisClientDataUseCase);
 
@@ -119,10 +119,10 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/addEvenement',
               builder: (context, state) {
-                EvenementsRepository evenementRepository = EvenementsRepositoryImpl();
-                FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+                EvenementsRepository evenementRepository = getIt<EvenementsRepositoryImpl>();
+                final FirebaseStorage storage = getIt<FirebaseStorage>();
                 var fetchEvenementDataUseCase = getIt<FetchEvenementDataUseCase>();
-                var evenementInteractor = EvenementsInteractor(evenementRepository, fetchEvenementDataUseCase, firebaseStorage);
+                var evenementInteractor = EvenementsInteractor(evenementRepository, fetchEvenementDataUseCase, storage);
                 return BlocProvider(
                     create: (context) => AddEvenementsBloc(evenementInteractor),
                 child: const AddEvenementsPage(),

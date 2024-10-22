@@ -13,7 +13,9 @@ void setupUseCaseModule() {
   getIt.registerLazySingleton<FetchAvisClientDataUseCase>(
           () => FetchAvisClientDataUseCase(getIt<AvisClientsRepositoryImpl>())
   );
-
+  if (getIt.isRegistered<FetchEvenementDataUseCase>()) {
+    getIt.unregister<FetchEvenementDataUseCase>();
+  }
   // Enregistrement du cas d'utilisation FetchEvenementDataUseCase
   getIt.registerLazySingleton<FetchEvenementDataUseCase>(
           () => FetchEvenementDataUseCase(getIt<EvenementsRepositoryImpl>())
