@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../../../domain/usecases/fetch_evenement_data_usecase.dart';
+import '../../domain/usecases/fetch_evenement_data_usecase.dart';
 
 class EvenementsInteractor {
   final EvenementsRepositoryImpl evenementsRepository;

@@ -24,10 +24,15 @@ import '../../domain/usecases/fetch_avis_clients_data_usecase.dart' as _i57;
 import '../../domain/usecases/fetch_evenement_data_usecase.dart' as _i914;
 import '../../domain/usecases/fetch_user_data_usecase.dart' as _i656;
 import '../../ui/account/account_module.dart' as _i692;
+import '../../ui/add_avis_clients/add_avis_clients_module.dart' as _i356;
+import '../../ui/add_evenement/evenement_module.dart' as _i402;
 import '../../ui/comon/router/router_config.dart' as _i686;
 import '../../ui/HomePage/home_module.dart' as _i587;
 import '../../ui/ui_module.dart' as _i573;
+import '../../ui/users/add_users/inscription/add_user_module.dart' as _i966;
+import '../../ui/users/login/login_module.dart' as _i863;
 import 'api/auth_service.dart' as _i977;
+import 'api/firebase_client.dart' as _i703;
 import 'api/firestore_service.dart' as _i746;
 import 'api/storage_service.dart' as _i717;
 import 'di_module.dart' as _i211;
@@ -44,10 +49,16 @@ _i174.GetIt init(
     environmentFilter,
   );
   final firebaseModule = _$FirebaseModule();
+  gh.factory<_i703.FirebaseClient>(() => _i703.FirebaseClient());
+  gh.factory<_i590.EvenementsRepository>(
+      () => firebaseModule.evenementsRepository);
+  gh.singleton<_i573.AppRouter>(() => _i573.AppRouter());
   gh.singleton<_i974.FirebaseFirestore>(() => firebaseModule.firestore);
   gh.singleton<_i457.FirebaseStorage>(() => firebaseModule.storage);
   gh.singleton<_i717.StorageService>(() => firebaseModule.storageService);
   gh.singleton<_i151.UsersRepository>(() => firebaseModule.usersRepository);
+  gh.singleton<_i684.AvisClientsRepository>(
+      () => firebaseModule.avisClientRepository);
   gh.factory<_i552.AvisClientsRepositoryImpl>(() =>
       _i552.AvisClientsRepositoryImpl(
           firestore: gh<_i974.FirebaseFirestore>()));
@@ -64,11 +75,23 @@ _i174.GetIt init(
   gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
   gh.singleton<_i692.AccountModule>(
       () => _i692.AccountModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i402.EvenementModule>(
+      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i863.LoginModule>(
+      () => _i863.LoginModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i966.AddUserModule>(
+      () => _i966.AddUserModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i356.AddAvisClientsModule>(
+      () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
       () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
   gh.singleton<_i686.AppRouterConfig>(() => _i686.AppRouterConfig(
         gh<_i692.AccountModule>(),
         gh<_i587.HomeModule>(),
+        gh<_i402.EvenementModule>(),
+        gh<_i863.LoginModule>(),
+        gh<_i966.AddUserModule>(),
+        gh<_i356.AddAvisClientsModule>(),
       ));
   gh.factoryParam<_i1053.EvenementsRepositoryImpl, _i974.FirebaseFirestore?,
       dynamic>((

@@ -1,13 +1,34 @@
 import 'package:app_lecocon_ssbe/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../core/utils/check_user_connection.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final auth = GetIt.instance<FirebaseAuth>();
     return Scaffold(
+      appBar: AppBar(title: const Text('Accueil'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout), color: Theme
+              .of(context)
+              .colorScheme
+              .secondary,
+            onPressed: () {
+              auth.signOut().then((_) {
+                debugPrint('Déconnexion réussie');
+                context.go('/');
+              });
+            },
+          )
+        ],
+      ), // Ajoutez une AppBar si nécessaire
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -36,19 +57,22 @@ class HomePage extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 30),
-                       TextButton(
-                          onPressed: () => context.go('/account/inscription'),
+                      ElevatedButton(
+                          onPressed: () => context.go('/inscription'),
                           child:Text(
                             'Créer un compte',style: textStyleText(context),
                           ),
                           ),
 
                         const SizedBox(height: 30),
-                        TextButton(
-                          onPressed: () => context.go('/account/login'),
-                          child:Text(
-                            'Connexion',style: textStyleText(context),)
+
+                        ElevatedButton(
+                          onPressed: () {
+                            checkUserConnection(context);
+                          },
+                          child:  Text('Connexion', style:  textStyleText(context,),
                         ),
+                        )
                       ],
                     ),
                   ),

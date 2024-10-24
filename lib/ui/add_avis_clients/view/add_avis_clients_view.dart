@@ -1,6 +1,6 @@
-import 'package:app_lecocon_ssbe/ui/add_avis_clients/bloc/avis_clients_bloc.dart';
-import 'package:app_lecocon_ssbe/ui/add_avis_clients/bloc/avis_clients_event.dart';
-import 'package:app_lecocon_ssbe/ui/add_avis_clients/bloc/avis_clients_state.dart';
+import 'package:app_lecocon_ssbe/ui/add_avis_clients/avis_clients_bloc.dart';
+import 'package:app_lecocon_ssbe/ui/add_avis_clients/avis_clients_event.dart';
+import 'package:app_lecocon_ssbe/ui/add_avis_clients/avis_clients_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +44,7 @@ class AddAvisClientsView extends StatelessWidget {
     Size size = MediaQuery.sizeOf(context);
     final auth = GetIt.instance<FirebaseAuth>();
     return Scaffold(
-        appBar: AppBar(title: const Text('Mon Compte'),
+        appBar: AppBar(title: const Text('J\'ajoute un avis'),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout), color: Theme

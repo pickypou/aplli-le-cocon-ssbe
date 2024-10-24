@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../comon/widgets/buttoms/custom_buttom.dart';
 import '../../../comon/widgets/inputs/custom_text_field.dart';
-import '../bloc/user_login_bloc.dart';
-import '../bloc/user_login_event.dart';
-import '../bloc/user_login_state.dart';
+import '../user_login_bloc.dart';
+import '../user_login_event.dart';
+import '../user_login_state.dart';
 
 
 class LoginView extends StatelessWidget {

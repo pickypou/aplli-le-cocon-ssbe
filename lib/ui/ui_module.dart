@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:injectable/injectable.dart';
 
 /// Interface abstraite pour les modules UI
 abstract class UIModule {
@@ -22,6 +23,7 @@ mixin DefaultSharedWidgets on UIModule {
 }
 
 /// Classe pour gérer les routes de l'application
+@singleton
 class AppRouter {
   final List<RouteBase> _routes = [];
 

@@ -1,5 +1,14 @@
 import 'package:app_lecocon_ssbe/core/di/api/auth_service.dart';
+import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
+import 'package:app_lecocon_ssbe/data/repository/avis_client_repository.dart';
+import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository_impl.dart';
+import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
+import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
+import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
+import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
+import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/add_user_module.dart';
+import 'package:app_lecocon_ssbe/ui/users/login/login_module.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,40 +39,53 @@ abstract class FirebaseModule {
 
   @singleton
   UsersRepository get usersRepository => UsersRepositoryImpl();
+
+  @singleton
+  AvisClientsRepository get avisClientRepository => AvisClientsRepositoryImpl();
+
+  //@singleton
+  EvenementsRepository get evenementsRepository => EvenementsRepositoryImpl(getIt<FirestoreService>(), getIt<FirebaseFirestore>());
+
 }
 
-// Configuration des injections de dépendances
-/*@module
-abstract class AppRouterModule {
-  @singleton
-  AppRouterConfig appRouterConfig() {
-    final accountModule = getIt<AccountModule>();
-    final homeModule = getIt<HomeModule>();
-    return AppRouterConfig(accountModule, homeModule);
-  }
-}*/
+
 
 void setupDi() {
   // Enregistre les instances Firebase
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  getIt.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+  getIt.registerLazySingleton<FirebaseFirestore>(
+      () => FirebaseFirestore.instance);
   getIt.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
 
   // Enregistre les services
-  getIt.registerLazySingleton<AuthService>(() => AuthService(getIt<FirebaseAuth>()));
-  getIt.registerLazySingleton<StorageService>(() => StorageService(getIt<FirebaseStorage>()));
+  getIt.registerLazySingleton<AuthService>(
+      () => AuthService(getIt<FirebaseAuth>()));
+  getIt.registerLazySingleton<StorageService>(
+      () => StorageService(getIt<FirebaseStorage>()));
 
   getIt.registerLazySingleton<AppRouter>(() => AppRouter());
 
   // Enregistre les modules de l'interface utilisateur
-  getIt.registerLazySingleton<AccountModule>(() => AccountModule(getIt<AppRouter>()));
+  getIt.registerLazySingleton<AccountModule>(
+      () => AccountModule(getIt<AppRouter>()));
   getIt.registerLazySingleton<HomeModule>(() => HomeModule(getIt<AppRouter>()));
-
-
+  getIt.registerLazySingleton<EvenementModule>(
+      () => EvenementModule(getIt<AppRouter>()));
+  getIt.registerLazySingleton<LoginModule>(
+      () => LoginModule(getIt<AppRouter>()));
+  getIt.registerLazySingleton<AddUserModule>(
+      () => AddUserModule(getIt<AppRouter>()));
+  getIt.registerLazySingleton<AddAvisClientsModule>(
+      () => AddAvisClientsModule(getIt<AppRouter>()));
 
   // Enregistre la configuration du routeur avec les modules appropriés
   getIt.registerLazySingleton<AppRouterConfig>(() => AppRouterConfig(
-    getIt<AccountModule>(),
-    getIt<HomeModule>(),
-  ));
+      getIt<AccountModule>(),
+      getIt<HomeModule>(),
+      getIt<EvenementModule>(),
+      getIt<LoginModule>(),
+      getIt<AddUserModule>(),
+      getIt<AddAvisClientsModule>()
+  )
+  );
 }

@@ -3,9 +3,9 @@ import 'package:app_lecocon_ssbe/ui/comon/widgets/inputs/custom_text_field.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../bloc/add_user_bloc.dart';
-import '../bloc/add_user_event.dart';
-import '../bloc/add_user_state.dart';
+import '../add_user_bloc.dart';
+import '../add_user_event.dart';
+import '../add_user_state.dart';
 
 class AddUserView extends StatelessWidget {
   final TextEditingController userNameController = TextEditingController();

@@ -1,4 +1,8 @@
+import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
+import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
 import 'package:app_lecocon_ssbe/ui/ui_module.dart';
+import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/add_user_module.dart';
+import 'package:app_lecocon_ssbe/ui/users/login/login_module.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -59,6 +63,10 @@ void setupDependencies() {
         AppRouterConfig(
           getIt<AccountModule>(),
           getIt<HomeModule>(),
+          getIt<EvenementModule>(),
+            getIt<LoginModule>(),
+          getIt<AddUserModule>(),
+          getIt<AddAvisClientsModule>()
         ));
 
     // Enregistre les modules de l'interface utilisateur
@@ -69,6 +77,21 @@ void setupDependencies() {
     debugPrint("Enregistrement de HomeModule");
     getIt.registerLazySingleton<HomeModule>(() =>
         HomeModule(getIt<AppRouter>()));
+
+    debugPrint("Enregistrement de EvenementModule");
+    getIt.registerLazySingleton<EvenementModule>(() =>
+        EvenementModule(getIt<AppRouter>()));
+
+    debugPrint("Enregistrement de LoginModule");
+    getIt.registerLazySingleton<LoginModule>(() =>
+        LoginModule(getIt<AppRouter>()));
+
+    debugPrint("Enregistrement de AddUserModule");
+    getIt.registerLazySingleton<AddUserModule>(() =>
+        AddUserModule(getIt<AppRouter>()));
+    debugPrint("Enregistrement de AvisClientModule");
+    getIt.registerLazySingleton<AddAvisClientsModule>(() =>
+        AddAvisClientsModule(getIt<AppRouter>()));
   }catch (e) {
     debugPrint("Erreur lors de l'enregistrement : $e");
   }

@@ -1,6 +1,6 @@
-import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/interactor/add_user_interactor.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/bloc/user_login_event.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/bloc/user_login_state.dart';
+import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/add_user_interactor.dart';
+import 'package:app_lecocon_ssbe/ui/users/login/user_login_event.dart';
+import 'package:app_lecocon_ssbe/ui/users/login/user_login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

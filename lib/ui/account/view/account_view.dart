@@ -48,13 +48,13 @@ class AccountView extends StatelessWidget {
                 ElevatedButton(
                     child:Text( 'Je crée un événement',style: textStyleText(context),),
                     onPressed: (){
-                      GoRouter.of(context).go('/account/addEvenement');
+                      GoRouter.of(context).go('/evenement');
                     }),
                 const SizedBox(height: 50,),
                 ElevatedButton(
                     child:Text( 'Je crée un avis client',style: textStyleText(context),),
                     onPressed: (){
-                      GoRouter.of(context).go('/account/addAvisClients');
+                      GoRouter.of(context).go('/addAvisClients');
                     }),
           ],
         ),

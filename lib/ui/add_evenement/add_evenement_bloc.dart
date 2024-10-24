@@ -1,7 +1,7 @@
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import '../interactor/add_evenements_interator.dart';
+import 'add_evenements_interator.dart';
 import 'add_evenement_event.dart';
 import 'add_evenement_state.dart';
 

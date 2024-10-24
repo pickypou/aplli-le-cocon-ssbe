@@ -12,5 +12,6 @@ Future<void> checkUserConnection(BuildContext context) async {
     GoRouter.of(context).go('/account');
   } else {
     debugPrint('Aucun utilisateur connecté.');
+    GoRouter.of(context).go('/login');
   }
 }

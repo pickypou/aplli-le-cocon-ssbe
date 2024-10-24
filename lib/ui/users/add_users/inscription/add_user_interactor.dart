@@ -1,7 +1,7 @@
 import 'package:app_lecocon_ssbe/data/repository/users_repository.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../domain/entity/users.dart';
+import '../../../../domain/entity/users.dart';
 
 
 class UserInteractor {
