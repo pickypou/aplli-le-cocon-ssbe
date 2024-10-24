@@ -1,14 +1,16 @@
 import 'package:app_lecocon_ssbe/ui/add_evenement/view/add_evenements_view.dart';
 import 'package:app_lecocon_ssbe/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import '../../../main.dart';
 
 class AddEvenementsPage extends StatelessWidget {
   const AddEvenementsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final auth = GetIt.instance<FirebaseAuth>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Evénements'),

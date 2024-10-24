@@ -1,6 +1,4 @@
 import 'package:app_lecocon_ssbe/core/di/api/auth_service.dart';
-import 'package:app_lecocon_ssbe/core/di/api/firebase_client.dart';
-import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -8,8 +6,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../data/repository/users_repository.dart';
+import '../../data/repository/users_repository_impl.dart';
+import '../../ui/HomePage/home_module.dart';
+import '../../ui/account/account_module.dart';
+import '../../ui/comon/router/router_config.dart';
+import '../../ui/ui_module.dart';
+
+// Initialisation de GetIt
 final GetIt getIt = GetIt.instance;
 
+// Module pour les services Firebase
 @module
 abstract class FirebaseModule {
   @singleton
@@ -18,27 +25,45 @@ abstract class FirebaseModule {
   @singleton
   FirebaseStorage get storage => FirebaseStorage.instance;
 
-  // Retire l'enregistrement de FirestoreService ici
-  // @singleton
-  // FirestoreService get firestoreService => FirestoreService();
-
   @singleton
   StorageService get storageService => StorageService(storage);
+
+  @singleton
+  UsersRepository get usersRepository => UsersRepositoryImpl();
 }
 
+// Configuration des injections de dépendances
+/*@module
+abstract class AppRouterModule {
+  @singleton
+  AppRouterConfig appRouterConfig() {
+    final accountModule = getIt<AccountModule>();
+    final homeModule = getIt<HomeModule>();
+    return AppRouterConfig(accountModule, homeModule);
+  }
+}*/
+
 void setupDi() {
-  // Enregistre FirebaseAuth
+  // Enregistre les instances Firebase
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  // Enregistre FirebaseFirestore
   getIt.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
-  // Enregistre FirebaseStorage
   getIt.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
 
-  // Enregistre FirestoreService avec FirebaseFirestore comme argument
-  getIt.registerLazySingleton<FirestoreService>(() => FirestoreService(getIt<FirebaseFirestore>()));
-
-  // Enregistre tes autres services
-  getIt.registerLazySingleton<FirebaseClient>(() => FirebaseClient());
+  // Enregistre les services
   getIt.registerLazySingleton<AuthService>(() => AuthService(getIt<FirebaseAuth>()));
   getIt.registerLazySingleton<StorageService>(() => StorageService(getIt<FirebaseStorage>()));
+
+  getIt.registerLazySingleton<AppRouter>(() => AppRouter());
+
+  // Enregistre les modules de l'interface utilisateur
+  getIt.registerLazySingleton<AccountModule>(() => AccountModule(getIt<AppRouter>()));
+  getIt.registerLazySingleton<HomeModule>(() => HomeModule(getIt<AppRouter>()));
+
+
+
+  // Enregistre la configuration du routeur avec les modules appropriés
+  getIt.registerLazySingleton<AppRouterConfig>(() => AppRouterConfig(
+    getIt<AccountModule>(),
+    getIt<HomeModule>(),
+  ));
 }

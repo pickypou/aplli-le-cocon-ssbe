@@ -1,4 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
+/*import 'package:firebase_core/firebase_core.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -7,3 +7,4 @@ class FirebaseClient {
     await Firebase.initializeApp();
   }
 }
+*/

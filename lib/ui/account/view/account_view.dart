@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../main.dart';
 import '../../../theme.dart';
 
 
@@ -13,6 +14,7 @@ class AccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
+    final auth = GetIt.instance<FirebaseAuth>();
     return Scaffold( // Ajoutez le Scaffold ici
       appBar: AppBar(title: const Text('Mon Compte'),
       actions: [

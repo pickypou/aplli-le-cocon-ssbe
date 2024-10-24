@@ -1,34 +1,21 @@
-import 'package:app_lecocon_ssbe/core/di/di.dart';
-import 'package:app_lecocon_ssbe/data/repository/repository_module.dart';
-import 'package:app_lecocon_ssbe/domain/domain_module.dart';
 import 'package:app_lecocon_ssbe/theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:app_lecocon_ssbe/ui/comon/router/router_config.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get_it/get_it.dart';
+import 'core/di/di.dart';
 import 'firebase_options.dart';
-import 'ui/comon/router/router_config.dart';
 
-FirebaseAuth auth = FirebaseAuth.instance;
-final firestore = FirebaseFirestore.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  setupDataModule();
-  setupDomainModule();
-  configureDependencies();
-
-  // Vérifier si un utilisateur est connecté
-  User? currentUser = FirebaseAuth.instance.currentUser;
-
-  if (currentUser != null) {
-    debugPrint('Utilisateur déjà connecté: ${currentUser.email}');
-  } else {
-    debugPrint('Aucun utilisateur connecté.');
-  }
+  // Configure toutes les dépendances
+    configureDependencies();
+  setupDependencies();
   runApp(const MyApp());
 }
 
@@ -37,11 +24,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appRouterConfig = GetIt.I<AppRouterConfig>(); // Injection via GetIt
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Le cocon.ssbe',
       theme: theme,
-      routerConfig: goRouter,
+      routerConfig: appRouterConfig.router, // Utilisez le router configuré
     );
   }
 }
