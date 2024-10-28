@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app_lecocon_ssbe/ui/comon/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class AddEvenementView extends StatefulWidget {
 }
 
 class AddEvenementViewState extends State<AddEvenementView> {
+  final titleController = TextEditingController();
   File? file;
   String? fileType;
   String? fileUrl;
@@ -80,6 +82,8 @@ class AddEvenementViewState extends State<AddEvenementView> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                CustomTextField(
+                    labelText: 'titre de lévénement', maxLines: 2),
                 ElevatedButton(
                   onPressed: pickFile,
                   child: Text(
@@ -106,6 +110,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
                               file: file!,
                               fileType: fileType!,
                               id: '',
+                              title: '',
                               fileUrl: '',
                               publishDate: DateTime.now(),
                             ),

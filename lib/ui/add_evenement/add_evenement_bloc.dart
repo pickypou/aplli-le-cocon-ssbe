@@ -20,6 +20,7 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
 
         final evenement = Evenements(
             id: event.id,
+            title: event.title,
             fileType: event.fileType,
             fileUrl: fileUrl,
             publishDate: event.publishDate

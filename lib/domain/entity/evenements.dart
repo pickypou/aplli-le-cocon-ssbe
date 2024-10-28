@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 class Evenements {
   final String id;
+  final String title;
   final String fileUrl;
   final String fileType;
   final DateTime publishDate;
@@ -12,7 +13,8 @@ class Evenements {
     required this.id,
     required this.fileType,
     required this.fileUrl,
-    required this.publishDate
+    required this.publishDate,
+    required this.title
 });
 
   //Formatte la date au format (DD/MM/YYYY)
@@ -23,6 +25,7 @@ class Evenements {
   factory Evenements.fromMap(Map<String, dynamic>? data, String id) {
     return Evenements(
         id: id,
+      title: data? ['title'] ?? '',
       fileType: data? ['fileType'] ?? '',
       fileUrl: data? ['fileUrl'] ?? '',
       publishDate: data? ['publishDATE']

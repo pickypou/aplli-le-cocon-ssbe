@@ -50,6 +50,7 @@ class EvenementsInteractor {
   Future<void> addEvenement(Evenements evenement) async {
     try {
       await _firestore.collection('evenement').add({
+        'title': evenement.title,
         'fileUrl': evenement.fileUrl,
         'fileType': evenement.fileType,
         'publishDate': evenement.publishDate,
