@@ -2,15 +2,17 @@ class EvenementDto {
   final String id;
   final String fileUrl;
   final String fileType;
+  final String fileName;
   final DateTime publishDate;
 
-  EvenementDto({required this.id, required this.fileUrl, required this.fileType, required this.publishDate});
+  EvenementDto({required this.id, required this.fileUrl, required this.fileType, required this.fileName, required this.publishDate});
 
   factory EvenementDto.fromJson(Map<String, dynamic> json) {
     return EvenementDto(
         id: json['is'],
         fileUrl:json['fileUrl'],
         fileType: json['fileType'],
+        fileName: json['fileName'],
         publishDate: json['publishDate']
     );
   }
@@ -19,11 +21,12 @@ class EvenementDto {
       'id':id,
       'fileUrl': fileUrl,
       'fileType': fileType,
+      'fileName': fileName,
       'publishDate': publishDate.toIso8601String(),
     };
   }
   @override
   String toString() {
-    return 'EvenementDto{id: $id, fileUrl: $fileUrl, fileType: $fileType, publishDate: $publishDate}';
+    return 'EvenementDto{id: $id, fileUrl: $fileUrl, fileType: $fileType, fileName: $fileName, publishDate: $publishDate}';
   }
 }

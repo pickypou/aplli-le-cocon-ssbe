@@ -36,7 +36,7 @@ class EvenementsInteractor {
   Future<String> uploadFile(File file) async {
     try {
       String fileName = file.path.split('/').last;
-      Reference storageReference = _storageService.ref('evenements').child('evenements/$fileName');
+      Reference storageReference = _storageService.ref('evenement/$fileName');
       UploadTask uploadTask = storageReference.putFile(file);
 
       TaskSnapshot taskSnapshot = await uploadTask;

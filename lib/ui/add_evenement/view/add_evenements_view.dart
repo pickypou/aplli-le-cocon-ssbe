@@ -20,9 +20,11 @@ class AddEvenementView extends StatefulWidget {
 
 class AddEvenementViewState extends State<AddEvenementView> {
   final titleController = TextEditingController();
+  final fileNameController = TextEditingController();
   File? file;
   String? fileType;
   String? fileUrl;
+
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -49,7 +51,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
     final auth = GetIt.instance<FirebaseAuth>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('j\'ajoute un événement'),
+        title: const Text('J\'ajoute un événement'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -83,7 +85,15 @@ class AddEvenementViewState extends State<AddEvenementView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 CustomTextField(
-                    labelText: 'titre de lévénement', maxLines: 2),
+                  controller: titleController,  // Ajout du contrôleur pour le titre
+                  labelText: 'Titre de l\'événement',
+                  maxLines: 2,
+                ),
+                CustomTextField(
+                  controller: fileNameController,  // Ajout du contrôleur pour le titre
+                  labelText: 'Nom du fichier',
+                  maxLines: 2,
+                ),
                 ElevatedButton(
                   onPressed: pickFile,
                   child: Text(
@@ -106,27 +116,30 @@ class AddEvenementViewState extends State<AddEvenementView> {
                   onPressed: () {
                     if (file != null && fileType != null) {
                       context.read<AddEvenementsBloc>().add(
-                            AddEvenementSignUpEvent(
-                              file: file!,
-                              fileType: fileType!,
-                              id: '',
-                              title: '',
-                              fileUrl: '',
-                              publishDate: DateTime.now(),
-                            ),
-                          );
+                        AddEvenementSignUpEvent(
+                          file: file!,
+                          fileType: fileType!,
+                          id: '', // Vous pouvez définir un ID généré si nécessaire
+                          title: titleController.text,
+                          fileName: fileNameController.text.trim(),
+                          fileUrl: '', // Vous pouvez mettre à jour ce champ après l'upload
+                          publishDate: DateTime.now(),
+                        ),
+                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text('Veuillez choisir un fichier')),
+                          content: Text('Veuillez choisir un fichier et donner un nom au fichier'),
+                        ),
                       );
                     }
                   },
                   child: Text(
-                    'envoyez l\'événement',
+                    'Envoyer l\'événement',
                     style: textStyleText(context),
                   ),
                 ),
+
               ],
             );
           },
