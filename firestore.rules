@@ -1,0 +1,13 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Autoriser à tout le monde de lire
+    match /{document=**} {
+      allow read: if true;  // Permettre la lecture à tous les utilisateurs
+
+      // Autoriser l'écriture uniquement aux utilisateurs authentifiés
+      allow write: if request.auth != null;  // Vérifier si l'utilisateur est authentifié
+    }
+  }
+}

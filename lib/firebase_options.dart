@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -65,4 +56,32 @@ class DefaultFirebaseOptions {
     storageBucket: 'le-cocon-ssbe-6a4d0.appspot.com',
     iosBundleId: 'com.example.appLecoconSsbe',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDcFwkYsp64HNZVgsY86TC7aE2_VM1SIqQ',
+    appId: '1:282482672251:web:2c68d577580e00a08058de',
+    messagingSenderId: '282482672251',
+    projectId: 'le-cocon-ssbe-6a4d0',
+    authDomain: 'le-cocon-ssbe-6a4d0.firebaseapp.com',
+    storageBucket: 'le-cocon-ssbe-6a4d0.appspot.com',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAHXNBKxfWEqoD-1HcwYIKM8MQzRNwYnNA',
+    appId: '1:282482672251:ios:324694d1005c38ff8058de',
+    messagingSenderId: '282482672251',
+    projectId: 'le-cocon-ssbe-6a4d0',
+    storageBucket: 'le-cocon-ssbe-6a4d0.appspot.com',
+    iosBundleId: 'com.example.appLecoconSsbe',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDcFwkYsp64HNZVgsY86TC7aE2_VM1SIqQ',
+    appId: '1:282482672251:web:d47bfd42596fb65d8058de',
+    messagingSenderId: '282482672251',
+    projectId: 'le-cocon-ssbe-6a4d0',
+    authDomain: 'le-cocon-ssbe-6a4d0.firebaseapp.com',
+    storageBucket: 'le-cocon-ssbe-6a4d0.appspot.com',
+  );
+
 }
