@@ -6,7 +6,6 @@ class Evenements {
   final String title;
   final String fileUrl;
   final String fileType;
-  final String fileName;
   final DateTime publishDate;
 
 
@@ -14,7 +13,6 @@ class Evenements {
     required this.id,
     required this.fileType,
     required this.fileUrl,
-    required this.fileName,
     required this.publishDate,
     required this.title
 });
@@ -30,7 +28,6 @@ class Evenements {
       title: data? ['title'] ?? '',
       fileType: data? ['fileType'] ?? '',
       fileUrl: data? ['fileUrl'] ?? '',
-      fileName: data? ['fileName'] ?? '',
       publishDate: data? ['publishDATE']
 
     );

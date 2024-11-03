@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app_lecocon_ssbe/ui/comon/widgets/created_miniature/created_miniature.dart';
 import 'package:app_lecocon_ssbe/ui/comon/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,11 +21,11 @@ class AddEvenementView extends StatefulWidget {
 
 class AddEvenementViewState extends State<AddEvenementView> {
   final titleController = TextEditingController();
-  final fileNameController = TextEditingController();
   File? file;
   String? fileType;
   String? fileUrl;
-
+  File? thumbnail;
+   String pdfUrl = '';
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -38,10 +39,14 @@ class AddEvenementViewState extends State<AddEvenementView> {
         file = File(platformFile.path!);
         fileType = platformFile.extension;
       });
+
+      // Générer la miniature sans l'afficher
+      thumbnail = (await PdfMiniature(pdfUrl: pdfUrl,)) as File?;
     } else {
       setState(() {
         file = null;
         fileType = null;
+        thumbnail = null;
       });
     }
   }
@@ -85,12 +90,11 @@ class AddEvenementViewState extends State<AddEvenementView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 CustomTextField(
-                  controller: titleController,  // Ajout du contrôleur pour le titre
+                  controller: titleController,
                   labelText: 'Titre de l\'événement',
                   maxLines: 2,
                 ),
                 CustomTextField(
-                  controller: fileNameController,  // Ajout du contrôleur pour le titre
                   labelText: 'Nom du fichier',
                   maxLines: 2,
                 ),
@@ -119,11 +123,11 @@ class AddEvenementViewState extends State<AddEvenementView> {
                         AddEvenementSignUpEvent(
                           file: file!,
                           fileType: fileType!,
-                          id: '', // Vous pouvez définir un ID généré si nécessaire
+                          id: '',
                           title: titleController.text,
-                          fileName: fileNameController.text.trim(),
-                          fileUrl: '', // Vous pouvez mettre à jour ce champ après l'upload
+                          fileUrl: '',
                           publishDate: DateTime.now(),
+                          thumbnail: thumbnail, // Inclure la miniature dans l'événement
                         ),
                       );
                     } else {
@@ -139,7 +143,6 @@ class AddEvenementViewState extends State<AddEvenementView> {
                     style: textStyleText(context),
                   ),
                 ),
-
               ],
             );
           },

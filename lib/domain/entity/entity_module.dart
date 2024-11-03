@@ -23,7 +23,6 @@ void setupEntityModule() {
     title: '',
     fileType: '',
     fileUrl: '',
-    fileName: '',
     publishDate: DateTime.now(),
   ));
 
