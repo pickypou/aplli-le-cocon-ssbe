@@ -6,6 +6,7 @@ class Evenements {
   final String title;
   final String fileUrl;
   final String fileType;
+  final String? thumbnailUrl;
   final DateTime publishDate;
 
 
@@ -14,7 +15,8 @@ class Evenements {
     required this.fileType,
     required this.fileUrl,
     required this.publishDate,
-    required this.title
+    required this.title,
+    this.thumbnailUrl
 });
 
   //Formatte la date au format (DD/MM/YYYY)
@@ -28,6 +30,7 @@ class Evenements {
       title: data? ['title'] ?? '',
       fileType: data? ['fileType'] ?? '',
       fileUrl: data? ['fileUrl'] ?? '',
+      thumbnailUrl: data?['thumbnailUrl'] ?? '',
       publishDate: data? ['publishDATE']
 
     );
