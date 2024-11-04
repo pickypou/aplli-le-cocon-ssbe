@@ -1,16 +1,16 @@
 import 'dart:io';
-import 'package:app_lecocon_ssbe/ui/comon/widgets/created_miniature/created_miniature.dart';
 import 'package:app_lecocon_ssbe/ui/comon/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenement_bloc.dart';
-import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenement_state.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme.dart';
+
+import '../add_evenement_bloc.dart';
 import '../add_evenement_event.dart';
+import '../add_evenement_state.dart';
 
 class AddEvenementView extends StatefulWidget {
   const AddEvenementView({super.key});
@@ -23,9 +23,6 @@ class AddEvenementViewState extends State<AddEvenementView> {
   final titleController = TextEditingController();
   File? file;
   String? fileType;
-  String? fileUrl;
-  File? thumbnail;
-   String pdfUrl = '';
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -39,14 +36,10 @@ class AddEvenementViewState extends State<AddEvenementView> {
         file = File(platformFile.path!);
         fileType = platformFile.extension;
       });
-
-      // Générer la miniature sans l'afficher
-      thumbnail = (await PdfMiniature(pdfUrl: pdfUrl,)) as File?;
     } else {
       setState(() {
         file = null;
         fileType = null;
-        thumbnail = null;
       });
     }
   }
@@ -94,10 +87,6 @@ class AddEvenementViewState extends State<AddEvenementView> {
                   labelText: 'Titre de l\'événement',
                   maxLines: 2,
                 ),
-                CustomTextField(
-                  labelText: 'Nom du fichier',
-                  maxLines: 2,
-                ),
                 ElevatedButton(
                   onPressed: pickFile,
                   child: Text(
@@ -118,7 +107,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    if (file != null && fileType != null) {
+                    if (file != null && titleController.text.isNotEmpty) {
                       context.read<AddEvenementsBloc>().add(
                         AddEvenementSignUpEvent(
                           file: file!,
@@ -127,19 +116,18 @@ class AddEvenementViewState extends State<AddEvenementView> {
                           title: titleController.text,
                           fileUrl: '',
                           publishDate: DateTime.now(),
-                          thumbnail: thumbnail, // Inclure la miniature dans l'événement
                         ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Veuillez choisir un fichier et donner un nom au fichier'),
+                          content: Text('Veuillez remplir tous les champs et choisir un fichier.'),
                         ),
                       );
                     }
                   },
                   child: Text(
-                    'Envoyer l\'événement',
+                    'Ajouter l\'événement',
                     style: textStyleText(context),
                   ),
                 ),

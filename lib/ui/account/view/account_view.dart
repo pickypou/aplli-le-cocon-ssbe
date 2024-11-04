@@ -29,7 +29,8 @@ class AccountView extends StatelessWidget {
         )
       ],
       ), // Ajoutez une AppBar si nécessaire
-      body: SizedBox(
+      body:SingleChildScrollView(
+    child: SizedBox(
         width: size.width,
         height: size.height,
         child: Column(
@@ -59,6 +60,7 @@ class AccountView extends StatelessWidget {
           ],
         ),
       ),
+      )
     );
   }
 }
