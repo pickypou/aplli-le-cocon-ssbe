@@ -52,7 +52,7 @@ class EvenementModule implements UIModule {
       return AddEvenementsBloc(interactor);
     },
 
-    child: const AddEvenementView(),
+    child: AddEvenementView(),
   );
   }
 

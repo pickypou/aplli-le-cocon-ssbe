@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:app_lecocon_ssbe/ui/comon/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import '../../../theme.dart';
-
+import '../ad_vignette_pdf.dart';
 import '../add_evenement_bloc.dart';
 import '../add_evenement_event.dart';
 import '../add_evenement_state.dart';
@@ -21,28 +20,7 @@ class AddEvenementView extends StatefulWidget {
 
 class AddEvenementViewState extends State<AddEvenementView> {
   final titleController = TextEditingController();
-  File? file;
-  String? fileType;
-
-  Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
-    );
-
-    if (result != null && result.files.isNotEmpty) {
-      PlatformFile platformFile = result.files.first;
-      setState(() {
-        file = File(platformFile.path!);
-        fileType = platformFile.extension;
-      });
-    } else {
-      setState(() {
-        file = null;
-        fileType = null;
-      });
-    }
-  }
+  final controller = AddEvenementController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,17 +66,17 @@ class AddEvenementViewState extends State<AddEvenementView> {
                   maxLines: 2,
                 ),
                 ElevatedButton(
-                  onPressed: pickFile,
-                  child: Text(
-                    'Choisir un fichier (PDF ou image)',
-                    style: textStyleText(context),
-                  ),
+                  onPressed: () async {
+                    await controller.pickFile();
+                    setState(() {}); // Met à jour l'interface
+                  },
+                  child: const Text('Choisir un fichier (PDF ou image)'),
                 ),
-                if (file != null)
+                if (controller.file != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      'Fichier sélectionné : ${file!.path}',
+                      'Fichier sélectionné : ${controller.file!.path}',
                       style: Theme.of(context).textTheme.bodySmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -107,18 +85,26 @@ class AddEvenementViewState extends State<AddEvenementView> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    if (file != null && titleController.text.isNotEmpty) {
+                    if (controller.file != null && titleController.text.isNotEmpty) {
+                      debugPrint("Préparation de l'ajout de l'événement au Bloc...");
+                      debugPrint("Titre : ${titleController.text}");
+                      debugPrint("Chemin du fichier : ${controller.file!.path}");
+                      debugPrint("Type de fichier : ${controller.fileType}");
+                      debugPrint("Thumbnail : ${controller.thumbnail != null ? "Générée" : "Non générée"}");
+
                       context.read<AddEvenementsBloc>().add(
                         AddEvenementSignUpEvent(
-                          file: file!,
-                          fileType: fileType!,
+                          file: controller.file!,
+                          fileType: controller.fileType!,
                           id: '',
                           title: titleController.text,
-                          fileUrl: '',
+                          fileUrl: '', // Placeholder pour l'URL du fichier après upload
                           publishDate: DateTime.now(),
+                          thumbnail: controller.thumbnail, // Ajout de la miniature ici
                         ),
                       );
                     } else {
+                      debugPrint("Échec de la soumission : Champs manquants.");
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Veuillez remplir tous les champs et choisir un fichier.'),
@@ -126,10 +112,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
                       );
                     }
                   },
-                  child: Text(
-                    'Ajouter l\'événement',
-                    style: textStyleText(context),
-                  ),
+                  child: const Text('Ajouter l\'événement'),
                 ),
               ],
             );

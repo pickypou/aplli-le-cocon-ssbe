@@ -23,6 +23,8 @@ import '../../data/repository/users_repository_impl.dart' as _i304;
 import '../../domain/usecases/fetch_avis_clients_data_usecase.dart' as _i57;
 import '../../domain/usecases/fetch_evenement_data_usecase.dart' as _i914;
 import '../../domain/usecases/fetch_user_data_usecase.dart' as _i656;
+import '../../domain/usecases/generate_and_upload_thumbnail_use_case.dart'
+    as _i700;
 import '../../ui/account/account_module.dart' as _i692;
 import '../../ui/add_avis_clients/add_avis_clients_module.dart' as _i356;
 import '../../ui/add_evenement/evenement_module.dart' as _i402;
@@ -52,6 +54,8 @@ _i174.GetIt init(
   gh.factory<_i703.FirebaseClient>(() => _i703.FirebaseClient());
   gh.factory<_i590.EvenementsRepository>(
       () => firebaseModule.evenementsRepository);
+  gh.factory<_i700.GenerateThumbnailUseCase>(
+      () => _i700.GenerateThumbnailUseCase());
   gh.singleton<_i573.AppRouter>(() => _i573.AppRouter());
   gh.singleton<_i974.FirebaseFirestore>(() => firebaseModule.firestore);
   gh.singleton<_i457.FirebaseStorage>(() => firebaseModule.storage);

@@ -51,7 +51,7 @@ class AddEvenementsPage extends StatelessWidget {
                           width: constraints.maxWidth / 2,
                         ),
                         const SizedBox(height: 50),
-                        const Expanded(child: AddEvenementView())
+                        Expanded(child: AddEvenementView())
                       ],
                     ),
                   ),

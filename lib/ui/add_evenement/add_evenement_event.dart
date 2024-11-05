@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 abstract class AddEvenementEvent {}
 
@@ -9,6 +10,7 @@ class AddEvenementSignUpEvent extends AddEvenementEvent {
   final String fileType;
   final DateTime publishDate;
   final File file;
+  final Uint8List? thumbnail;
 
   AddEvenementSignUpEvent(
       {required this.id,
@@ -16,7 +18,9 @@ class AddEvenementSignUpEvent extends AddEvenementEvent {
       required this.fileUrl,
       required this.fileType,
       required this.publishDate,
-      required this.file, File? thumbnail});
+      required this.file,
+      this.thumbnail
+      });
 }
 
 class AddEvenementButtonPressed extends AddEvenementEvent {

@@ -1,3 +1,8 @@
+
+
+
+
+
 abstract class AddEvenementsState {}
 
 class AddEvenementsSignUpInitialState extends AddEvenementsState {}
@@ -17,5 +22,7 @@ class AddEvenementsSignUpSuccessState extends AddEvenementsState {
 class AddEvenementsSignUpErrorState extends AddEvenementsState {
   final String error;
   AddEvenementsSignUpErrorState({required this.error});
-
 }
+
+
+

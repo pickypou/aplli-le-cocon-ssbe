@@ -1,3 +1,4 @@
+import 'package:app_lecocon_ssbe/domain/usecases/generate_and_upload_thumbnail_use_case.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
 import 'package:app_lecocon_ssbe/ui/ui_module.dart';
@@ -47,6 +48,11 @@ void setupDependencies() {
     debugPrint("Enregistrement de StorageService");
     getIt.registerLazySingleton<StorageService>(() =>
         StorageService(getIt<FirebaseStorage>()));
+
+    debugPrint("Enregistrement de GenerateThumbnailUseCase");
+    getIt.registerLazySingleton<GenerateThumbnailUseCase>(() =>
+        GenerateThumbnailUseCase());
+
 
     // Enregistre les modules de l'interface utilisateur
     debugPrint("Enregistrement de AccountModule");

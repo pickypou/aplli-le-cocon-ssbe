@@ -1,4 +1,6 @@
 
+import 'dart:typed_data';
+
 import 'package:intl/intl.dart';
 
 class Evenements {
@@ -6,7 +8,7 @@ class Evenements {
   final String title;
   final String fileUrl;
   final String fileType;
-  final String? thumbnailUrl;
+  final Uint8List? thumbnailUrl;
   final DateTime publishDate;
 
 

@@ -4,6 +4,7 @@ import 'package:app_lecocon_ssbe/domain/usecases/fetch_evenement_data_usecase.da
 import 'package:app_lecocon_ssbe/domain/usecases/fetch_user_data_usecase.dart';
 import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository_impl.dart';
 import 'package:app_lecocon_ssbe/domain/usecases/fetch_avis_clients_data_usecase.dart';
+import 'package:app_lecocon_ssbe/domain/usecases/generate_and_upload_thumbnail_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -20,6 +21,8 @@ void setupUseCaseModule() {
   getIt.registerLazySingleton<FetchEvenementDataUseCase>(
           () => FetchEvenementDataUseCase(getIt<EvenementsRepositoryImpl>())
   );
+  getIt.registerLazySingleton<GenerateThumbnailUseCase>(() as FactoryFunc<GenerateThumbnailUseCase>);
+
 
   // Enregistrement du cas d'utilisation FetchUserDataUseCase avec un userId dynamique
   getIt.registerFactoryParam<FetchUserDataUseCase, String, void>(

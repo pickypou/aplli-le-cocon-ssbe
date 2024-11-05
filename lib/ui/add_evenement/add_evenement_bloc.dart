@@ -23,7 +23,8 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
             title: event.title,
             fileType: event.fileType,
             fileUrl: fileUrl,
-            publishDate: event.publishDate
+            publishDate: event.publishDate,
+            thumbnailUrl: event.thumbnail
         );
         await evenementInteractor.addEvenement(evenement);
         emit(AddEvenementsSignUpSuccessState(evenementId: event.id));
