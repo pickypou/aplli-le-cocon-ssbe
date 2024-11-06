@@ -1,11 +1,10 @@
-import 'dart:typed_data';
 import 'package:app_lecocon_ssbe/ui/comon/widgets/inputs/custom_text_field.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+
 import '../ad_vignette_pdf.dart';
 import '../add_evenement_bloc.dart';
 import '../add_evenement_event.dart';
@@ -85,29 +84,36 @@ class AddEvenementViewState extends State<AddEvenementView> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    if (controller.file != null && titleController.text.isNotEmpty) {
-                      debugPrint("Préparation de l'ajout de l'événement au Bloc...");
+                    if (controller.file != null &&
+                        titleController.text.isNotEmpty) {
+                      debugPrint(
+                          "Préparation de l'ajout de l'événement au Bloc...");
                       debugPrint("Titre : ${titleController.text}");
-                      debugPrint("Chemin du fichier : ${controller.file!.path}");
+                      debugPrint(
+                          "Chemin du fichier : ${controller.file!.path}");
                       debugPrint("Type de fichier : ${controller.fileType}");
-                      debugPrint("Thumbnail : ${controller.thumbnail != null ? "Générée" : "Non générée"}");
+                      debugPrint(
+                          "Thumbnail : ${controller.thumbnail != null ? "Générée" : "Non générée"}");
 
                       context.read<AddEvenementsBloc>().add(
-                        AddEvenementSignUpEvent(
-                          file: controller.file!,
-                          fileType: controller.fileType!,
-                          id: '',
-                          title: titleController.text,
-                          fileUrl: '', // Placeholder pour l'URL du fichier après upload
-                          publishDate: DateTime.now(),
-                          thumbnail: controller.thumbnail, // Ajout de la miniature ici
-                        ),
-                      );
+                            AddEvenementSignUpEvent(
+                              file: controller.file!,
+                              fileType: controller.fileType!,
+                              id: '',
+                              title: titleController.text,
+                              fileUrl:
+                                  '', // Placeholder pour l'URL du fichier après upload
+                              publishDate: DateTime.now(),
+                              thumbnail: controller
+                                  .thumbnail, // Ajout de la miniature ici
+                            ),
+                          );
                     } else {
                       debugPrint("Échec de la soumission : Champs manquants.");
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Veuillez remplir tous les champs et choisir un fichier.'),
+                          content: Text(
+                              'Veuillez remplir tous les champs et choisir un fichier.'),
                         ),
                       );
                     }

@@ -1,8 +1,10 @@
 import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:app_lecocon_ssbe/ui/comon/router/router_config.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+
 import 'core/di/di.dart';
 import 'firebase_options.dart';
 
@@ -13,8 +15,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'YOUR_RECAPTCHA_SITE_KEY',
+    // Vous pouvez utiliser androidProvider: AndroidProvider.playIntegrity pour la production
+    androidProvider: AndroidProvider.debug,
+  );
+
   // Configure toutes les dépendances
-    configureDependencies();
+  configureDependencies();
   setupDependencies();
   runApp(const MyApp());
 }

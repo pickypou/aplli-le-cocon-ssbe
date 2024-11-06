@@ -24,6 +24,8 @@
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
+	<key>FirebaseAppCheckProviderFactory</key>
+    <string>FirebaseAppCheckProviderFactory</string>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:282482672251:ios:324694d1005c38ff8058de</string>
 	<key>NSPhotoLibraryUsageDescription</key>
