@@ -51,9 +51,9 @@ _i174.GetIt init(
     environmentFilter,
   );
   final firebaseModule = _$FirebaseModule();
+  gh.factory<_i703.FirebaseClient>(() => _i703.FirebaseClient());
   gh.factory<_i590.EvenementsRepository>(
       () => firebaseModule.evenementsRepository);
-  gh.factory<_i703.FirebaseClient>(() => _i703.FirebaseClient());
   gh.factory<_i700.GenerateThumbnailUseCase>(
       () => _i700.GenerateThumbnailUseCase());
   gh.singleton<_i573.AppRouter>(() => _i573.AppRouter());
@@ -76,15 +76,15 @@ _i174.GetIt init(
       () => _i57.FetchAvisClientDataUseCase(gh<_i684.AvisClientsRepository>()));
   gh.factory<_i977.AuthService>(
       () => _i977.AuthService(gh<_i59.FirebaseAuth>()));
-  gh.singleton<_i356.AddAvisClientsModule>(
-      () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
   gh.singleton<_i402.EvenementModule>(
       () => _i402.EvenementModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i966.AddUserModule>(
-      () => _i966.AddUserModule(gh<_i573.AppRouter>()));
   gh.singleton<_i863.LoginModule>(
       () => _i863.LoginModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i966.AddUserModule>(
+      () => _i966.AddUserModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i356.AddAvisClientsModule>(
+      () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
   gh.singleton<_i692.AccountModule>(
       () => _i692.AccountModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
