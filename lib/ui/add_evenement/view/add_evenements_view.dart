@@ -94,7 +94,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
                       debugPrint("Type de fichier : ${controller.fileType}");
                       debugPrint(
                           "Thumbnail : ${controller.thumbnail != null ? "Générée" : "Non générée"}");
-                      debugPrint("upLoad: ${controller.uploadFiles()}");
+                      debugPrint("upLoad: ${controller.uploadFileAndThumbnail()}");
 
                       context.read<AddEvenementsBloc>().add(
                             AddEvenementSignUpEvent(
