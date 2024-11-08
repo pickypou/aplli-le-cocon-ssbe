@@ -1,11 +1,12 @@
+import 'dart:io';
+
 import 'package:app_lecocon_ssbe/ui/comon/widgets/inputs/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-
-import '../ad_vignette_pdf.dart';
+import 'package:file_picker/file_picker.dart';
 import '../add_evenement_bloc.dart';
 import '../add_evenement_event.dart';
 import '../add_evenement_state.dart';
@@ -19,11 +20,13 @@ class AddEvenementView extends StatefulWidget {
 
 class AddEvenementViewState extends State<AddEvenementView> {
   final titleController = TextEditingController();
-  final controller = AddEvenementController();
+  File? selectedFile;
+  String? fileType;
 
   @override
   Widget build(BuildContext context) {
     final auth = GetIt.instance<FirebaseAuth>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('J\'ajoute un événement'),
@@ -66,16 +69,16 @@ class AddEvenementViewState extends State<AddEvenementView> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    await controller.pickFile();
-                    setState(() {}); // Met à jour l'interface
+                    await _pickFile();
+                    setState(() {}); // Met à jour l'interface après sélection
                   },
                   child: const Text('Choisir un fichier (PDF ou image)'),
                 ),
-                if (controller.file != null)
+                if (selectedFile != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      'Fichier sélectionné : ${controller.file!.path}',
+                      'Fichier sélectionné : ${selectedFile!.path}',
                       style: Theme.of(context).textTheme.bodySmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -84,33 +87,18 @@ class AddEvenementViewState extends State<AddEvenementView> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    if (controller.file != null &&
-                        titleController.text.isNotEmpty) {
-                      debugPrint(
-                          "Préparation de l'ajout de l'événement au Bloc...");
-                      debugPrint("Titre : ${titleController.text}");
-                      debugPrint(
-                          "Chemin du fichier : ${controller.file!.path}");
-                      debugPrint("Type de fichier : ${controller.fileType}");
-                      debugPrint(
-                          "Thumbnail : ${controller.thumbnail != null ? "Générée" : "Non générée"}");
-                      debugPrint("upLoad: ${controller.uploadFileAndThumbnail()}");
-
+                    if (selectedFile != null && titleController.text.isNotEmpty) {
                       context.read<AddEvenementsBloc>().add(
-                            AddEvenementSignUpEvent(
-                              file: controller.file!,
-                              fileType: controller.fileType!,
-                              id: '',
-                              title: titleController.text,
-                              fileUrl:
-                                  '', // Placeholder pour l'URL du fichier après upload
-                              publishDate: DateTime.now(),
-                              thumbnail: controller
-                                  .thumbnail, // Ajout de la miniature ici
-                            ),
-                          );
+                        AddEvenementSignUpEvent(
+                          file: selectedFile!,
+                          fileType: fileType!,
+                          id: '', // ID généré côté Firestore ou Bloc
+                          title: titleController.text,
+                          publishDate: DateTime.now(),
+                          thumbnail: null, // Remplacez par la miniature si elle est générée
+                        ),
+                      );
                     } else {
-                      debugPrint("Échec de la soumission : Champs manquants.");
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
@@ -121,12 +109,29 @@ class AddEvenementViewState extends State<AddEvenementView> {
                   },
                   child: const Text('Ajouter l\'événement'),
                 ),
-
               ],
             );
           },
         ),
       ),
     );
+  }
+
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      selectedFile = File(result.files.first.path!);
+      fileType = result.files.first.extension;
+      debugPrint("Fichier sélectionné : ${selectedFile!.path}");
+      debugPrint("Type de fichier : $fileType");
+    } else {
+      debugPrint("Aucun fichier sélectionné.");
+      selectedFile = null;
+      fileType = null;
+    }
   }
 }

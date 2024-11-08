@@ -9,32 +9,35 @@ class FetchEvenementDataUseCase {
 
   FetchEvenementDataUseCase(this.evenementsRepository);
 
+  // Méthode pour récupérer la liste des événements
   Future<List<Evenements>> getEvenement() async {
     try {
       debugPrint('Fetching evenement data');
-      Stream<Iterable<Evenements>> evenementStream =
-          evenementsRepository.getEvenementStream();
 
-      List<Evenements> evenementList = [];
-      await for (var evenementIterable in evenementStream) {
-        evenementList.addAll(evenementIterable);
-      }
-      return evenementList;
-    }catch (e) {
-      debugPrint(e.toString());
+      // Écoute du stream et ajout à une liste au fur et à mesure
+      final evenementStream = evenementsRepository.getEvenementStream();
+      final evenementList = await evenementStream.first;  // Récupérer tous les événements à la première émission du Stream
+
+      return evenementList.toList();  // Retourner la liste
+    } catch (e) {
+      debugPrint('Error fetching evenement data: $e');
       rethrow;
     }
   }
 
+  // Méthode pour récupérer un événement spécifique par son ID
   Future<Evenements?> getEvenementsById(String evenementId) async {
     try {
       debugPrint('Fetching evenement data from Firestore...');
 
-      Map<String, dynamic>? evenementData =
-          await evenementsRepository.getById(evenementId);
-      return Evenements.fromMap(evenementData!, evenementId);
-    }catch (e) {
-      debugPrint('Error fetching evenement by ID : $e');
+      Map<String, dynamic>? evenementData = await evenementsRepository.getById(evenementId);
+      if (evenementData == null) {
+        debugPrint('No data found for evenementId: $evenementId');
+        return null;
+      }
+      return Evenements.fromMap(evenementData, evenementId);
+    } catch (e) {
+      debugPrint('Error fetching evenement by ID: $e');
       rethrow;
     }
   }

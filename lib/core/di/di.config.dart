@@ -89,6 +89,11 @@ _i174.GetIt init(
       () => _i692.AccountModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
       () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
+  gh.factory<_i1053.EvenementsRepositoryImpl>(
+      () => _i1053.EvenementsRepositoryImpl(
+            gh<_i746.FirestoreService>(),
+            gh<_i974.FirebaseFirestore>(),
+          ));
   gh.singleton<_i686.AppRouterConfig>(() => _i686.AppRouterConfig(
         gh<_i692.AccountModule>(),
         gh<_i587.HomeModule>(),
@@ -96,15 +101,6 @@ _i174.GetIt init(
         gh<_i863.LoginModule>(),
         gh<_i966.AddUserModule>(),
         gh<_i356.AddAvisClientsModule>(),
-      ));
-  gh.factoryParam<_i1053.EvenementsRepositoryImpl, _i974.FirebaseFirestore?,
-      dynamic>((
-    firestore,
-    _,
-  ) =>
-      _i1053.EvenementsRepositoryImpl(
-        gh<_i746.FirestoreService>(),
-        firestore,
       ));
   gh.factory<_i656.FetchUserDataUseCase>(() => _i656.FetchUserDataUseCase(
         gh<String>(),
