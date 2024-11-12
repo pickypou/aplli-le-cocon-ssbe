@@ -23,60 +23,56 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
     });
   }
 
-  Future<void> _handleAddEvenementSignUpEvent(AddEvenementSignUpEvent event, Emitter<AddEvenementsState> emit) async {
+  Future<void> _handleAddEvenementSignUpEvent(
+      AddEvenementSignUpEvent event, Emitter<AddEvenementsState> emit) async {
     emit(AddEvenementsSignUpLoadingState());
-    try {
-      File? file;
-      String? fileType;
-      String? title;
 
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+    try {
+      Uint8List? thumbnail;
+
+      // Génération de la vignette uniquement si le fichier est un PDF
+      if (event.fileType == 'pdf') {
+        thumbnail = await generateThumbnailUseCase.generateThumbnail(event.file.path);
+      }
+
+      String evenementId = FirebaseFirestore.instance.collection('evenements').doc().id;
+
+      // Upload du fichier principal
+      String fileUrl = await _uploadFile(event.file, evenementId);
+
+      // Upload de la vignette si elle a été générée
+      String? thumbnailUrl;
+      if (thumbnail != null) {
+        thumbnailUrl = await _uploadThumbnail(thumbnail, evenementId);
+      }
+
+      // Création de l'entité événement
+      final evenement = Evenements(
+        id: evenementId,
+        title: event.title,
+        fileType: event.fileType,
+        fileUrl: fileUrl,
+        publishDate: event.publishDate,
+        thumbnailUrl: thumbnailUrl,  // Null pour les images
       );
 
-      if (result != null && result.files.isNotEmpty) {
-        PlatformFile platformFile = result.files.first;
-        file = File(platformFile.path!);
-        fileType = platformFile.extension;
-        title = platformFile.name;
+      // Ajout des données dans Firestore
+      await FirebaseFirestore.instance.collection('evenements').doc(evenementId).set({
+        'fileType': evenement.fileType,
+        'fileUrl': evenement.fileUrl,
+        'thumbnailUrl': evenement.thumbnailUrl,
+        'title': evenement.title,
+        'publishDate': evenement.publishDate,
+      });
 
-        Uint8List? thumbnail = await generateThumbnailUseCase.generateThumbnail(file.path);
-
-        if (thumbnail != null) {
-          String evenementId = FirebaseFirestore.instance.collection('evenements').doc().id;
-          String fileUrl = await _uploadFile(file, evenementId);
-          String thumbnailUrl = await _uploadThumbnail(thumbnail, evenementId);
-
-          final evenement = Evenements(
-            id: evenementId,
-            title: title,
-            fileType: fileType ?? "Type inconnu",
-            fileUrl: fileUrl,
-            publishDate: Timestamp.now().toDate(),
-            thumbnailUrl: thumbnailUrl,
-          );
-
-          await FirebaseFirestore.instance.collection('evenements').doc(evenementId).set({
-            'fileType': evenement.fileType,
-            'fileUrl': evenement.fileUrl,
-            'thumbnailUrl': evenement.thumbnailUrl,
-            'title': evenement.title,
-            'publishDate': evenement.publishDate,
-          });
-
-          emit(AddEvenementsSignUpSuccessState(evenementId: evenementId));
-        } else {
-          throw Exception("Échec de la génération de la vignette");
-        }
-      } else {
-        throw Exception("Aucun fichier sélectionné");
-      }
+      emit(AddEvenementsSignUpSuccessState(evenementId: evenementId));
     } catch (error) {
       debugPrint("Erreur lors de l'ajout de l'événement : $error");
       emit(AddEvenementsSignUpErrorState(error: error.toString()));
     }
   }
+
+
 
   Future<String> _uploadFile(File file, String evenementId) async {
     Reference fileRef = _firebaseStorage.ref().child('evenement/$evenementId/file.pdf');

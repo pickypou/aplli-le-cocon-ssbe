@@ -14,6 +14,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+
   // Configure toutes les dépendances
   configureDependencies();
   setupDependencies();

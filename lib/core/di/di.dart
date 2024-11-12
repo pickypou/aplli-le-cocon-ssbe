@@ -2,7 +2,6 @@ import 'package:app_lecocon_ssbe/domain/usecases/generate_and_upload_thumbnail_u
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
 import 'package:app_lecocon_ssbe/ui/ui_module.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,16 +25,11 @@ final getIt = GetIt.instance;
   preferRelativeImports: true, // Utilisation d'importations relatives
   asExtension: false, // Pas d'extension
 )
-void configureDependencies() => init(getIt);
-
+Future<void> configureDependencies() async => await init(getIt);
 void setupDependencies() {
   try {
     debugPrint("Enregistrement de FirebaseAuth");
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-
-    debugPrint("Enregistrement de FirebaseFirestore");
-    getIt.registerLazySingleton<FirebaseFirestore>(
-        () => FirebaseFirestore.instance);
 
     debugPrint("Enregistrement de FirebaseStorage");
     getIt
