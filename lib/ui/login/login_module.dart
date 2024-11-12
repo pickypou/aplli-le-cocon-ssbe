@@ -1,10 +1,10 @@
 import 'package:app_lecocon_ssbe/core/di/di.dart';
 import 'package:app_lecocon_ssbe/data/repository/users_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/users_repository_impl.dart';
+import 'package:app_lecocon_ssbe/ui/login/login_interactor.dart';
+import 'package:app_lecocon_ssbe/ui/login/user_login_bloc.dart';
+import 'package:app_lecocon_ssbe/ui/login/view/login_view.dart';
 import 'package:app_lecocon_ssbe/ui/ui_module.dart';
-import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/add_user_interactor.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/user_login_bloc.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/view/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +39,7 @@ class LoginModule implements UIModule {
       create: (context) {
         UsersRepository usersRepository = getIt<UsersRepositoryImpl>();
 
-        var interactor = UserInteractor(usersRepository: usersRepository);
+        var interactor = LoginInteractor(usersRepository: usersRepository);
         return UserLoginBloc(interactor, userId: '');
       },
       child: LoginView(),

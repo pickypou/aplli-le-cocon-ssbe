@@ -1,33 +1,31 @@
-import 'package:app_lecocon_ssbe/data/repository/users_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/entity/users.dart';
+import '../../data/repository/users_repository.dart';
 
-
-class UserInteractor {
+class LoginInteractor {
   final UsersRepository usersRepository;
 
-  UserInteractor({required this.usersRepository});
+  LoginInteractor({required this.usersRepository});
 
   Future<void> registerUser(Users user) async {
     try {
       await usersRepository.registerUser(Users(
-        id: (user.id),
-        userName: user.userName,
-        email: user.email,
-        password: user.password
-      ));
-    }catch(error) {
+          id: (user.id),
+          userName: user.userName,
+          email: user.email,
+          password: user.password));
+    } catch (error) {
       debugPrint('erreur lors de l\'enregistrement de user : $error');
       rethrow;
     }
   }
 
   Future<Map<String, dynamic>> fetchUserData(String userId) async {
-    try{
+    try {
       final user = await usersRepository.fetchUserData(userId);
       return user;
-    }catch (error) {
+    } catch (error) {
       debugPrint('Erreur lors d" la récupération des données utilisateur');
       rethrow;
     }
@@ -36,7 +34,7 @@ class UserInteractor {
   Future<void> login(String email, String password) async {
     try {
       await usersRepository.login(email, password);
-    }catch(error) {
+    } catch (error) {
       debugPrint('Error de connexion:$error');
       rethrow;
     }
@@ -45,7 +43,7 @@ class UserInteractor {
   Future<void> resetPassword(String email) async {
     try {
       await usersRepository.resetPassword(email);
-    }catch(error) {
+    } catch (error) {
       debugPrint('$error');
     }
   }
@@ -53,13 +51,12 @@ class UserInteractor {
   Future<void> checkAuthenticatorStatus() async {
     try {
       await usersRepository.checkAuthenticationStatus();
-    }catch (error) {
+    } catch (error) {
       debugPrint('redirection échoué: $error');
     }
   }
+
   Future<void> logOut() async {
     await usersRepository.logOut();
   }
-
-
 }

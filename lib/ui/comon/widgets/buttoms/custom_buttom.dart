@@ -28,16 +28,16 @@ class CustomButton extends StatelessWidget {
         child: ElevatedButton(
           style: ButtonStyle(
             padding: WidgetStateProperty.all<EdgeInsets>(
-                const EdgeInsets.symmetric(vertical: 30)),
-            backgroundColor: WidgetStateProperty.all(theme.colorScheme.primary),
+                const EdgeInsets.symmetric(vertical: 15)),
             shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
-                side:  BorderSide(color: theme.colorScheme.onPrimary),
+                side: BorderSide(color: theme.colorScheme.onPrimary),
               ),
             ),
           ),
-          onPressed: onPressed ?? () {}, // Utiliser une fonction vide par défaut
+          onPressed:
+              onPressed ?? () {}, // Utiliser une fonction vide par défaut
           child: Text(
             label,
             style: textStyleText(context).copyWith(fontSize: size.width / 20),

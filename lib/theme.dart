@@ -13,12 +13,10 @@ ThemeData theme = ThemeData(
     onSecondary: Color(0xFFFF0000),
     error: Color(0xFF000000),
     onError: Color(0xFFFFFFFF),
-    surface: Color(  0xFFFAF6F1),
+    surface: Color(0xFFFAF6F1),
     onSurface: Color(0xFF198393),
   ),
 );
-
-
 
 // Style pour les titres avec la police Amable
 TextStyle titleStyle(BuildContext context) {
@@ -43,7 +41,6 @@ TextStyle titleStyleLarge(BuildContext context) {
     fontFamily: "Autography", // Police Amable pour les grands titres
     decoration: TextDecoration.none,
   );
-
 }
 
 TextStyle titleStyleMedium(BuildContext context) {
@@ -75,8 +72,7 @@ TextStyle titleStyleSmall(BuildContext context) {
 TextStyle textStyleText(BuildContext context) {
   Size size = MediaQuery.sizeOf(context);
   double textFontSize = size.width / 18;
-  return
-    GoogleFonts.montserrat().copyWith(
+  return GoogleFonts.montserrat().copyWith(
     fontSize: textFontSize,
     color: Theme.of(context).colorScheme.secondary,
     decoration: TextDecoration.none,
@@ -86,7 +82,7 @@ TextStyle textStyleText(BuildContext context) {
 TextStyle textStyleTextAccueil(BuildContext context) {
   Size size = MediaQuery.sizeOf(context);
   double textFontSize = size.width / 55;
-  return  GoogleFonts.lora().copyWith(
+  return GoogleFonts.montserrat().copyWith(
     fontSize: textFontSize,
     color: Theme.of(context).colorScheme.secondary,
     decoration: TextDecoration.none,
@@ -96,8 +92,7 @@ TextStyle textStyleTextAccueil(BuildContext context) {
 TextStyle textStyleTextBulle(BuildContext context) {
   Size size = MediaQuery.sizeOf(context);
   double textFontSize = size.width / 45;
-  return
-    GoogleFonts.lora().copyWith(
+  return GoogleFonts.montserrat().copyWith(
     fontSize: textFontSize,
     color: Theme.of(context).colorScheme.secondary,
     decoration: TextDecoration.none,
@@ -109,7 +104,7 @@ TextStyle? textStyleInput(BuildContext context, String inputText) {
   double textFontSize =
       inputText.length > 20 ? baseFontSize - 1.5 : baseFontSize.toDouble();
 
-  return  GoogleFonts.lora().copyWith(
+  return GoogleFonts.montserrat().copyWith(
     fontSize: textFontSize,
     fontWeight: FontWeight.bold,
     color: Theme.of(context).colorScheme.onPrimary,

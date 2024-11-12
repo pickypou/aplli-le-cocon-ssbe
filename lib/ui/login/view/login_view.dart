@@ -3,20 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../comon/widgets/buttoms/custom_buttom.dart';
-import '../../../comon/widgets/inputs/custom_text_field.dart';
+import '../../comon/widgets/buttoms/custom_buttom.dart';
+import '../../comon/widgets/inputs/custom_text_field.dart';
 import '../user_login_bloc.dart';
 import '../user_login_event.dart';
 import '../user_login_state.dart';
-
 
 class LoginView extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-
-
-  LoginView({super.key, });
+  LoginView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +56,18 @@ class LoginView extends StatelessWidget {
                     style: titleStyleLarge(context),
                   ),
                 ),
-
-
                 const SizedBox(height: 40),
                 CustomTextField(
                   labelText: 'E-mail',
-                  controller: emailController, maxLines: 1,
+                  controller: emailController,
+                  maxLines: 1,
                 ),
                 const SizedBox(height: 40),
                 CustomTextField(
                   labelText: 'Mot de passe',
                   controller: passwordController,
-                  obscureText: true, maxLines: 1,
+                  obscureText: true,
+                  maxLines: 1,
                 ),
                 const SizedBox(height: 40),
                 SizedBox(
@@ -79,10 +78,8 @@ class LoginView extends StatelessWidget {
                         LoginWithEmailPassword(
                             email: emailController.text,
                             password: passwordController.text,
-                            navigateToAccount: ()  {
+                            navigateToAccount: () {
                               GoRouter.of(context).go('/account');
-
-
                             }),
                       );
                     },
@@ -94,22 +91,19 @@ class LoginView extends StatelessWidget {
                     Expanded(
                       child: TextButton(
                         onPressed: () => context.go('/account/inscription'),
-
-                        child: Text(
-                          "Créer un compte",
-                          style: textStyleText(context).copyWith(fontSize: size.width/30)),
-                        ),
+                        child: Text("Créer un compte",
+                            style: textStyleText(context)
+                                .copyWith(fontSize: size.width / 30)),
                       ),
-
+                    ),
                     Expanded(
                       child: TextButton(
                         onPressed: () => context.go('/account/ResetPassword'),
-
-                        child: Text(
-                          "Mot de passe oublié?",
-                          style: textStyleText(context).copyWith(fontSize: size.width/30)),
-                        ),
+                        child: Text("Mot de passe oublié ?",
+                            style: textStyleText(context)
+                                .copyWith(fontSize: size.width / 30)),
                       ),
+                    ),
                   ],
                 ),
               ],

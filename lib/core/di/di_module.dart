@@ -7,12 +7,10 @@ import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
-import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/add_user_module.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/login_module.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../data/repository/users_repository.dart';
@@ -20,6 +18,7 @@ import '../../data/repository/users_repository_impl.dart';
 import '../../ui/HomePage/home_module.dart';
 import '../../ui/account/account_module.dart';
 import '../../ui/comon/router/router_config.dart';
+import '../../ui/login/login_module.dart';
 import '../../ui/ui_module.dart';
 
 // Initialisation de GetIt
@@ -44,11 +43,9 @@ abstract class FirebaseModule {
   AvisClientsRepository get avisClientRepository => AvisClientsRepositoryImpl();
 
   //@singleton
-  EvenementsRepository get evenementsRepository => EvenementsRepositoryImpl(getIt<FirestoreService>(), getIt<FirebaseFirestore>());
-
+  EvenementsRepository get evenementsRepository => EvenementsRepositoryImpl(
+      getIt<FirestoreService>(), getIt<FirebaseFirestore>());
 }
-
-
 
 void setupDi() {
   // Enregistre les instances Firebase
@@ -73,8 +70,6 @@ void setupDi() {
       () => EvenementModule(getIt<AppRouter>()));
   getIt.registerLazySingleton<LoginModule>(
       () => LoginModule(getIt<AppRouter>()));
-  getIt.registerLazySingleton<AddUserModule>(
-      () => AddUserModule(getIt<AppRouter>()));
   getIt.registerLazySingleton<AddAvisClientsModule>(
       () => AddAvisClientsModule(getIt<AppRouter>()));
 
@@ -84,8 +79,5 @@ void setupDi() {
       getIt<HomeModule>(),
       getIt<EvenementModule>(),
       getIt<LoginModule>(),
-      getIt<AddUserModule>(),
-      getIt<AddAvisClientsModule>()
-  )
-  );
+      getIt<AddAvisClientsModule>()));
 }

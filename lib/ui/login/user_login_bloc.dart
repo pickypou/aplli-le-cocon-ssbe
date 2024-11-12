@@ -1,30 +1,29 @@
-import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/add_user_interactor.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/user_login_event.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/user_login_state.dart';
+import 'package:app_lecocon_ssbe/ui/login/login_interactor.dart';
+import 'package:app_lecocon_ssbe/ui/login/user_login_event.dart';
+import 'package:app_lecocon_ssbe/ui/login/user_login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class UserLoginBloc extends Bloc<UserLoginEvent, UserLoginState> {
-  final UserInteractor userInteractor;
+  final LoginInteractor userInteractor;
   final String userId;
 
   UserLoginBloc(this.userInteractor, {required this.userId})
-  : super(UserLoginInitial()) {
+      : super(UserLoginInitial()) {
     on<FetchUserDataEvent>((event, emit) async {
-    try {
-    Map<String, dynamic> userData =
-    await userInteractor.fetchUserData(userId);
-    emit(UserDataLoadedState(userData));
-    } catch (e) {
-    emit(AuthenticationErrorState());
-    }
-  });
+      try {
+        Map<String, dynamic> userData =
+            await userInteractor.fetchUserData(userId);
+        emit(UserDataLoadedState(userData));
+      } catch (e) {
+        emit(AuthenticationErrorState());
+      }
+    });
     on<LoginWithEmailPassword>((event, emit) async {
       emit(UserLoginLoading());
       try {
         await userInteractor.login(event.email, event.password);
         Map<String, dynamic> userData =
-        await userInteractor.fetchUserData(userId);
+            await userInteractor.fetchUserData(userId);
         emit(UserDataLoadedState(userData));
         event.navigateToAccount();
       } catch (error) {
@@ -40,6 +39,5 @@ class UserLoginBloc extends Bloc<UserLoginEvent, UserLoginState> {
         emit(AuthenticationErrorState());
       }
     });
-
   }
 }

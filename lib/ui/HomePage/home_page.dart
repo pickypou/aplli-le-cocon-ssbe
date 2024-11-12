@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/utils/check_user_connection.dart';
+import '../comon/widgets/buttoms/custom_buttom.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,13 +14,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = GetIt.instance<FirebaseAuth>();
     return Scaffold(
-      appBar: AppBar(title: const Text('Accueil'),
+      appBar: AppBar(
+        title: const Text('Accueil'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout), color: Theme
-              .of(context)
-              .colorScheme
-              .secondary,
+            icon: const Icon(Icons.logout),
+            color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
               auth.signOut().then((_) {
                 debugPrint('Déconnexion réussie');
@@ -52,26 +52,21 @@ class HomePage extends StatelessWidget {
                         ),
                         const SizedBox(height: 70),
                         Text(
-                          'Bienvenue sur le cocon',
+                          'Bienvenue sur l\'aplication',
+                          style: titleStyleLarge(context),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          'Du Cocon SSBE',
                           style: titleStyleLarge(context),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 30),
-                      ElevatedButton(
-                          onPressed: () => context.go('/inscription'),
-                          child:Text(
-                            'Créer un compte',style: textStyleText(context),
-                          ),
-                          ),
-
-                        const SizedBox(height: 30),
-
-                        ElevatedButton(
+                        CustomButton(
                           onPressed: () {
                             checkUserConnection(context);
                           },
-                          child:  Text('Connexion', style:  textStyleText(context,),
-                        ),
+                          label: 'Connexion',
                         )
                       ],
                     ),

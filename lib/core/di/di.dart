@@ -2,17 +2,17 @@ import 'package:app_lecocon_ssbe/domain/usecases/generate_and_upload_thumbnail_u
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
 import 'package:app_lecocon_ssbe/ui/ui_module.dart';
-import 'package:app_lecocon_ssbe/ui/users/add_users/inscription/add_user_module.dart';
-import 'package:app_lecocon_ssbe/ui/users/login/login_module.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+
 import '../../ui/HomePage/home_module.dart';
 import '../../ui/account/account_module.dart';
 import '../../ui/comon/router/router_config.dart';
+import '../../ui/login/login_module.dart';
 import 'api/auth_service.dart';
 import 'api/storage_service.dart';
 import 'di.config.dart'; // Assurez-vous que ce fichier est bien généré
@@ -34,71 +34,65 @@ void setupDependencies() {
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
     debugPrint("Enregistrement de FirebaseFirestore");
-    getIt.registerLazySingleton<FirebaseFirestore>(() =>
-    FirebaseFirestore.instance);
+    getIt.registerLazySingleton<FirebaseFirestore>(
+        () => FirebaseFirestore.instance);
 
     debugPrint("Enregistrement de FirebaseStorage");
-    getIt.registerLazySingleton<FirebaseStorage>(() =>
-    FirebaseStorage.instance);
+    getIt
+        .registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
 
     debugPrint("Enregistrement de AuthService");
-    getIt.registerLazySingleton<AuthService>(() =>
-        AuthService(getIt<FirebaseAuth>()));
+    getIt.registerLazySingleton<AuthService>(
+        () => AuthService(getIt<FirebaseAuth>()));
 
     debugPrint("Enregistrement de StorageService");
-    getIt.registerLazySingleton<StorageService>(() =>
-        StorageService(getIt<FirebaseStorage>()));
+    getIt.registerLazySingleton<StorageService>(
+        () => StorageService(getIt<FirebaseStorage>()));
 
     debugPrint("Enregistrement de GenerateThumbnailUseCase");
-    getIt.registerLazySingleton<GenerateThumbnailUseCase>(() =>
-        GenerateThumbnailUseCase());
-
+    getIt.registerLazySingleton<GenerateThumbnailUseCase>(
+        () => GenerateThumbnailUseCase());
 
     // Enregistre les modules de l'interface utilisateur
     debugPrint("Enregistrement de AccountModule");
-    getIt.registerLazySingleton<AccountModule>(() =>
-        AccountModule(getIt<AppRouter>()));
+    getIt.registerLazySingleton<AccountModule>(
+        () => AccountModule(getIt<AppRouter>()));
 
     debugPrint("Enregistrement de HomeModule");
-    getIt.registerLazySingleton<HomeModule>(() =>
-        HomeModule(getIt<AppRouter>()));
+    getIt.registerLazySingleton<HomeModule>(
+        () => HomeModule(getIt<AppRouter>()));
 
     // Enregistre la configuration du routeur avec les modules appropriés
     debugPrint("Enregistrement de AppRouterConfig");
-    getIt.registerLazySingleton<AppRouterConfig>(() =>
-        AppRouterConfig(
-          getIt<AccountModule>(),
-          getIt<HomeModule>(),
-          getIt<EvenementModule>(),
-            getIt<LoginModule>(),
-          getIt<AddUserModule>(),
-          getIt<AddAvisClientsModule>()
-        ));
+    getIt.registerLazySingleton<AppRouterConfig>(() => AppRouterConfig(
+        getIt<AccountModule>(),
+        getIt<HomeModule>(),
+        getIt<EvenementModule>(),
+        getIt<LoginModule>(),
+        getIt<AddAvisClientsModule>()));
 
     // Enregistre les modules de l'interface utilisateur
     debugPrint("Enregistrement de AccountModule");
-    getIt.registerLazySingleton<AccountModule>(() =>
-        AccountModule(getIt<AppRouter>()));
+    getIt.registerLazySingleton<AccountModule>(
+        () => AccountModule(getIt<AppRouter>()));
 
     debugPrint("Enregistrement de HomeModule");
-    getIt.registerLazySingleton<HomeModule>(() =>
-        HomeModule(getIt<AppRouter>()));
+    getIt.registerLazySingleton<HomeModule>(
+        () => HomeModule(getIt<AppRouter>()));
 
     debugPrint("Enregistrement de EvenementModule");
-    getIt.registerLazySingleton<EvenementModule>(() =>
-        EvenementModule(getIt<AppRouter>()));
+    getIt.registerLazySingleton<EvenementModule>(
+        () => EvenementModule(getIt<AppRouter>()));
 
     debugPrint("Enregistrement de LoginModule");
-    getIt.registerLazySingleton<LoginModule>(() =>
-        LoginModule(getIt<AppRouter>()));
+    getIt.registerLazySingleton<LoginModule>(
+        () => LoginModule(getIt<AppRouter>()));
 
     debugPrint("Enregistrement de AddUserModule");
-    getIt.registerLazySingleton<AddUserModule>(() =>
-        AddUserModule(getIt<AppRouter>()));
     debugPrint("Enregistrement de AvisClientModule");
-    getIt.registerLazySingleton<AddAvisClientsModule>(() =>
-        AddAvisClientsModule(getIt<AppRouter>()));
-  }catch (e) {
+    getIt.registerLazySingleton<AddAvisClientsModule>(
+        () => AddAvisClientsModule(getIt<AppRouter>()));
+  } catch (e) {
     debugPrint("Erreur lors de l'enregistrement : $e");
   }
 }
