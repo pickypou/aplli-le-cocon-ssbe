@@ -1,15 +1,16 @@
-import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'dart:typed_data';
 import 'dart:io';
-import 'package:get_it/get_it.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:typed_data';
+
+import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../domain/usecases/generate_and_upload_thumbnail_use_case.dart';
 import 'add_evenement_event.dart';
 import 'add_evenement_state.dart';
-import '../../domain/usecases/generate_and_upload_thumbnail_use_case.dart';
 
 class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
@@ -32,13 +33,16 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
 
       // Génération de la vignette uniquement si le fichier est un PDF
       if (event.fileType == 'pdf') {
-        thumbnail = await generateThumbnailUseCase.generateThumbnail(event.file.path);
+        thumbnail =
+            await generateThumbnailUseCase.generateThumbnail(event.file.path);
       }
 
-      String evenementId = FirebaseFirestore.instance.collection('evenements').doc().id;
+      String evenementId =
+          FirebaseFirestore.instance.collection('evenements').doc().id;
 
       // Upload du fichier principal
-      String fileUrl = await _uploadFile(event.file, evenementId);
+      String fileUrl =
+          await _uploadFile(event.file, evenementId, event.fileType);
 
       // Upload de la vignette si elle a été générée
       String? thumbnailUrl;
@@ -53,11 +57,14 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
         fileType: event.fileType,
         fileUrl: fileUrl,
         publishDate: event.publishDate,
-        thumbnailUrl: thumbnailUrl,  // Null pour les images
+        thumbnailUrl: thumbnailUrl, // Null pour les images
       );
 
       // Ajout des données dans Firestore
-      await FirebaseFirestore.instance.collection('evenements').doc(evenementId).set({
+      await FirebaseFirestore.instance
+          .collection('evenements')
+          .doc(evenementId)
+          .set({
         'fileType': evenement.fileType,
         'fileUrl': evenement.fileUrl,
         'thumbnailUrl': evenement.thumbnailUrl,
@@ -72,16 +79,20 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
     }
   }
 
-
-
-  Future<String> _uploadFile(File file, String evenementId) async {
-    Reference fileRef = _firebaseStorage.ref().child('evenement/$evenementId/file.pdf');
+  Future<String> _uploadFile(
+      File file, String evenementId, String fileType) async {
+    String extension =
+        fileType == 'pdf' ? 'pdf' : 'jpg'; // Adaptez selon les types possibles
+    Reference fileRef =
+        _firebaseStorage.ref().child('evenement/$evenementId/file.$extension');
     await fileRef.putFile(file);
     return await fileRef.getDownloadURL();
   }
 
-  Future<String> _uploadThumbnail(Uint8List thumbnail, String evenementId) async {
-    Reference thumbnailRef = _firebaseStorage.ref().child('evenement/$evenementId/thumbnail.jpg');
+  Future<String> _uploadThumbnail(
+      Uint8List thumbnail, String evenementId) async {
+    Reference thumbnailRef =
+        _firebaseStorage.ref().child('evenement/$evenementId/thumbnail.jpg');
     await thumbnailRef.putData(thumbnail);
     return await thumbnailRef.getDownloadURL();
   }
