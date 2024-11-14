@@ -1,9 +1,13 @@
 import 'package:app_lecocon_ssbe/ui/add_evenement/view/add_evenements_view.dart';
 import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../domain/entity/evenements.dart';
 
 class AddEvenementsPage extends StatelessWidget {
   const AddEvenementsPage({super.key});
@@ -63,4 +67,52 @@ class AddEvenementsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<List<Evenements>> fetchEvenements() async {
+  List<Evenements> evenements = [];
+  try {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('evenements')
+        .orderBy('publishDate', descending: true)
+        .get();
+
+    for (var doc in snapshot.docs) {
+      Evenements evt = Evenements.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+
+      try {
+        final Reference eventRef = FirebaseStorage.instance.ref().child('evenement/${evt.id}');
+        final Reference fileRef = eventRef.child('file.${evt.fileType == 'pdf' ? 'pdf' : 'jpg'}');
+
+        String fileUrl = await fileRef.getDownloadURL();
+        String? thumbnailUrl;
+
+        if (evt.fileType == 'pdf') {
+          final Reference thumbnailRef = eventRef.child('thumbnail.jpg');
+          try {
+            thumbnailUrl = await thumbnailRef.getDownloadURL();
+          } catch (e) {
+            debugPrint('Pas de vignette pour le PDF de l\'événement ${evt.id}');
+          }
+        } else {
+          thumbnailUrl = fileUrl; // Pour les images, utiliser le fichier principal comme vignette
+        }
+
+        evenements.add(Evenements(
+          id: evt.id,
+          title: evt.title,
+          publishDate: evt.publishDate,
+          fileType: evt.fileType,
+          fileUrl: fileUrl,
+          thumbnailUrl: thumbnailUrl,
+        ));
+      } catch (e) {
+        debugPrint('Erreur lors de la récupération des fichiers pour l\'événement ${evt.id}: $e');
+      }
+    }
+  } catch (e) {
+    debugPrint('Erreur lors de la récupération des événements: $e');
+  }
+
+  return evenements;
 }

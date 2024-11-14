@@ -142,7 +142,15 @@ class AddEvenementViewState extends State<AddEvenementView> {
       if (result != null && result.files.isNotEmpty) {
         setState(() {
           selectedFile = File(result.files.first.path!);
-          fileType = result.files.first.extension?.toLowerCase();
+          // Déterminer le type de fichier basé sur l'extension
+          String extension = result.files.first.extension?.toLowerCase() ?? '';
+          if (extension == 'pdf') {
+            fileType = 'pdf';
+          } else if (['png', 'jpg', 'jpeg'].contains(extension)) {
+            fileType = 'image';
+          } else {
+            throw Exception('Type de fichier non supporté');
+          }
         });
         debugPrint("Fichier sélectionné : ${selectedFile!.path}");
         debugPrint("Type de fichier : $fileType");
