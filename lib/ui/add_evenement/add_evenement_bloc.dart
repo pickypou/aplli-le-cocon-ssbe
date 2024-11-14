@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:path/path.dart' as path;
 
 import '../../domain/usecases/generate_and_upload_thumbnail_use_case.dart';
 import 'add_evenement_event.dart';
@@ -81,11 +82,20 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
 
   Future<String> _uploadFile(
       File file, String evenementId, String fileType) async {
-    String extension =
-        fileType == 'pdf' ? 'pdf' : 'jpg'; // Adaptez selon les types possibles
+    // Récupérer l'extension du fichier source, qu'elle soit .jpg, .jpeg, .png ou .pdf
+    String extension = path
+        .extension(file.path)
+        .replaceFirst('.', ''); // 'jpg', 'jpeg', 'png', 'pdf'
+    debugPrint("Extension détectée : $extension");
+
+    // Définir le nom du fichier en utilisant l'extension d'origine
     Reference fileRef =
         _firebaseStorage.ref().child('evenement/$evenementId/file.$extension');
+
+    // Upload du fichier
     await fileRef.putFile(file);
+
+    // Obtenir l'URL du fichier uploadé
     return await fileRef.getDownloadURL();
   }
 
