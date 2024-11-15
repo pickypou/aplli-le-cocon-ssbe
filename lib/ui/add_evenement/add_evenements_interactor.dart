@@ -43,6 +43,7 @@ class EvenementsInteractor {
 
       TaskSnapshot taskSnapshot = await uploadTask;
       String fileUrl = await taskSnapshot.ref.getDownloadURL();
+
       return fileUrl;
     } catch (e) {
       throw Exception('Erreur lors de l\'envoi du fichiers : $e');

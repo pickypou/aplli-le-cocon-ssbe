@@ -1,5 +1,6 @@
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
+import 'package:app_lecocon_ssbe/ui/evenement_list/evenement_list_module.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -15,10 +16,11 @@ class AppRouterConfig {
   final EvenementModule _evenementModule;
   final LoginModule _loginModule;
   final AddAvisClientsModule _addAvisClientsModule;
+  final EvenementListModule _evenementListModule;
 
   // Injection des modules via le constructeur
   AppRouterConfig(this._accountModule, this._homeModule, this._evenementModule,
-      this._loginModule, this._addAvisClientsModule);
+      this._loginModule, this._addAvisClientsModule, this._evenementListModule);
 
   GoRouter get router => GoRouter(
         routes: [
@@ -29,7 +31,8 @@ class AppRouterConfig {
 
           ..._evenementModule.getRoutes(),
           ..._loginModule.getRoutes(),
-          ..._addAvisClientsModule.getRoutes()
+          ..._addAvisClientsModule.getRoutes(),
+          ..._evenementListModule.getRoutes(),
         ],
         errorBuilder: (context, state) => const ErrorPage(),
       );

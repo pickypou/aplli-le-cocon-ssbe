@@ -1,5 +1,6 @@
 import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/entity/evenements.dart';
@@ -12,9 +13,9 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
   final FirebaseFirestore _firestore;
 
   EvenementsRepositoryImpl(
-      this._firestoreService,
-      this._firestore,
-      );
+    this._firestoreService,
+    this._firestore,
+  );
 
   @override
   FirebaseFirestore get firestore => _firestore;
@@ -23,16 +24,18 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
   Stream<Iterable<Evenements>> getEvenementStream() {
     return _firestoreService.collection('evenement').snapshots().map(
           (querySnapshot) => querySnapshot.docs
-          .where((doc) => doc.data() != null)  // Filtrer les documents non nulles
-          .map((doc) => Evenements.fromMap(doc.data() as Map<String, dynamic>, doc.id))
-          .toList(),
-    );
+              .where((doc) =>
+                  doc.data() != null) // Filtrer les documents non nulles
+              .map((doc) => Evenements.fromMap(
+                  doc.data() as Map<String, dynamic>, doc.id))
+              .toList(),
+        );
   }
 
   @override
   Future<Map<String, dynamic>?> getById(String evenementId) async {
     final docSnapshot =
-    await firestore.collection('evenement').doc(evenementId).get();
+        await firestore.collection('evenement').doc(evenementId).get();
     return docSnapshot.data() ?? {};
   }
 
@@ -46,9 +49,20 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
   }
 
   @override
-  Future<void> updateField(String evenementId, String fieldName, newValue) async {
+  Future<void> updateField(
+      String evenementId, String fieldName, newValue) async {
     await firestore.collection('evenement').doc(evenementId).update({
       fieldName: newValue,
     });
+  }
+
+  @override
+  Future<void> deleteEvenement(String evenementId) async {
+    try {
+      await firestore.collection('evenements').doc(evenementId).delete();
+    } catch (e) {
+      debugPrint('Erreur lors de la suppression de l\'événement : $e');
+      rethrow;
+    }
   }
 }
