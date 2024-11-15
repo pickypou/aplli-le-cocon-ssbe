@@ -38,7 +38,7 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
       }
 
       String evenementId =
-          FirebaseFirestore.instance.collection('evenements').doc().id;
+          FirebaseFirestore.instance.collection('evenement').doc().id;
 
       // Upload du fichier principal
       String fileUrl =
@@ -51,7 +51,7 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
       }
 
       // Création de l'entité événement
-      final evenement = Evenements(
+      final evenement = Evenement(
         id: evenementId,
         title: event.title,
         fileType: event.fileType,
@@ -62,7 +62,7 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
 
       // Ajout des données dans Firestore
       await FirebaseFirestore.instance
-          .collection('evenements')
+          .collection('evenement')
           .doc(evenementId)
           .set({
         'fileType': evenement.fileType,

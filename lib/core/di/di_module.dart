@@ -45,7 +45,7 @@ abstract class FirebaseModule {
 
   //@singleton
   EvenementsRepository get evenementsRepository => EvenementsRepositoryImpl(
-      getIt<FirestoreService>(), getIt<FirebaseFirestore>());
+      getIt<FirestoreService>(), getIt<FirebaseFirestore>(), getIt<StorageService>(), getIt<FirebaseStorage>());
 }
 
 void setupDi() {

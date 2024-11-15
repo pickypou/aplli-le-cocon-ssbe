@@ -4,8 +4,8 @@ import '../../domain/entity/evenements.dart';
 import 'evenement_dto.dart';
 
 extension EvenementDtoMapper on EvenementDto {
-  Evenements toEntity() {
-    return Evenements(
+  Evenement toEntity() {
+    return Evenement(
       id: id,
       title: fileName,
       fileUrl: fileUrl,
@@ -16,7 +16,7 @@ extension EvenementDtoMapper on EvenementDto {
   }
 }
 
-extension EvenementsMapper on Evenements {
+extension EvenementsMapper on Evenement {
   EvenementDto toDto() {
     return EvenementDto(
       id: id,

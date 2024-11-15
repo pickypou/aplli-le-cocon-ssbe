@@ -25,7 +25,7 @@ class EvenementsInteractor {
         _firestore = FirestoreService(
             firestore); // Passer Firestore au constructeur de FirestoreService
 
-  Future<Iterable<Evenements>> fetchEvenementData() async {
+  Future<Iterable<Evenement>> fetchEvenementData() async {
     try {
       final evenement = await fetchEvenementDataUseCase.getEvenement();
       return evenement;
@@ -50,9 +50,9 @@ class EvenementsInteractor {
     }
   }
 
-  Future<void> addEvenement(Evenements evenement) async {
+  Future<void> addEvenement(Evenement evenement) async {
     try {
-      await _firestore.collection('evenements').add({
+      await _firestore.collection('evenement').add({
         'title': evenement.title,
         'fileUrl': evenement.fileUrl,
         'fileType': evenement.fileType,

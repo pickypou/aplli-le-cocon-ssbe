@@ -10,7 +10,7 @@ class FetchEvenementDataUseCase {
   FetchEvenementDataUseCase(this.evenementsRepository);
 
   // Méthode pour récupérer la liste des événements
-  Future<List<Evenements>> getEvenement() async {
+  Future<List<Evenement>> getEvenement() async {
     try {
       debugPrint('Fetching evenement data');
 
@@ -26,7 +26,7 @@ class FetchEvenementDataUseCase {
   }
 
   // Méthode pour récupérer un événement spécifique par son ID
-  Future<Evenements?> getEvenementsById(String evenementId) async {
+  Future<Evenement?> getEvenementsById(String evenementId) async {
     try {
       debugPrint('Fetching evenement data from Firestore...');
 
@@ -35,7 +35,7 @@ class FetchEvenementDataUseCase {
         debugPrint('No data found for evenementId: $evenementId');
         return null;
       }
-      return Evenements.fromMap(evenementData, evenementId);
+      return Evenement.fromMap(evenementData, evenementId);
     } catch (e) {
       debugPrint('Error fetching evenement by ID: $e');
       rethrow;

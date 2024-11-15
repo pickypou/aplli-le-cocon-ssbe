@@ -7,7 +7,7 @@ class EvenementsListSignUpInitialState extends EvenementListState {}
 class EvenementsListSignUpLoadingState extends EvenementListState {}
 
 class EvenementsListSignUpLoadState extends EvenementListState {
-  final List<Evenements> evenementData;
+  final List<Evenement> evenementData;
   EvenementsListSignUpLoadState({required this.evenementData});
 }
 

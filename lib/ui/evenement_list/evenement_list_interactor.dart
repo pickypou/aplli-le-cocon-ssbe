@@ -13,7 +13,7 @@ class EvenementListInteractor {
     this.evenementsRepositoryImpl,
   );
 
-  Future<Iterable<Evenements>> fetchEvenementData() async {
+  Future<Iterable<Evenement>> fetchEvenementData() async {
     try {
       final evenement = await fetchEvenementDataUseCase.getEvenement();
       return evenement;
@@ -23,7 +23,7 @@ class EvenementListInteractor {
     }
   }
 
-  Future<Evenements?> getEvenementById(String evenementId) async {
+  Future<Evenement?> getEvenementById(String evenementId) async {
     try {
       return await fetchEvenementDataUseCase.getEvenementsById(evenementId);
     } catch (e) {
@@ -31,6 +31,7 @@ class EvenementListInteractor {
       rethrow;
     }
   }
+
 
   Future<void> removeEvenement(String evenementId) async {
     try {

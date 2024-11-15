@@ -69,16 +69,16 @@ class AddEvenementsPage extends StatelessWidget {
   }
 }
 
-Future<List<Evenements>> fetchEvenements() async {
-  List<Evenements> evenements = [];
+Future<List<Evenement>> fetchEvenements() async {
+  List<Evenement> evenements = [];
   try {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('evenements')
+        .collection('evenement')
         .orderBy('publishDate', descending: true)
         .get();
 
     for (var doc in snapshot.docs) {
-      Evenements evt = Evenements.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      Evenement evt = Evenement.fromMap(doc.data() as Map<String, dynamic>, doc.id);
 
       try {
         final Reference eventRef = FirebaseStorage.instance.ref().child('evenement/${evt.id}');
@@ -98,7 +98,7 @@ Future<List<Evenements>> fetchEvenements() async {
           thumbnailUrl = fileUrl; // Pour les images, utiliser le fichier principal comme vignette
         }
 
-        evenements.add(Evenements(
+        evenements.add(Evenement(
           id: evt.id,
           title: evt.title,
           publishDate: evt.publishDate,

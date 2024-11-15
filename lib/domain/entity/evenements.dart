@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class Evenements {
+class Evenement {
   final String id;
   final String title;
   final String fileUrl;
@@ -8,7 +8,7 @@ class Evenements {
   final String? thumbnailUrl;  // Ici, Uint8List pour une vignette en mémoire
   final DateTime publishDate;
 
-  Evenements({
+  Evenement({
     required this.id,
     required this.title,
     required this.fileUrl,
@@ -22,8 +22,8 @@ class Evenements {
     return DateFormat('dd/MM/yyyy').format(publishDate);
   }
 
-  factory Evenements.fromMap(Map<String, dynamic> data, String id) {
-    return Evenements(
+  factory Evenement.fromMap(Map<String, dynamic> data, String id) {
+    return Evenement(
       id: id,
       title: data['title'] ?? '',
       fileType: data['fileType'] ?? '',
