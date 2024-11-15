@@ -68,6 +68,12 @@ class AccountView extends StatelessWidget {
                     onPressed: () {
                       GoRouter.of(context).go('/addAvisClients');
                     }),
+                CustomButton(
+                  label: 'je supprime un événement',
+                  onPressed: () {
+                    GoRouter.of(context).go('/evenementList');
+                  },
+                )
               ],
             ),
           ),

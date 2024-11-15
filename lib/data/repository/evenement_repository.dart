@@ -8,6 +8,8 @@ abstract class EvenementsRepository {
 
   Stream<Iterable<Evenements>> getEvenementStream();
   Future<Map<String, dynamic>?> getById(String evenementId);
-  Future<void> add(EvenementDto evenementDto);  // Utilisation d'un DTO ici
-  Future<void> updateField(String evenementId, String fieldName, dynamic newValue);
+  Future<void> add(EvenementDto evenementDto); // Utilisation d'un DTO ici
+  Future<void> deleteEvenement(String evenementId);
+  Future<void> updateField(
+      String evenementId, String fieldName, dynamic newValue);
 }

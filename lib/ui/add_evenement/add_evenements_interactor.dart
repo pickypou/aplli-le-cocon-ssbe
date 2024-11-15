@@ -1,11 +1,12 @@
 import 'dart:io';
+
 import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
 import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 import '../../domain/usecases/fetch_evenement_data_usecase.dart';
 
@@ -16,12 +17,13 @@ class EvenementsInteractor {
   final FirestoreService _firestore;
 
   EvenementsInteractor(
-      this.evenementsRepository,
-      this.fetchEvenementDataUseCase,
-      FirebaseStorage storage,
-      FirebaseFirestore firestore, // Ajout de Firestore ici
-      ) : _storageService = StorageService(storage),
-        _firestore = FirestoreService(firestore); // Passer Firestore au constructeur de FirestoreService
+    this.evenementsRepository,
+    this.fetchEvenementDataUseCase,
+    FirebaseStorage storage,
+    FirebaseFirestore firestore, // Ajout de Firestore ici
+  )   : _storageService = StorageService(storage),
+        _firestore = FirestoreService(
+            firestore); // Passer Firestore au constructeur de FirestoreService
 
   Future<Iterable<Evenements>> fetchEvenementData() async {
     try {
@@ -41,9 +43,10 @@ class EvenementsInteractor {
 
       TaskSnapshot taskSnapshot = await uploadTask;
       String fileUrl = await taskSnapshot.ref.getDownloadURL();
+
       return fileUrl;
     } catch (e) {
-      throw Exception('Erreur lors de l\'envoi du fichier : $e');
+      throw Exception('Erreur lors de l\'envoi du fichiers : $e');
     }
   }
 

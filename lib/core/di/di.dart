@@ -1,6 +1,7 @@
 import 'package:app_lecocon_ssbe/domain/usecases/generate_and_upload_thumbnail_use_case.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
+import 'package:app_lecocon_ssbe/ui/evenement_list/evenement_list_module.dart';
 import 'package:app_lecocon_ssbe/ui/ui_module.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -63,7 +64,8 @@ void setupDependencies() {
         getIt<HomeModule>(),
         getIt<EvenementModule>(),
         getIt<LoginModule>(),
-        getIt<AddAvisClientsModule>()));
+        getIt<AddAvisClientsModule>(),
+        getIt<EvenementListModule>()));
 
     // Enregistre les modules de l'interface utilisateur
     debugPrint("Enregistrement de AccountModule");
@@ -82,10 +84,13 @@ void setupDependencies() {
     getIt.registerLazySingleton<LoginModule>(
         () => LoginModule(getIt<AppRouter>()));
 
-    debugPrint("Enregistrement de AddUserModule");
     debugPrint("Enregistrement de AvisClientModule");
     getIt.registerLazySingleton<AddAvisClientsModule>(
         () => AddAvisClientsModule(getIt<AppRouter>()));
+
+    debugPrint("Enregistrement de EvenementListModule");
+    getIt.registerLazySingleton<EvenementListModule>(
+        () => EvenementListModule(getIt<AppRouter>()));
   } catch (e) {
     debugPrint("Erreur lors de l'enregistrement : $e");
   }

@@ -7,6 +7,7 @@ import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
+import 'package:app_lecocon_ssbe/ui/evenement_list/evenement_list_module.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -72,6 +73,8 @@ void setupDi() {
       () => LoginModule(getIt<AppRouter>()));
   getIt.registerLazySingleton<AddAvisClientsModule>(
       () => AddAvisClientsModule(getIt<AppRouter>()));
+  getIt.registerLazySingleton<EvenementListModule>(
+      () => EvenementListModule(getIt<AppRouter>()));
 
   // Enregistre la configuration du routeur avec les modules appropriés
   getIt.registerLazySingleton<AppRouterConfig>(() => AppRouterConfig(
@@ -79,5 +82,6 @@ void setupDi() {
       getIt<HomeModule>(),
       getIt<EvenementModule>(),
       getIt<LoginModule>(),
-      getIt<AddAvisClientsModule>()));
+      getIt<AddAvisClientsModule>(),
+      getIt<EvenementListModule>()));
 }
