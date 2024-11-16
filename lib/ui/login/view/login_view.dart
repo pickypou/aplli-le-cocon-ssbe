@@ -85,27 +85,6 @@ class LoginView extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: 22),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () => context.go('/account/inscription'),
-                        child: Text("Créer un compte",
-                            style: textStyleText(context)
-                                .copyWith(fontSize: size.width / 30)),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () => context.go('/account/ResetPassword'),
-                        child: Text("Mot de passe oublié ?",
-                            style: textStyleText(context)
-                                .copyWith(fontSize: size.width / 30)),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
