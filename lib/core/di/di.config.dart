@@ -28,11 +28,12 @@ import '../../domain/usecases/generate_and_upload_thumbnail_use_case.dart'
 import '../../ui/account/account_module.dart' as _i692;
 import '../../ui/add_avis_clients/add_avis_clients_module.dart' as _i356;
 import '../../ui/add_evenement/evenement_module.dart' as _i402;
-import '../../ui/comon/router/router_config.dart' as _i686;
+import '../../ui/common/router/router_config.dart' as _i223;
 import '../../ui/evenement_list/evenement_list_module.dart' as _i181;
 import '../../ui/HomePage/home_module.dart' as _i587;
-import '../../ui/login/login_module.dart' as _i533;
 import '../../ui/ui_module.dart' as _i573;
+import '../../ui/users/add_users/add_user_module.dart' as _i787;
+import '../../ui/users/login/login_module.dart' as _i863;
 import 'api/auth_service.dart' as _i977;
 import 'api/firebase_client.dart' as _i703;
 import 'api/firestore_service.dart' as _i746;
@@ -82,20 +83,23 @@ _i174.GetIt init(
       () => _i402.EvenementModule(gh<_i573.AppRouter>()));
   gh.singleton<_i356.AddAvisClientsModule>(
       () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i533.LoginModule>(
-      () => _i533.LoginModule(gh<_i573.AppRouter>()));
   gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
   gh.singleton<_i692.AccountModule>(
       () => _i692.AccountModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i863.LoginModule>(
+      () => _i863.LoginModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i787.AddUserModule>(
+      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
       () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
-  gh.singleton<_i686.AppRouterConfig>(() => _i686.AppRouterConfig(
+  gh.singleton<_i223.AppRouterConfig>(() => _i223.AppRouterConfig(
         gh<_i692.AccountModule>(),
         gh<_i587.HomeModule>(),
         gh<_i402.EvenementModule>(),
-        gh<_i533.LoginModule>(),
+        gh<_i863.LoginModule>(),
         gh<_i356.AddAvisClientsModule>(),
         gh<_i181.EvenementListModule>(),
+        gh<_i787.AddUserModule>(),
       ));
   gh.factory<_i656.FetchUserDataUseCase>(() => _i656.FetchUserDataUseCase(
         gh<String>(),

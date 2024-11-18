@@ -1,1 +1,46 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"le-cocon-ssbe-6a4d0","appId":"1:282482672251:android:a4d9ab958d4a01718058de","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"le-cocon-ssbe-6a4d0","configurations":{"android":"1:282482672251:android:a4d9ab958d4a01718058de","ios":"1:282482672251:ios:324694d1005c38ff8058de","macos":"1:282482672251:ios:324694d1005c38ff8058de","web":"1:282482672251:web:2c68d577580e00a08058de","windows":"1:282482672251:web:d47bfd42596fb65d8058de"}}}}},"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"hosting":{"public":"build","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"storage":{"rules":"storage.rules"}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "le-cocon-ssbe-6a4d0",
+          "appId": "1:282482672251:android:a4d9ab958d4a01718058de",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "le-cocon-ssbe-6a4d0",
+          "configurations": {
+            "android": "1:282482672251:android:a4d9ab958d4a01718058de",
+            "ios": "1:282482672251:ios:324694d1005c38ff8058de",
+            "macos": "1:282482672251:ios:324694d1005c38ff8058de",
+            "web": "1:282482672251:web:2c68d577580e00a08058de",
+            "windows": "1:282482672251:web:d47bfd42596fb65d8058de"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

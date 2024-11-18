@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:app_lecocon_ssbe/ui/comon/widgets/buttoms/custom_buttom.dart';
+import 'package:app_lecocon_ssbe/ui/common/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../theme.dart';
+import '../../common/widgets/buttoms/custom_buttom.dart';
 import '../add_evenement_bloc.dart';
 import '../add_evenement_event.dart';
 import '../add_evenement_state.dart';
@@ -33,10 +35,17 @@ class AddEvenementViewState extends State<AddEvenementView> {
   @override
   Widget build(BuildContext context) {
     final auth = GetIt.instance<FirebaseAuth>();
+    Size size = MediaQuery.sizeOf(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('J\'ajoute un événement'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/account'); // Revenir à la page précédente
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -70,22 +79,26 @@ class AddEvenementViewState extends State<AddEvenementView> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TextField(
-                    controller: titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'Titre de l\'événement',
-                      border: OutlineInputBorder(),
-                    ),
+                  Align(
+                      alignment: Alignment.center,
+                  child:  Text('Je crée un événement', style: titleStyleLarge(context),),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 35,),
+                  CustomTextField(
+                    controller: titleController,
+                     labelText: 'Titre de l\'événement',
+                    maxLines: 1,
+                  ),
+                  const SizedBox(height: 35),
+                  const SizedBox(height: 35),
                   CustomButton(
                     onPressed: _pickFile,
-                    label: 'Choisir un fichier (PDF ou image)',
+                    label: 'Choisir un fichier ',
                   ),
                   const SizedBox(height: 20),
                   if (selectedFile != null)
                     _buildFilePreview(),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 35),
                   CustomButton(
                     onPressed: _isValidInput() ? _addEvent : null,
                     label: 'Ajouter l\'événement',

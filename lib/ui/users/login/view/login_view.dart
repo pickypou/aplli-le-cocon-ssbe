@@ -2,9 +2,8 @@ import 'package:app_lecocon_ssbe/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../comon/widgets/buttoms/custom_buttom.dart';
-import '../../comon/widgets/inputs/custom_text_field.dart';
+import '../../../common/widgets/buttoms/custom_buttom.dart';
+import '../../../common/widgets/inputs/custom_text_field.dart';
 import '../user_login_bloc.dart';
 import '../user_login_event.dart';
 import '../user_login_state.dart';
@@ -90,7 +89,7 @@ class LoginView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextButton(
-                        onPressed: () => context.go('/account/inscription'),
+                        onPressed: () => context.go('/addUser'),
                         child: Text("Créer un compte",
                             style: textStyleText(context)
                                 .copyWith(fontSize: size.width / 30)),

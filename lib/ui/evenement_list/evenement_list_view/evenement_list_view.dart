@@ -1,13 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 class EvenementListView extends StatelessWidget {
-  const EvenementListView({Key? key}) : super(key: key);
+  final auth = GetIt.instance<FirebaseAuth>();
+
+  EvenementListView({super.key});
 
   Future<void> deleteEvent(BuildContext context, String eventId) async {
     try {
-      // Afficher un indicateur de chargement
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -16,25 +20,16 @@ class EvenementListView extends StatelessWidget {
         ),
       );
 
-      // Suppression du fichier dans Storage
       try {
         await FirebaseStorage.instance.ref('evenement/$eventId').delete();
-        print('Fichier associé supprimé avec succès');
       } catch (storageError) {
-        // Fichier peut ne pas exister, ignorer cette erreur
         print('Erreur lors de la suppression du fichier Storage : $storageError');
       }
 
-      // Suppression du document dans Firestore
       await FirebaseFirestore.instance.collection('evenement').doc(eventId).delete();
-      print('Événement supprimé avec succès');
-
-      // Cacher le dialogue après la suppression réussie
       Navigator.of(context).pop();
     } catch (e) {
-      // Afficher une erreur et fermer le dialogue
       Navigator.of(context).pop();
-      print('Erreur lors de la suppression : $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erreur : Impossible de supprimer l\'événement')),
       );
@@ -70,7 +65,26 @@ class EvenementListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Liste des événements')),
+      appBar: AppBar(
+        title: const Text('Liste des événements'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/account');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            color: Theme.of(context).colorScheme.secondary,
+            onPressed: () {
+              auth.signOut().then((_) {
+                context.go('/');
+              });
+            },
+          )
+        ],
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('evenement').snapshots(),
         builder: (context, snapshot) {
@@ -88,23 +102,48 @@ class EvenementListView extends StatelessWidget {
 
           final evenements = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: evenements.length,
-            itemBuilder: (context, index) {
-              final doc = evenements[index];
-              return ListTile(
-                title: Text(doc['title']),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  color: Colors.red,
-                  onPressed: () => _confirmDelete(context, doc.id),
-                ),
-              );
-            },
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 8.0, // Espacement horizontal entre les cartes
+              runSpacing: 8.0, // Espacement vertical entre les cartes
+              children: evenements.map((doc) {
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45, // Largeur des cartes
+                  child: Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            doc['title'],
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8.0),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            color: Colors.red,
+                            onPressed: () => _confirmDelete(context, doc.id),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           );
         },
       ),
     );
   }
 }
-

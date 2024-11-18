@@ -32,11 +32,10 @@ TextStyle titleStyle(BuildContext context) {
 
 TextStyle titleStyleLarge(BuildContext context) {
   Size size = MediaQuery.of(context).size;
-  double titleFontSize = size.width / 8;
+  double titleFontSize = size.width / 11;
 
   return TextStyle(
     fontSize: titleFontSize,
-    fontWeight: FontWeight.bold,
     color: Theme.of(context).colorScheme.secondary,
     fontFamily: "Autography", // Police Amable pour les grands titres
     decoration: TextDecoration.none,
@@ -68,10 +67,18 @@ TextStyle titleStyleSmall(BuildContext context) {
   );
 }
 
-// Style pour le texte avec la police Autography
 TextStyle textStyleText(BuildContext context) {
   Size size = MediaQuery.sizeOf(context);
-  double textFontSize = size.width / 18;
+  double textFontSize = size.width / 22;
+  return GoogleFonts.montserrat().copyWith(
+    fontSize: textFontSize,
+    color: Theme.of(context).colorScheme.secondary,
+    decoration: TextDecoration.none,
+  );
+}
+TextStyle textStyleTextWeb(BuildContext context) {
+  Size size = MediaQuery.sizeOf(context);
+  double textFontSize = size.width / 40;
   return GoogleFonts.montserrat().copyWith(
     fontSize: textFontSize,
     color: Theme.of(context).colorScheme.secondary,
@@ -100,13 +107,12 @@ TextStyle textStyleTextBulle(BuildContext context) {
 }
 
 TextStyle? textStyleInput(BuildContext context, String inputText) {
-  int baseFontSize = 20;
+  int baseFontSize = 18;
   double textFontSize =
       inputText.length > 20 ? baseFontSize - 1.5 : baseFontSize.toDouble();
 
   return GoogleFonts.montserrat().copyWith(
     fontSize: textFontSize,
-    fontWeight: FontWeight.bold,
     color: Theme.of(context).colorScheme.onPrimary,
     decoration: TextDecoration.none,
   );

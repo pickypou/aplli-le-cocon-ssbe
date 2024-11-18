@@ -17,45 +17,48 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
-    double textFieldWidth = size.width * 0.8;
+    final size = MediaQuery.sizeOf(context);
+    final double textFieldWidth = size.width > 600
+        ? size.width * 0.4 // Largeur plus grande pour les écrans larges
+        : size.width * 0.8; // Largeur plus petite pour les écrans étroits
     final borderColor = theme.colorScheme.onSurface;
 
-    return Material(
-      color: Colors.transparent,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: size.width > 600 ? 16.0 : 8.0, // Ajuste les marges latérales
+        vertical: 8.0, // Marge verticale constante
+      ),
       child: Center(
-        child: Container(
+        child: SizedBox(
           width: textFieldWidth,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            border: Border.all(color: Colors.transparent),
-          ),
           child: TextField(
             controller: controller,
-            style: TextStyle(
-              fontSize: size.width / 20,
-            ),
+            style: textStyleText(context).copyWith(fontSize: 14.0),
+            maxLines: maxLines,
+            obscureText: obscureText,
             decoration: InputDecoration(
+              isDense: true, // Réduit l'espace vertical
               labelText: labelText,
               labelStyle: textStyleInput(context, labelText),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(20.0), // Ajuste la courbure
                 borderSide: BorderSide(
                   color: borderColor,
+                  width: 1.5, // Épaisseur de la bordure
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: BorderSide(
-                  color: borderColor,
+                  color: theme.colorScheme.primary, // Couleur primaire au focus
+                  width: 2.0, // Épaisseur accrue au focus
                 ),
               ),
               contentPadding: EdgeInsets.symmetric(
-                vertical: size.width / 20, // Ajuste ici pour réduire la hauteur
-                horizontal: size.height / 10,
+                vertical: size.height * 0.01, // Hauteur relative à l'écran
+                horizontal: size.width * 0.03, // Largeur relative à l'écran
               ),
             ),
-            obscureText: obscureText,
           ),
         ),
       ),

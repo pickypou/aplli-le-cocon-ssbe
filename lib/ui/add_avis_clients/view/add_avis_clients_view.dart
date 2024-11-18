@@ -8,9 +8,9 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../comon/widgets/buttoms/custom_buttom.dart';
-import '../../comon/widgets/inputs/custom_text_field.dart';
 import '../../../theme.dart';
+import '../../common/widgets/buttoms/custom_buttom.dart';
+import '../../common/widgets/inputs/custom_text_field.dart';
 
 class AddAvisClientsView extends StatelessWidget {
   final TextEditingController categoriesController = TextEditingController();
@@ -45,6 +45,12 @@ class AddAvisClientsView extends StatelessWidget {
     final auth = GetIt.instance<FirebaseAuth>();
     return Scaffold(
         appBar: AppBar(title: const Text('J\'ajoute un avis'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.go('/account'); // Revenir à la page précédente
+            },
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout), color: Theme
@@ -70,8 +76,7 @@ class AddAvisClientsView extends StatelessWidget {
                       style: titleStyleLarge(context),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 40),
-                    Image.asset('assets/images/logo_cocon.png', fit: BoxFit.contain,width: size.width/1.6),
+
                     const SizedBox(height: 40),
                     Wrap(
                         alignment: WrapAlignment.center,
@@ -79,7 +84,7 @@ class AddAvisClientsView extends StatelessWidget {
                         runSpacing: 20.0,
                         children: [
                           CustomTextField(
-                            labelText: 'Catégories',
+                            labelText: 'titre',
                             controller: categoriesController, maxLines: 1,
                           ),
                           const SizedBox(width: 40),
@@ -88,7 +93,7 @@ class AddAvisClientsView extends StatelessWidget {
                             controller: publishDateController, maxLines: 1,
                           ),
                           CustomTextField(
-                            labelText: 'mon commenter',
+                            labelText: 'mon Commentaire',
                             controller: textController,
                             maxLines: 5,
                           ),
