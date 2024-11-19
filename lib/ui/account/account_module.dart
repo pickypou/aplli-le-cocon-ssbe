@@ -8,7 +8,8 @@ import 'package:injectable/injectable.dart';
 import '../../core/di/di.dart';
 import '../../data/repository/users_repository.dart';
 import '../../data/repository/users_repository_impl.dart';
-import '../login/view/login_view.dart';
+import '../users/login/user_login_bloc.dart';
+import '../users/login/view/login_view.dart';
 import '../ui_module.dart';
 import 'account_bloc.dart';
 import 'account_interactor.dart';
@@ -56,7 +57,10 @@ class AccountModule implements UIModule {
         child: const AccountPage(),
       );
     } else {
-      return LoginView();
+      return BlocProvider<UserLoginBloc>(
+        create: (_) => getIt<UserLoginBloc>(),
+        child: LoginView(),
+      );
     }
   }
 }

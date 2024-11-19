@@ -8,6 +8,7 @@ import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart'
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
 import 'package:app_lecocon_ssbe/ui/evenement_list/evenement_list_module.dart';
+import 'package:app_lecocon_ssbe/ui/users/add_users/add_user_module.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,9 +19,9 @@ import '../../data/repository/users_repository.dart';
 import '../../data/repository/users_repository_impl.dart';
 import '../../ui/HomePage/home_module.dart';
 import '../../ui/account/account_module.dart';
-import '../../ui/comon/router/router_config.dart';
-import '../../ui/login/login_module.dart';
+import '../../ui/common/router/router_config.dart';
 import '../../ui/ui_module.dart';
+import '../../ui/users/login/login_module.dart';
 
 // Initialisation de GetIt
 final GetIt getIt = GetIt.instance;
@@ -45,7 +46,9 @@ abstract class FirebaseModule {
 
   //@singleton
   EvenementsRepository get evenementsRepository => EvenementsRepositoryImpl(
-      getIt<FirestoreService>(), getIt<FirebaseFirestore>(), getIt<StorageService>(), getIt<FirebaseStorage>());
+      getIt<FirestoreService>(),
+      getIt<FirebaseFirestore>(),
+      getIt<FirebaseStorage>());
 }
 
 void setupDi() {
@@ -75,6 +78,8 @@ void setupDi() {
       () => AddAvisClientsModule(getIt<AppRouter>()));
   getIt.registerLazySingleton<EvenementListModule>(
       () => EvenementListModule(getIt<AppRouter>()));
+  getIt.registerLazySingleton<AddUserModule>(
+      () => AddUserModule(getIt<AppRouter>()));
 
   // Enregistre la configuration du routeur avec les modules appropriés
   getIt.registerLazySingleton<AppRouterConfig>(() => AppRouterConfig(
@@ -83,5 +88,6 @@ void setupDi() {
       getIt<EvenementModule>(),
       getIt<LoginModule>(),
       getIt<AddAvisClientsModule>(),
-      getIt<EvenementListModule>()));
+      getIt<EvenementListModule>(),
+      getIt<AddUserModule>()));
 }

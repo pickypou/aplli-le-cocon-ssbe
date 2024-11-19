@@ -1,5 +1,5 @@
 import 'package:app_lecocon_ssbe/theme.dart';
-import 'package:app_lecocon_ssbe/ui/comon/router/router_config.dart';
+import 'package:app_lecocon_ssbe/ui/common/router/router_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Le cocon.ssbe',
       theme: theme,
-      routerConfig: appRouterConfig.router,
+        routerConfig: appRouterConfig.router,
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
@@ -35,18 +35,25 @@ class EvenementsInteractor {
     }
   }
 
-  Future<String> uploadFile(File file) async {
+  Future<String> uploadFileFromBytes(
+      Uint8List fileBytes, String fileName) async {
     try {
-      String fileName = file.path.split('/').last;
+      // Référence de stockage où le fichier sera uploadé
       Reference storageReference = _storageService.ref('evenement/$fileName');
-      UploadTask uploadTask = storageReference.putFile(file);
 
+      // Upload des données binaires (Web)
+      UploadTask uploadTask = storageReference.putData(fileBytes);
+
+      // Attendre que l'upload soit terminé
       TaskSnapshot taskSnapshot = await uploadTask;
+
+      // Une fois l'upload terminé, obtenir l'URL de téléchargement du fichier
       String fileUrl = await taskSnapshot.ref.getDownloadURL();
 
+      debugPrint('Fichier téléchargé avec succès ! URL : $fileUrl');
       return fileUrl;
     } catch (e) {
-      throw Exception('Erreur lors de l\'envoi du fichiers : $e');
+      throw Exception('Erreur lors de l\'envoi du fichier : $e');
     }
   }
 

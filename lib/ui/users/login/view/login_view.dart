@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../comon/widgets/buttoms/custom_buttom.dart';
-import '../../comon/widgets/inputs/custom_text_field.dart';
+import '../../../common/widgets/buttoms/custom_buttom.dart';
+import '../../../common/widgets/inputs/custom_text_field.dart';
 import '../user_login_bloc.dart';
 import '../user_login_event.dart';
 import '../user_login_state.dart';
@@ -19,7 +19,6 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
     return BlocConsumer<UserLoginBloc, UserLoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
@@ -85,6 +84,7 @@ class LoginView extends StatelessWidget {
                     },
                   ),
                 ),
+                const SizedBox(height: 22),
               ],
             ),
           ),

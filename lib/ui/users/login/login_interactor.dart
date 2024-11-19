@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/entity/users.dart';
-import '../../data/repository/users_repository.dart';
+import '../../../../../domain/entity/users.dart';
+import '../../../data/repository/users_repository.dart';
 
 class LoginInteractor {
   final UsersRepository usersRepository;

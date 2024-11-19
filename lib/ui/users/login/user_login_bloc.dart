@@ -1,7 +1,9 @@
-import 'package:app_lecocon_ssbe/ui/login/login_interactor.dart';
-import 'package:app_lecocon_ssbe/ui/login/user_login_event.dart';
-import 'package:app_lecocon_ssbe/ui/login/user_login_state.dart';
+
+import 'package:app_lecocon_ssbe/ui/users/login/user_login_event.dart';
+import 'package:app_lecocon_ssbe/ui/users/login/user_login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'login_interactor.dart';
 
 class UserLoginBloc extends Bloc<UserLoginEvent, UserLoginState> {
   final LoginInteractor userInteractor;

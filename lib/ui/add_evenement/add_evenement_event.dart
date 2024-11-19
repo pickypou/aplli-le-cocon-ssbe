@@ -20,4 +20,3 @@ class AddEvenementSignUpEvent extends AddEvenementEvent {
     this.thumbnail,
   });
 }
-

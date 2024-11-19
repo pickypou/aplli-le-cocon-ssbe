@@ -1,7 +1,4 @@
-
-
 import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
-import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
 import 'package:app_lecocon_ssbe/data/repository/avis_client_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository_impl.dart';
 import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
@@ -15,27 +12,19 @@ import 'package:get_it/get_it.dart';
 final GetIt getIt = GetIt.instance;
 
 void setupDataModule() {
-  getIt.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+  getIt.registerLazySingleton<FirebaseFirestore>(
+      () => FirebaseFirestore.instance);
 
   // Pass the FirebaseFirestore instance to the FirestoreService
   getIt.registerLazySingleton<FirestoreService>(
-          () => FirestoreService(getIt<FirebaseFirestore>())
-  );
+      () => FirestoreService(getIt<FirebaseFirestore>()));
 
   getIt.registerLazySingleton<AvisClientsRepository>(
-          () => AvisClientsRepositoryImpl()
-  );
+      () => AvisClientsRepositoryImpl());
 
-  getIt.registerLazySingleton<EvenementsRepository>(
-          () => EvenementsRepositoryImpl(
-          getIt<FirestoreService>(),
-          getIt<FirebaseFirestore>(),
-              getIt<StorageService>(),
-            getIt<FirebaseStorage>())
+  getIt.registerLazySingleton<EvenementsRepository>(() =>
+      EvenementsRepositoryImpl(getIt<FirestoreService>(),
+          getIt<FirebaseFirestore>(), getIt<FirebaseStorage>()));
 
-  );
-
-  getIt.registerLazySingleton<UsersRepository>(
-          () => UsersRepositoryImpl()
-  );
+  getIt.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl());
 }

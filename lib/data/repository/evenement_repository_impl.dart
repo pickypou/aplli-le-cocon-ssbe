@@ -1,5 +1,4 @@
 import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
-import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +12,10 @@ import 'evenement_repository.dart';
 class EvenementsRepositoryImpl extends EvenementsRepository {
   final FirestoreService _firestoreService;
   final FirebaseFirestore _firestore;
-  final StorageService _storageService;
   final FirebaseStorage _storage;
 
   EvenementsRepositoryImpl(
-    this._firestoreService,
-    this._firestore,
-      this._storageService,
-      this._storage
-  );
+      this._firestoreService, this._firestore, this._storage);
 
   @override
   FirebaseFirestore get firestore => _firestore;
@@ -33,8 +27,8 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
           (querySnapshot) => querySnapshot.docs
               .where((doc) =>
                   doc.data() != null) // Filtrer les documents non nulles
-              .map((doc) => Evenement.fromMap(
-                  doc.data() as Map<String, dynamic>, doc.id))
+              .map((doc) =>
+                  Evenement.fromMap(doc.data() as Map<String, dynamic>, doc.id))
               .toList(),
         );
   }
@@ -64,7 +58,6 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
   }
 
   @override
-
   Future<void> deleteEvenement(String evenementId) async {
     try {
       // Suppression du document dans Firestore

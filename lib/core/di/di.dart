@@ -3,6 +3,7 @@ import 'package:app_lecocon_ssbe/ui/add_avis_clients/add_avis_clients_module.dar
 import 'package:app_lecocon_ssbe/ui/add_evenement/evenement_module.dart';
 import 'package:app_lecocon_ssbe/ui/evenement_list/evenement_list_module.dart';
 import 'package:app_lecocon_ssbe/ui/ui_module.dart';
+import 'package:app_lecocon_ssbe/ui/users/add_users/add_user_module.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,8 +12,8 @@ import 'package:injectable/injectable.dart';
 
 import '../../ui/HomePage/home_module.dart';
 import '../../ui/account/account_module.dart';
-import '../../ui/comon/router/router_config.dart';
-import '../../ui/login/login_module.dart';
+import '../../ui/common/router/router_config.dart';
+import '../../ui/users/login/login_module.dart';
 import 'api/auth_service.dart';
 import 'api/storage_service.dart';
 import 'di.config.dart'; // Assurez-vous que ce fichier est bien généré
@@ -65,7 +66,9 @@ void setupDependencies() {
         getIt<EvenementModule>(),
         getIt<LoginModule>(),
         getIt<AddAvisClientsModule>(),
-        getIt<EvenementListModule>()));
+        getIt<EvenementListModule>(),
+      getIt<AddUserModule>()
+    ));
 
     // Enregistre les modules de l'interface utilisateur
     debugPrint("Enregistrement de AccountModule");
@@ -91,6 +94,11 @@ void setupDependencies() {
     debugPrint("Enregistrement de EvenementListModule");
     getIt.registerLazySingleton<EvenementListModule>(
         () => EvenementListModule(getIt<AppRouter>()));
+
+    debugPrint("Enregistrement de AddUserModule");
+    getIt.registerLazySingleton<AddUserModule>(
+            () => AddUserModule(getIt<AppRouter>()));
+
   } catch (e) {
     debugPrint("Erreur lors de l'enregistrement : $e");
   }
