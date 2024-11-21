@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 import 'dart:io';
 
+import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
 import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenements_interactor.dart';
 import 'package:app_lecocon_ssbe/ui/common/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
@@ -18,8 +19,7 @@ import '../add_evenement_event.dart';
 import '../add_evenement_state.dart';
 
 class AddEvenementView extends StatefulWidget {
-  final EvenementsInteractor _evenementInteractor =
-      GetIt.I<EvenementsInteractor>();
+
 
   AddEvenementView({super.key});
 
@@ -124,6 +124,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
   }
 
   Future<void> _pickFile() async {
+    final EvenementsInteractor evenementInteractor = GetIt.I<EvenementsInteractor>();
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -136,11 +137,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
             // Pour la plateforme Web
             Uint8List? fileBytes = result.files.first.bytes;
             String fileName = result.files.first.name;
-            String extension =
-                result.files.first.extension?.toLowerCase() ?? '';
-
-            debugPrint("Fichier sélectionné (Web) : $fileName");
-            debugPrint("Extension (Web) : $extension");
+            String extension = result.files.first.extension?.toLowerCase() ?? '';
 
             if (extension == 'pdf') {
               fileType = 'pdf';
@@ -150,16 +147,14 @@ class AddEvenementViewState extends State<AddEvenementView> {
               throw Exception('Type de fichier non supporté');
             }
 
-            // Appeler la fonction uploadFile avec les données binaires
-            uploadFileFromBytes(fileBytes!, fileName);
+            // Appeler la fonction uploadFileFromBytes
+            evenementInteractor.uploadFileFromBytes(fileBytes!, fileName).then((url) {
+              debugPrint("Fichier téléchargé avec succès : $url");
+            });
           } else {
             // Pour les plateformes natives (Android/iOS)
             selectedFile = io.File(result.files.first.path!);
-            String extension =
-                result.files.first.extension?.toLowerCase() ?? '';
-
-            debugPrint("Fichier sélectionné (Natif) : ${selectedFile!.path}");
-            debugPrint("Extension (Natif) : $extension");
+            String extension = result.files.first.extension?.toLowerCase() ?? '';
 
             if (extension == 'pdf') {
               fileType = 'pdf';
@@ -169,8 +164,13 @@ class AddEvenementViewState extends State<AddEvenementView> {
               throw Exception('Type de fichier non supporté');
             }
 
-            // Appeler la fonction uploadFile avec le fichier local
-            _eveuploadFile(selectedFile!);
+            // Appeler la méthode uploadFile locale
+            evenementInteractor.uploadFileFromBytes(
+              selectedFile!.readAsBytesSync(),
+              selectedFile!.path.split('/').last,
+            ).then((url) {
+              debugPrint("Fichier téléchargé avec succès : $url");
+            });
           }
         });
       } else {
@@ -183,6 +183,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
       );
     }
   }
+
 
   Widget _buildFilePreview() {
     return Column(

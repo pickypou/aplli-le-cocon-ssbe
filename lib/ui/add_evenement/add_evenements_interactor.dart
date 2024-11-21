@@ -2,16 +2,18 @@ import 'dart:typed_data';
 
 import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
-import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart';
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 
+import '../../data/repository/evenement_repository.dart';
 import '../../domain/usecases/fetch_evenement_data_usecase.dart';
 
+@injectable
 class EvenementsInteractor {
-  final EvenementsRepositoryImpl evenementsRepository;
+  final EvenementsRepository evenementsRepository;
   final FetchEvenementDataUseCase fetchEvenementDataUseCase;
   final StorageService _storageService;
   final FirestoreService _firestore;

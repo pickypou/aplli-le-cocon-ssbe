@@ -17,8 +17,10 @@ import 'package:injectable/injectable.dart';
 
 import '../../data/repository/users_repository.dart';
 import '../../data/repository/users_repository_impl.dart';
+import '../../domain/usecases/fetch_evenement_data_usecase.dart';
 import '../../ui/HomePage/home_module.dart';
 import '../../ui/account/account_module.dart';
+import '../../ui/add_evenement/add_evenements_interactor.dart';
 import '../../ui/common/router/router_config.dart';
 import '../../ui/ui_module.dart';
 import '../../ui/users/login/login_module.dart';
@@ -44,11 +46,19 @@ abstract class FirebaseModule {
   @singleton
   AvisClientsRepository get avisClientRepository => AvisClientsRepositoryImpl();
 
-  //@singleton
+  @singleton
   EvenementsRepository get evenementsRepository => EvenementsRepositoryImpl(
       getIt<FirestoreService>(),
       getIt<FirebaseFirestore>(),
       getIt<FirebaseStorage>());
+
+  @singleton
+  EvenementsInteractor get evenementInteractor => EvenementsInteractor(
+    getIt<EvenementsRepository>(), // Injection de l'interface
+    getIt<FetchEvenementDataUseCase>(),
+    getIt<FirebaseStorage>(),
+    getIt<FirebaseFirestore>(),
+  );
 }
 
 void setupDi() {
