@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 import '../../domain/entity/avis_clients.dart';
 import 'avis_client_repository.dart';
 
-@injectable
+
 class AvisClientsRepositoryImpl extends AvisClientsRepository {
   final FirebaseFirestore _firestore;
 

@@ -11,7 +11,6 @@ import 'package:injectable/injectable.dart';
 import '../../data/repository/evenement_repository.dart';
 import '../../domain/usecases/fetch_evenement_data_usecase.dart';
 
-@injectable
 class EvenementsInteractor {
   final EvenementsRepository evenementsRepository;
   final FetchEvenementDataUseCase fetchEvenementDataUseCase;

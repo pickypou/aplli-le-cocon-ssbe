@@ -23,7 +23,7 @@ void setupDataModule() {
       () => AvisClientsRepositoryImpl());
 
   getIt.registerLazySingleton<EvenementsRepository>(() =>
-      EvenementsRepositoryImpl(getIt<FirestoreService>(),
+      EvenementsRepositoryImpl(
           getIt<FirebaseFirestore>(), getIt<FirebaseStorage>()));
 
   getIt.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl());

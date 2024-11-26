@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../domain/entity/avis_clients.dart';
 
-
+@factoryMethod
 abstract class AvisClientsRepository {
   FirebaseFirestore get fireStore;
   Stream<Iterable<AvisClients>> getAvisClientsStream();

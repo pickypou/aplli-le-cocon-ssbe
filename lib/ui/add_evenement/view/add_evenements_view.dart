@@ -1,27 +1,18 @@
-import 'dart:io' as io;
-import 'dart:io';
-
-import 'package:app_lecocon_ssbe/data/repository/evenement_repository.dart';
+import 'dart:typed_data';
 import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenements_interactor.dart';
 import 'package:app_lecocon_ssbe/ui/common/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../theme.dart';
 import '../../common/widgets/buttoms/custom_buttom.dart';
-import '../add_evenement_bloc.dart';
-import '../add_evenement_event.dart';
-import '../add_evenement_state.dart';
 
 class AddEvenementView extends StatefulWidget {
-
-
-  AddEvenementView({super.key});
+  const AddEvenementView({super.key});
 
   @override
   AddEvenementViewState createState() => AddEvenementViewState();
@@ -29,7 +20,8 @@ class AddEvenementView extends StatefulWidget {
 
 class AddEvenementViewState extends State<AddEvenementView> {
   final titleController = TextEditingController();
-  File? selectedFile;
+  Uint8List? selectedFileBytes; // Stocke les bytes du fichier pour le Web
+  String? fileName;
   String? fileType;
 
   @override
@@ -48,7 +40,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/account'); // Revenir à la page précédente
+            context.go('/account'); // Retour à la page précédente
           },
         ),
         actions: [
@@ -67,56 +59,35 @@ class AddEvenementViewState extends State<AddEvenementView> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: BlocConsumer<AddEvenementsBloc, AddEvenementsState>(
-            listener: (context, state) {
-              if (state is AddEvenementsSignUpSuccessState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Événement ajouté avec succès')),
-                );
-                GoRouter.of(context).go('/account');
-              } else if (state is AddEvenementsSignUpErrorState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Erreur: ${state.error}')),
-                );
-              }
-            },
-            builder: (context, state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Je crée un événement',
-                      style: titleStyleLarge(context),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  CustomTextField(
-                    controller: titleController,
-                    labelText: 'Titre de l\'événement',
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 35),
-                  const SizedBox(height: 35),
-                  CustomButton(
-                    onPressed: _pickFile,
-                    label: 'Choisir un fichier ',
-                  ),
-                  const SizedBox(height: 20),
-                  if (selectedFile != null) _buildFilePreview(),
-                  const SizedBox(height: 35),
-                  CustomButton(
-                    onPressed: _isValidInput() ? _addEvent : null,
-                    label: 'Ajouter l\'événement',
-                  ),
-                  if (state is AddEvenementsSignUpLoadingState)
-                    const CircularProgressIndicator(),
-                ],
-              );
-            },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Je crée un événement',
+                  style: titleStyleLarge(context),
+                ),
+              ),
+              const SizedBox(height: 35),
+              CustomTextField(
+                controller: titleController,
+                labelText: 'Titre de l\'événement',
+                maxLines: 1,
+              ),
+              const SizedBox(height: 35),
+              CustomButton(
+                onPressed: _pickFile,
+                label: 'Choisir un fichier',
+              ),
+              const SizedBox(height: 20),
+              if (selectedFileBytes != null) _buildFilePreview(),
+              const SizedBox(height: 35),
+              CustomButton(
+                onPressed: _isValidInput() ? _addEvent : null,
+                label: 'Ajouter l\'événement',
+              ),
+            ],
           ),
         ),
       ),
@@ -124,8 +95,11 @@ class AddEvenementViewState extends State<AddEvenementView> {
   }
 
   Future<void> _pickFile() async {
-    final EvenementsInteractor evenementInteractor = GetIt.I<EvenementsInteractor>();
+    final EvenementsInteractor evenementInteractor =
+    GetIt.I<EvenementsInteractor>();
+
     try {
+      // Sélection du fichier
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
@@ -133,45 +107,27 @@ class AddEvenementViewState extends State<AddEvenementView> {
 
       if (result != null && result.files.isNotEmpty) {
         setState(() {
-          if (kIsWeb) {
-            // Pour la plateforme Web
-            Uint8List? fileBytes = result.files.first.bytes;
-            String fileName = result.files.first.name;
-            String extension = result.files.first.extension?.toLowerCase() ?? '';
+          selectedFileBytes = result.files.first.bytes; // Récupération des bytes
+          fileName = result.files.first.name; // Récupération du nom du fichier
+          String extension = result.files.first.extension?.toLowerCase() ?? '';
 
-            if (extension == 'pdf') {
-              fileType = 'pdf';
-            } else if (['png', 'jpg', 'jpeg'].contains(extension)) {
-              fileType = 'image';
-            } else {
-              throw Exception('Type de fichier non supporté');
-            }
-
-            // Appeler la fonction uploadFileFromBytes
-            evenementInteractor.uploadFileFromBytes(fileBytes!, fileName).then((url) {
-              debugPrint("Fichier téléchargé avec succès : $url");
-            });
+          if (extension == 'pdf') {
+            fileType = 'pdf';
+          } else if (['png', 'jpg', 'jpeg'].contains(extension)) {
+            fileType = 'image';
           } else {
-            // Pour les plateformes natives (Android/iOS)
-            selectedFile = io.File(result.files.first.path!);
-            String extension = result.files.first.extension?.toLowerCase() ?? '';
-
-            if (extension == 'pdf') {
-              fileType = 'pdf';
-            } else if (['png', 'jpg', 'jpeg'].contains(extension)) {
-              fileType = 'image';
-            } else {
-              throw Exception('Type de fichier non supporté');
-            }
-
-            // Appeler la méthode uploadFile locale
-            evenementInteractor.uploadFileFromBytes(
-              selectedFile!.readAsBytesSync(),
-              selectedFile!.path.split('/').last,
-            ).then((url) {
-              debugPrint("Fichier téléchargé avec succès : $url");
-            });
+            throw Exception('Type de fichier non supporté');
           }
+
+          // Téléchargement vers Firebase Storage
+          evenementInteractor.uploadFileFromBytes(
+            selectedFileBytes!,
+            fileName!,
+          ).then((url) {
+            debugPrint("Fichier téléchargé avec succès : $url");
+          }).catchError((error) {
+            debugPrint("Erreur lors du téléchargement : $error");
+          });
         });
       } else {
         debugPrint("Aucun fichier sélectionné.");
@@ -184,54 +140,39 @@ class AddEvenementViewState extends State<AddEvenementView> {
     }
   }
 
-
   Widget _buildFilePreview() {
     return Column(
       children: [
-        Text('Fichier sélectionné: ${selectedFile!.path.split('/').last}'),
+        Text('Fichier sélectionné : $fileName'),
         const SizedBox(height: 10),
         if (fileType == 'pdf')
           Container(
             height: 150,
             width: 150,
             color: Colors.grey[300],
-            child: const Center(child: Text('Aperçu PDF')),
+            child: const Center(child: Text('Aperçu PDF indisponible')),
           )
-        else if (['png', 'jpg', 'jpeg'].contains(fileType))
-          Image.file(
-            selectedFile!,
+        else if (fileType == 'image')
+          Image.memory(
+            selectedFileBytes!,
             height: 150,
             width: 150,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                height: 150,
-                width: 150,
-                color: Colors.red[300],
-                child: const Center(child: Text('Erreur de chargement')),
-              );
-            },
           ),
       ],
     );
   }
 
   bool _isValidInput() {
-    return selectedFile != null && titleController.text.isNotEmpty;
+    return selectedFileBytes != null && titleController.text.isNotEmpty;
   }
 
   void _addEvent() {
     if (_isValidInput()) {
-      context.read<AddEvenementsBloc>().add(
-            AddEvenementSignUpEvent(
-              file: selectedFile!,
-              fileType: fileType!,
-              id: '',
-              title: titleController.text,
-              publishDate: DateTime.now(),
-              thumbnail: null,
-            ),
-          );
+      final EvenementsInteractor evenementInteractor =
+      GetIt.I<EvenementsInteractor>();
+      // Ajouter l'événement via un Interactor ou une API.
+      debugPrint('Ajout de l\'événement : ${titleController.text}');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

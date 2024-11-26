@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import 'core/di/di.dart';
+import 'core/di/di_module.dart';
 import 'firebase_options.dart';
 
 void main() async {

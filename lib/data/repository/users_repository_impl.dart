@@ -7,20 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import '../../domain/entity/users.dart';
 
-@injectable
+
+@Injectable(as: UsersRepository)
 class UsersRepositoryImpl implements UsersRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
-  UsersRepositoryImpl({FirebaseFirestore? firestore, FirebaseAuth? auth})
-  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
-
-
-  @override
-  FirebaseFirestore get firestore => _firestore;
-
-  FirebaseAuth get auth => _auth;
+  UsersRepositoryImpl(this._firestore, this._auth);
 
   @override
   Future<Map<String, dynamic>> fetchUserData(String userId) async {
@@ -107,11 +100,15 @@ class UsersRepositoryImpl implements UsersRepository {
   @override
   Future<void> logOut() async {
     try {
-      await auth.signOut();
+      await _auth.signOut();
       debugPrint('Déconnexion réussie.');
     } catch (error) {
       debugPrint('Erreur lors de la déconnexion : $error');
       throw Exception('Échec de la déconnexion : $error');
     }
   }
+
+  @override
+  // TODO: implement firestore
+  FirebaseFirestore get firestore => throw UnimplementedError();
 }
