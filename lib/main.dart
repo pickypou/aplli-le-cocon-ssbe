@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import 'core/di/di.dart';
-import 'core/di/di_module.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -15,10 +14,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-
   // Configure toutes les dépendances
   configureDependencies();
-  setupDependencies();
 
   runApp(const MyApp());
 }
@@ -34,7 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Le cocon.ssbe',
       theme: theme,
-        routerConfig: appRouterConfig.router,
+      routerConfig: appRouterConfig.router,
     );
   }
 }

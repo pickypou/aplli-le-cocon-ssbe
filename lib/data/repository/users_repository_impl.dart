@@ -1,12 +1,10 @@
-
-
 import 'package:app_lecocon_ssbe/data/repository/users_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import '../../domain/entity/users.dart';
 
+import '../../domain/entity/users.dart';
 
 @Injectable(as: UsersRepository)
 class UsersRepositoryImpl implements UsersRepository {
@@ -20,7 +18,8 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       User? currentUser = _auth.currentUser;
       if (currentUser != null) {
-        DocumentSnapshot snapshot = await _firestore.collection('Users').doc(currentUser.uid).get();
+        DocumentSnapshot snapshot =
+            await _firestore.collection('Users').doc(currentUser.uid).get();
         if (snapshot.exists) {
           return snapshot.data() as Map<String, dynamic>;
         } else {
@@ -30,7 +29,8 @@ class UsersRepositoryImpl implements UsersRepository {
         throw Exception('Aucun utilisateur connecté.');
       }
     } catch (error) {
-      debugPrint('Erreur lors de la récupération des données utilisateur : $error');
+      debugPrint(
+          'Erreur lors de la récupération des données utilisateur : $error');
       rethrow;
     }
   }
@@ -44,7 +44,7 @@ class UsersRepositoryImpl implements UsersRepository {
       );
       await _firestore.collection('Users').doc(result.user!.uid).set({
         'email': user.email,
-        'userName' : user.userName
+        'userName': user.userName
         // Ajoutez ici d'autres champs si nécessaire
       });
     } catch (error) {
@@ -56,7 +56,8 @@ class UsersRepositoryImpl implements UsersRepository {
   @override
   Future<User?> login(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
-      throw Exception("Veuillez fournir une adresse e-mail et un mot de passe valides.");
+      throw Exception(
+          "Veuillez fournir une adresse e-mail et un mot de passe valides.");
     }
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -92,7 +93,8 @@ class UsersRepositoryImpl implements UsersRepository {
         return false;
       }
     } catch (error) {
-      debugPrint('Erreur lors de la vérification du statut d\'authentification : $error');
+      debugPrint(
+          'Erreur lors de la vérification du statut d\'authentification : $error');
       rethrow;
     }
   }

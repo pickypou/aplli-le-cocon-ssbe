@@ -6,7 +6,6 @@ import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../data/repository/evenement_repository.dart';
 import '../../domain/usecases/fetch_evenement_data_usecase.dart';

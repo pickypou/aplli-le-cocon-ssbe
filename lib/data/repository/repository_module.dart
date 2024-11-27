@@ -6,10 +6,10 @@ import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart'
 import 'package:app_lecocon_ssbe/data/repository/users_repository.dart';
 import 'package:app_lecocon_ssbe/data/repository/users_repository_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get_it/get_it.dart';
 
-final GetIt getIt = GetIt.instance;
+import '../../core/di/di.dart';
 
 void setupDataModule() {
   getIt.registerLazySingleton<FirebaseFirestore>(
@@ -20,11 +20,12 @@ void setupDataModule() {
       () => FirestoreService(getIt<FirebaseFirestore>()));
 
   getIt.registerLazySingleton<AvisClientsRepository>(
-      () => AvisClientsRepositoryImpl());
+      () => AvisClientsRepositoryImpl(getIt<FirestoreService>()));
 
   getIt.registerLazySingleton<EvenementsRepository>(() =>
       EvenementsRepositoryImpl(
           getIt<FirebaseFirestore>(), getIt<FirebaseStorage>()));
 
-  getIt.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl());
+  getIt.registerLazySingleton<UsersRepository>(() =>
+      UsersRepositoryImpl(getIt<FirebaseFirestore>(), getIt<FirebaseAuth>()));
 }

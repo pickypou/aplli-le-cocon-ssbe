@@ -10,11 +10,14 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
+import 'package:firebase_storage/firebase_storage.dart' as _i457;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../data/repository/avis_client_repository.dart' as _i684;
+import '../../data/repository/avis_clients_repository_impl.dart' as _i552;
 import '../../data/repository/evenement_repository.dart' as _i590;
+import '../../data/repository/evenement_repository_impl.dart' as _i1053;
 import '../../data/repository/users_repository.dart' as _i151;
 import '../../data/repository/users_repository_impl.dart' as _i304;
 import '../../domain/usecases/fetch_avis_clients_data_usecase.dart' as _i57;
@@ -34,9 +37,10 @@ import '../../ui/users/login/login_module.dart' as _i863;
 import 'api/auth_service.dart' as _i977;
 import 'api/firebase_client.dart' as _i703;
 import 'api/firestore_service.dart' as _i746;
+import 'api/storage_service.dart' as _i717;
 
 // initializes the registration of main-scope dependencies inside of GetIt
-_i174.GetIt initGetIt(
+_i174.GetIt init(
   _i174.GetIt getIt, {
   String? environment,
   _i526.EnvironmentFilter? environmentFilter,
@@ -50,25 +54,21 @@ _i174.GetIt initGetIt(
   gh.factory<_i700.GenerateThumbnailUseCase>(
       () => _i700.GenerateThumbnailUseCase());
   gh.singleton<_i573.AppRouter>(() => _i573.AppRouter());
-  gh.factory<_i914.FetchEvenementDataUseCase>(
-      () => _i914.FetchEvenementDataUseCase(gh<_i590.EvenementsRepository>()));
-  gh.factory<_i57.FetchAvisClientDataUseCase>(
-      () => _i57.FetchAvisClientDataUseCase(gh<_i684.AvisClientsRepository>()));
   gh.factory<_i977.AuthService>(
       () => _i977.AuthService(gh<_i59.FirebaseAuth>()));
-  gh.singleton<_i181.EvenementListModule>(
-      () => _i181.EvenementListModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i402.EvenementModule>(
-      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i863.LoginModule>(
-      () => _i863.LoginModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i787.AddUserModule>(
-      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
   gh.singleton<_i356.AddAvisClientsModule>(
       () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i402.EvenementModule>(
+      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
   gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i787.AddUserModule>(
+      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i863.LoginModule>(
+      () => _i863.LoginModule(gh<_i573.AppRouter>()));
   gh.singleton<_i692.AccountModule>(
       () => _i692.AccountModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i181.EvenementListModule>(
+      () => _i181.EvenementListModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
       () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
   gh.factory<_i151.UsersRepository>(() => _i304.UsersRepositoryImpl(
@@ -79,6 +79,12 @@ _i174.GetIt initGetIt(
         gh<String>(),
         gh<_i151.UsersRepository>(),
       ));
+  gh.factory<_i590.EvenementsRepository>(() => _i1053.EvenementsRepositoryImpl(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i457.FirebaseStorage>(),
+      ));
+  gh.factory<_i717.StorageService>(
+      () => _i717.StorageService(gh<_i457.FirebaseStorage>()));
   gh.singleton<_i223.AppRouterConfig>(() => _i223.AppRouterConfig(
         gh<_i692.AccountModule>(),
         gh<_i587.HomeModule>(),
@@ -88,5 +94,11 @@ _i174.GetIt initGetIt(
         gh<_i181.EvenementListModule>(),
         gh<_i787.AddUserModule>(),
       ));
+  gh.factory<_i914.FetchEvenementDataUseCase>(
+      () => _i914.FetchEvenementDataUseCase(gh<_i590.EvenementsRepository>()));
+  gh.factory<_i684.AvisClientsRepository>(
+      () => _i552.AvisClientsRepositoryImpl(gh<_i746.FirestoreService>()));
+  gh.factory<_i57.FetchAvisClientDataUseCase>(
+      () => _i57.FetchAvisClientDataUseCase(gh<_i684.AvisClientsRepository>()));
   return getIt;
 }

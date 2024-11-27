@@ -1,13 +1,8 @@
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:injectable/injectable.dart';
 
 import '../dto/evenement_dto.dart';
 
-@factoryMethod
 abstract class EvenementsRepository {
-  FirebaseFirestore get firestore;
-
   Stream<Iterable<Evenement>> getEvenementStream();
   Future<Map<String, dynamic>?> getById(String evenementId);
   Future<void> add(EvenementDto evenementDto); // Utilisation d'un DTO ici
