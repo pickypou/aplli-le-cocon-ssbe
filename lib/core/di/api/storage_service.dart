@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -19,7 +18,7 @@ class StorageService {
       await _firebaseStorage.ref(path).putFile(file);
     } catch (e) {
       debugPrint('Error uploading file: $e');
-      rethrow; // Rethrow or handle the error as needed
+      rethrow;
     }
   }
 
@@ -29,7 +28,8 @@ class StorageService {
       return await ref.getDownloadURL();
     } catch (e) {
       debugPrint('Error fetching download URL: $e');
-      rethrow; // Rethrow or handle the error as needed
+      rethrow;
     }
   }
 }
+

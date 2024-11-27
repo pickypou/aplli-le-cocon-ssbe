@@ -3,11 +3,9 @@ import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenements_interactor.dart
 import 'package:app_lecocon_ssbe/ui/common/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../theme.dart';
 import '../../common/widgets/buttoms/custom_buttom.dart';
 
@@ -20,7 +18,7 @@ class AddEvenementView extends StatefulWidget {
 
 class AddEvenementViewState extends State<AddEvenementView> {
   final titleController = TextEditingController();
-  Uint8List? selectedFileBytes; // Stocke les bytes du fichier pour le Web
+  Uint8List? selectedFileBytes;
   String? fileName;
   String? fileType;
 
@@ -40,7 +38,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/account'); // Retour à la page précédente
+            context.go('/account');
           },
         ),
         actions: [
@@ -95,11 +93,9 @@ class AddEvenementViewState extends State<AddEvenementView> {
   }
 
   Future<void> _pickFile() async {
-    final EvenementsInteractor evenementInteractor =
-    GetIt.I<EvenementsInteractor>();
+    final evenementsInteractor = EvenementsInteractor();
 
     try {
-      // Sélection du fichier
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
@@ -107,8 +103,8 @@ class AddEvenementViewState extends State<AddEvenementView> {
 
       if (result != null && result.files.isNotEmpty) {
         setState(() {
-          selectedFileBytes = result.files.first.bytes; // Récupération des bytes
-          fileName = result.files.first.name; // Récupération du nom du fichier
+          selectedFileBytes = result.files.first.bytes;
+          fileName = result.files.first.name;
           String extension = result.files.first.extension?.toLowerCase() ?? '';
 
           if (extension == 'pdf') {
@@ -119,8 +115,8 @@ class AddEvenementViewState extends State<AddEvenementView> {
             throw Exception('Type de fichier non supporté');
           }
 
-          // Téléchargement vers Firebase Storage
-          evenementInteractor.uploadFileFromBytes(
+          // Upload directement sur Firebase Storage pour le Web
+          evenementsInteractor.uploadFileFromBytes(
             selectedFileBytes!,
             fileName!,
           ).then((url) {
@@ -169,9 +165,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
 
   void _addEvent() {
     if (_isValidInput()) {
-      final EvenementsInteractor evenementInteractor =
       GetIt.I<EvenementsInteractor>();
-      // Ajouter l'événement via un Interactor ou une API.
       debugPrint('Ajout de l\'événement : ${titleController.text}');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

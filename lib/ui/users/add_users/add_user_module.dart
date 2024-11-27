@@ -7,7 +7,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../../core/di/di.dart';
 import '../../../data/repository/users_repository.dart';
-import '../../../data/repository/users_repository_impl.dart';
 import '../../ui_module.dart';
 import 'add_user_bloc.dart';
 import 'add_user_interactor.dart';
@@ -37,7 +36,7 @@ class AddUserModule implements UIModule {
   Widget _buildAddUserPage() {
     return BlocProvider<AddUserBloc>(
       create: (context) {
-        UsersRepository usersRepository = getIt<UsersRepositoryImpl>();
+        UsersRepository usersRepository = getIt<UsersRepository>();
 
         var interactor = AddUserInteractor(usersRepository: usersRepository);
         return AddUserBloc(interactor, userId: '');

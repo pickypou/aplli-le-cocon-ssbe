@@ -38,7 +38,7 @@ class LoginModule implements UIModule {
   Widget _buildLoginPage() {
     return BlocProvider<UserLoginBloc>(
       create: (context) {
-        UsersRepository usersRepository = getIt<UsersRepositoryImpl>();
+        UsersRepository usersRepository = getIt<UsersRepository>();
 
         var interactor = LoginInteractor(usersRepository: usersRepository);
         return UserLoginBloc(interactor, userId: '');

@@ -67,7 +67,7 @@ class AddAvisClientsView extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(children: [
                 Text(
-                  'Ajouter un commenter',
+                  'Ajouter un commantaire',
                   style: titleStyleLarge(context),
                   textAlign: TextAlign.center,
                 ),

@@ -1,0 +1,10 @@
+generate_for:
+  # Les chemins des fichiers où vous utilisez les annotations injectable (@injectable, @module, etc.)
+  - lib/**.dart
+  - lib/core/**.dart
+  - lib/data/**.dart
+  - lib/domain/**.dart
+  - lib/ui/**.dart
+output: lib/core/di/di_module.config.dart # Chemin du fichier généré
+register_module: true
+

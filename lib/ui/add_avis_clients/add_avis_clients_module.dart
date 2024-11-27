@@ -1,6 +1,5 @@
 import 'package:app_lecocon_ssbe/core/di/di.dart';
 import 'package:app_lecocon_ssbe/data/repository/avis_client_repository.dart';
-import 'package:app_lecocon_ssbe/data/repository/avis_clients_repository_impl.dart';
 import 'package:app_lecocon_ssbe/domain/usecases/fetch_avis_clients_data_usecase.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/avis_clients_bloc.dart';
 import 'package:app_lecocon_ssbe/ui/add_avis_clients/avis_clients_interactor.dart';
@@ -45,7 +44,7 @@ class AddAvisClientsModule implements UIModule {
 
     return BlocProvider<AddAvisClientsBloc>(
       create: (context){
-        AvisClientsRepository avisClientsRepository = getIt<AvisClientsRepositoryImpl>();
+        AvisClientsRepository avisClientsRepository = getIt<AvisClientsRepository>();
         FetchAvisClientDataUseCase fetchAvisClientDataUseCase = getIt<FetchAvisClientDataUseCase>();
         var interactor = AvisClientsInteractor(avisClientsRepository, fetchAvisClientDataUseCase);
 

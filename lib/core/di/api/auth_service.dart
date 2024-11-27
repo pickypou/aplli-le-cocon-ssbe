@@ -2,11 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import '../../../data/dto/user_dto.dart';
 
-@injectable
+@LazySingleton()
 class AuthService {
   final FirebaseAuth _auth;
 
-  // Injecte FirebaseAuth via le constructeur
   AuthService(this._auth);
 
   Future<User?> signIn(String email, String password) async {
@@ -31,3 +30,4 @@ class AuthService {
   )
       : null);
 }
+

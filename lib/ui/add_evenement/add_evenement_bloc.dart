@@ -13,7 +13,7 @@ import 'add_evenement_event.dart';
 import 'add_evenement_state.dart';
 
 class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  final  _firebaseStorage = GetIt.instance<FirebaseStorage>();
   final generateThumbnailUseCase = GetIt.instance<GenerateThumbnailUseCase>();
 
   AddEvenementsBloc() : super(AddEvenementsSignUpInitialState()) {

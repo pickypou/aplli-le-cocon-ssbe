@@ -7,7 +7,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../core/di/di.dart';
 import '../../data/repository/users_repository.dart';
-import '../../data/repository/users_repository_impl.dart';
 import '../users/login/user_login_bloc.dart';
 import '../users/login/view/login_view.dart';
 import '../ui_module.dart';
@@ -50,7 +49,7 @@ class AccountModule implements UIModule {
     if (userId != null) {
       return BlocProvider<AccountBloc>(
         create: (context) {
-          UsersRepository userRepository = getIt<UsersRepositoryImpl>();
+          UsersRepository userRepository = getIt<UsersRepository>();
           var interactor = AccountInteractor(userRepository, userId);
           return AccountBloc(accountInteractor: interactor, userId: userId);
         },

@@ -3,27 +3,19 @@ import 'dart:typed_data';
 import 'package:app_lecocon_ssbe/core/di/api/firestore_service.dart';
 import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/di/di.dart';
 import '../../data/repository/evenement_repository.dart';
 import '../../domain/usecases/fetch_evenement_data_usecase.dart';
 
 class EvenementsInteractor {
-  final EvenementsRepository evenementsRepository;
-  final FetchEvenementDataUseCase fetchEvenementDataUseCase;
-  final StorageService _storageService;
-  final FirestoreService _firestore;
+  final  evenementsRepository = getIt<EvenementsRepository>();
+  final  fetchEvenementDataUseCase = getIt<FetchEvenementDataUseCase>();
+  final  _storageService = getIt<StorageService>();
+  final  _firestore = getIt<FirestoreService>();
 
-  EvenementsInteractor(
-    this.evenementsRepository,
-    this.fetchEvenementDataUseCase,
-    FirebaseStorage storage,
-    FirebaseFirestore firestore, // Ajout de Firestore ici
-  )   : _storageService = StorageService(storage),
-        _firestore = FirestoreService(
-            firestore); // Passer Firestore au constructeur de FirestoreService
 
   Future<Iterable<Evenement>> fetchEvenementData() async {
     try {

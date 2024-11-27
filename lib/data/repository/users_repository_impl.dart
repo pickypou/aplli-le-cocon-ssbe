@@ -110,7 +110,6 @@ class UsersRepositoryImpl implements UsersRepository {
     }
   }
 
-  @override
   // TODO: implement firestore
   FirebaseFirestore get firestore => throw UnimplementedError();
 }
