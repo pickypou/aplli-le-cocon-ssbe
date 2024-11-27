@@ -16,27 +16,31 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
   @override
   Stream<Iterable<Evenement>> getEvenementStream() {
     return _firestore.collection('evenement').snapshots().map(
-          (querySnapshot) => querySnapshot.docs
-              .where((doc) => doc.data() != null)
-              .map((doc) => Evenement.fromMap(doc.data(), doc.id))
-              .toList(),
+          (querySnapshot) => querySnapshot.docs.map((doc) {
+            final data = doc.data();
+            return Evenement.fromMap(data, doc.id);
+          }).toList(),
         );
   }
 
   @override
-  Future<Map<String, dynamic>?> getById(String evenementId) async {
-    final docSnapshot =
-        await _firestore.collection('evenement').doc(evenementId).get();
-    return docSnapshot.data();
+  Future<void> add(EvenementDto evenementDto) async {
+    await _firestore
+        .collection('evenement')
+        .doc(evenementDto.id)
+        .set(evenementDto.toJson());
   }
 
   @override
-  Future<void> add(EvenementDto evenementDto) async {
-    try {
-      await _firestore.collection('evenement').add(evenementDto.toJson());
-    } catch (e) {
-      throw Exception('Erreur lors de l\'ajout de l\'événement: $e');
-    }
+  Future<void> deleteEvenement(String evenementId) async {
+    await _firestore.collection('evenement').doc(evenementId).delete();
+    await _storage.ref('evenement/$evenementId/').delete();
+  }
+
+  @override
+  Future<Map<String, dynamic>?> getById(String evenementId) async {
+    final doc = await _firestore.collection('evenement').doc(evenementId).get();
+    return doc.data();
   }
 
   @override
@@ -46,17 +50,4 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
       fieldName: newValue,
     });
   }
-
-  @override
-  Future<void> deleteEvenement(String evenementId) async {
-    try {
-      await _firestore.collection('evenement').doc(evenementId).delete();
-      await _storage.ref().child('evenement/$evenementId').delete();
-    } catch (e) {
-      throw Exception('Impossible de supprimer l\'événement : $e');
-    }
-  }
-
-  // TODO: implement firestore
-  FirebaseFirestore get firestore => throw UnimplementedError();
 }

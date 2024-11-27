@@ -62,19 +62,19 @@ _i174.GetIt init(
   gh.singleton<_i718.AppRouterConfig>(() => _i718.AppRouterConfig());
   gh.lazySingleton<_i977.AuthService>(
       () => _i977.AuthService(gh<_i59.FirebaseAuth>()));
-  gh.singleton<_i181.EvenementListModule>(
-      () => _i181.EvenementListModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i402.EvenementModule>(
-      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i863.LoginModule>(
-      () => _i863.LoginModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i787.AddUserModule>(
-      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
   gh.singleton<_i356.AddAvisClientsModule>(
       () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i402.EvenementModule>(
+      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
   gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i787.AddUserModule>(
+      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i863.LoginModule>(
+      () => _i863.LoginModule(gh<_i573.AppRouter>()));
   gh.singleton<_i692.AccountModule>(
       () => _i692.AccountModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i181.EvenementListModule>(
+      () => _i181.EvenementListModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
       () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
   gh.factory<_i151.UsersRepository>(() => _i304.UsersRepositoryImpl(

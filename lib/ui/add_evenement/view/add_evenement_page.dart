@@ -1,8 +1,8 @@
-import 'package:app_lecocon_ssbe/ui/add_evenement/view/add_evenements_view.dart';
 import 'package:app_lecocon_ssbe/theme.dart';
+import 'package:app_lecocon_ssbe/ui/add_evenement/view/add_evenements_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -78,24 +78,28 @@ Future<List<Evenement>> fetchEvenements() async {
         .get();
 
     for (var doc in snapshot.docs) {
-      Evenement evt = Evenement.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      Evenement evt =
+          Evenement.fromMap(doc.data() as Map<String, dynamic>, doc.id);
 
       try {
-        final Reference eventRef = FirebaseStorage.instance.ref().child('evenement/${evt.id}');
-        final Reference fileRef = eventRef.child('file.${evt.fileType == 'pdf' ? 'pdf' : 'jpg'}');
+        final Reference eventRef =
+            FirebaseStorage.instance.ref().child('evenement/${evt.id}');
+        final Reference fileRef =
+            eventRef.child('file.${evt.fileType == 'pdf' ? 'pdf' : 'jpg'}');
+        final Reference thumbnailRef = eventRef.child('thumbnail.jpg');
 
         String fileUrl = await fileRef.getDownloadURL();
         String? thumbnailUrl;
 
         if (evt.fileType == 'pdf') {
-          final Reference thumbnailRef = eventRef.child('thumbnail.jpg');
           try {
             thumbnailUrl = await thumbnailRef.getDownloadURL();
           } catch (e) {
             debugPrint('Pas de vignette pour le PDF de l\'événement ${evt.id}');
           }
         } else {
-          thumbnailUrl = fileUrl; // Pour les images, utiliser le fichier principal comme vignette
+          thumbnailUrl =
+              fileUrl; // Pour les images, utiliser le fichier principal comme vignette
         }
 
         evenements.add(Evenement(
@@ -107,7 +111,8 @@ Future<List<Evenement>> fetchEvenements() async {
           thumbnailUrl: thumbnailUrl,
         ));
       } catch (e) {
-        debugPrint('Erreur lors de la récupération des fichiers pour l\'événement ${evt.id}: $e');
+        debugPrint(
+            'Erreur lors de la récupération des fichiers pour l\'événement ${evt.id}: $e');
       }
     }
   } catch (e) {

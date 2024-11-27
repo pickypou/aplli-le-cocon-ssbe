@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenements_interactor.dart';
 import 'package:app_lecocon_ssbe/ui/common/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
@@ -6,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../domain/entity/evenements.dart';
 import '../../../theme.dart';
 import '../../common/widgets/buttoms/custom_buttom.dart';
 
@@ -114,16 +117,6 @@ class AddEvenementViewState extends State<AddEvenementView> {
           } else {
             throw Exception('Type de fichier non supporté');
           }
-
-          // Upload directement sur Firebase Storage pour le Web
-          evenementsInteractor.uploadFileFromBytes(
-            selectedFileBytes!,
-            fileName!,
-          ).then((url) {
-            debugPrint("Fichier téléchargé avec succès : $url");
-          }).catchError((error) {
-            debugPrint("Erreur lors du téléchargement : $error");
-          });
         });
       } else {
         debugPrint("Aucun fichier sélectionné.");
@@ -163,16 +156,38 @@ class AddEvenementViewState extends State<AddEvenementView> {
     return selectedFileBytes != null && titleController.text.isNotEmpty;
   }
 
-  void _addEvent() {
-    if (_isValidInput()) {
-      GetIt.I<EvenementsInteractor>();
-      debugPrint('Ajout de l\'événement : ${titleController.text}');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Veuillez sélectionner un fichier et entrer un titre.'),
-        ),
-      );
+  Future<void> _addEvent() async {
+    final interactor = EvenementsInteractor();
+
+    if (_isValidInput() && selectedFileBytes != null) {
+      try {
+        final uploadResult = await interactor.uploadFileWithThumbnail(
+          selectedFileBytes!,
+          fileName!,
+          fileType!,
+          DateTime.now().millisecondsSinceEpoch.toString(),
+        );
+
+        final evenement = Evenement(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          title: titleController.text,
+          fileUrl: uploadResult['fileUrl']!,
+          thumbnailUrl: uploadResult['thumbnailUrl']!,
+          fileType: fileType!,
+          publishDate: DateTime.now(),
+        );
+
+        await interactor.addEvenement(evenement);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Événement ajouté avec succès')),
+        );
+
+        context.go('/account'); // Redirection après succès
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Erreur : $e')));
+      }
     }
   }
 }

@@ -1,9 +1,8 @@
 import 'package:app_lecocon_ssbe/core/di/di.dart';
 import 'package:app_lecocon_ssbe/data/repository/users_repository.dart';
-import 'package:app_lecocon_ssbe/data/repository/users_repository_impl.dart';
+import 'package:app_lecocon_ssbe/ui/ui_module.dart';
 import 'package:app_lecocon_ssbe/ui/users/login/user_login_bloc.dart';
 import 'package:app_lecocon_ssbe/ui/users/login/view/login_view.dart';
-import 'package:app_lecocon_ssbe/ui/ui_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
