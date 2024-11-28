@@ -1,9 +1,11 @@
 import 'dart:typed_data';
-
+import 'dart:html' as html;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenements_interactor.dart';
 import 'package:app_lecocon_ssbe/ui/common/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -94,21 +96,29 @@ class AddEvenementViewState extends State<AddEvenementView> {
       ),
     );
   }
-
   Future<void> _pickFile() async {
     final evenementsInteractor = EvenementsInteractor();
 
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
-      );
+      FilePickerResult? result;
+      if (kIsWeb) {
+        result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+          withData: true,
+        );
+      } else {
+        result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+        );
+      }
 
       if (result != null && result.files.isNotEmpty) {
         setState(() {
-          selectedFileBytes = result.files.first.bytes;
-          fileName = result.files.first.name;
-          String extension = result.files.first.extension?.toLowerCase() ?? '';
+          selectedFileBytes = result?.files.first.bytes;
+          fileName = result?.files.first.name;
+          String extension = result?.files.first.extension?.toLowerCase() ?? '';
 
           if (extension == 'pdf') {
             fileType = 'pdf';
@@ -129,6 +139,10 @@ class AddEvenementViewState extends State<AddEvenementView> {
     }
   }
 
+
+
+// ...
+
   Widget _buildFilePreview() {
     return Column(
       children: [
@@ -142,7 +156,20 @@ class AddEvenementViewState extends State<AddEvenementView> {
             child: const Center(child: Text('Aperçu PDF indisponible')),
           )
         else if (fileType == 'image')
-          Image.memory(
+          kIsWeb
+              ? Builder(
+            builder: (BuildContext context) {
+              final blob = html.Blob([selectedFileBytes!]);
+              final url = html.Url.createObjectUrlFromBlob(blob);
+              return Image.network(
+                url,
+                height: 150,
+                width: 150,
+                fit: BoxFit.cover,
+              );
+            },
+          )
+              : Image.memory(
             selectedFileBytes!,
             height: 150,
             width: 150,
@@ -151,6 +178,10 @@ class AddEvenementViewState extends State<AddEvenementView> {
       ],
     );
   }
+
+
+
+
 
   bool _isValidInput() {
     return selectedFileBytes != null && titleController.text.isNotEmpty;
