@@ -5,18 +5,25 @@ import 'package:app_lecocon_ssbe/core/di/api/storage_service.dart';
 import 'package:app_lecocon_ssbe/domain/entity/evenements.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 import 'package:pdfx/pdfx.dart';
 
-import '../../core/di/di.dart';
 import '../../data/repository/evenement_repository.dart';
 import '../../domain/usecases/fetch_evenement_data_usecase.dart';
 
+@injectable
 class EvenementsInteractor {
-  final evenementsRepository = getIt<EvenementsRepository>();
-  final fetchEvenementDataUseCase = getIt<FetchEvenementDataUseCase>();
-  final _storageService = getIt<StorageService>();
-  final _firestore = getIt<FirestoreService>();
+  final EvenementsRepository evenementsRepository;
+  final FetchEvenementDataUseCase fetchEvenementDataUseCase;
+  final StorageService storageService;
+  final FirestoreService firestore;
 
+  EvenementsInteractor(
+    this.evenementsRepository,
+    this.fetchEvenementDataUseCase,
+    this.storageService,
+    this.firestore,
+  );
   Future<Iterable<Evenement>> fetchEvenementData() async {
     try {
       final evenement = await fetchEvenementDataUseCase.getEvenement();
@@ -29,41 +36,44 @@ class EvenementsInteractor {
 
   Future<Map<String, String>> uploadFileWithThumbnail(
     Uint8List fileBytes,
-    String fileName,
+    String originalFileName,
     String fileType,
-    String evenementId,
+    String folderId,
+    FirebaseStorage storage, // Injection via paramètre
   ) async {
-    try {
-      // Créer un identifiant unique pour l'événement
-      String eventId = DateTime.now().millisecondsSinceEpoch.toString();
-      String folderPath = 'evenement/$eventId/';
+    // Création du chemin pour le dossier
+    final folderPath = '$folderId/';
+    final fileExtension = originalFileName.split('.').last;
 
-      // Upload du fichier principal (PDF ou image)
-      final Reference fileRef =
-          FirebaseStorage.instance.ref().child('$folderPath$fileName');
-      await fileRef.putData(fileBytes);
+    // Nom du fichier principal
+    final mainFileName = originalFileName; // Utiliser le nom original
+    final mainFileRef = storage.ref('$folderPath$mainFileName');
 
-      String fileUrl = await fileRef.getDownloadURL();
+    // Upload du fichier principal
+    await mainFileRef.putData(fileBytes);
+    final fileUrl = await mainFileRef.getDownloadURL();
 
-      String thumbnailUrl = '';
-      // Si c'est un PDF, générer une vignette
-      if (fileType == 'pdf') {
-        Uint8List? thumbnailBytes = await generatePdfThumbnail(fileBytes);
-        final Reference thumbnailRef =
-            FirebaseStorage.instance.ref().child('$folderPath/thumbnail.png');
-        await thumbnailRef.putData(thumbnailBytes!);
-        thumbnailUrl = await thumbnailRef.getDownloadURL();
-      }
-
-      return {'fileUrl': fileUrl, 'thumbnailUrl': thumbnailUrl};
-    } catch (e) {
-      throw Exception('Erreur lors de l\'upload : $e');
+    // Si le fichier est un PDF, générer une miniature
+    String? thumbnailUrl;
+    if (fileType == 'pdf') {
+      final thumbnailBytes = await generatePdfThumbnail(fileBytes);
+      final thumbnailName =
+          'thumbnail_$originalFileName.png'; // Ajouter un préfixe pour éviter les conflits
+      final thumbnailRef = storage.ref('$folderPath$thumbnailName');
+      await thumbnailRef.putData(thumbnailBytes!);
+      thumbnailUrl = await thumbnailRef.getDownloadURL();
+      debugPrint(fileType);
     }
+
+    return {
+      'fileUrl': fileUrl,
+      'thumbnailUrl': thumbnailUrl ?? '', // Vide si pas de miniature
+    };
   }
 
   Future<void> addEvenement(Evenement evenement) async {
     try {
-      await _firestore.collection('evenement').doc(evenement.id).set({
+      await firestore.collection('evenement').doc(evenement.id).set({
         'title': evenement.title,
         'fileUrl': evenement.fileUrl,
         'thumbnailUrl': evenement.thumbnailUrl,
@@ -71,6 +81,7 @@ class EvenementsInteractor {
         'publishDate': evenement.publishDate,
       });
     } catch (e) {
+      debugPrint('Erreur lors de l\'ajout de l\'événement : $e'.toString());
       throw Exception('Erreur lors de l\'ajout de l\'événement : $e');
     }
   }

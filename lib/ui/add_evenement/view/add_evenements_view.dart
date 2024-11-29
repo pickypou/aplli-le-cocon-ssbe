@@ -1,15 +1,16 @@
-import 'dart:typed_data';
 import 'dart:html' as html;
-import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:app_lecocon_ssbe/ui/add_evenement/add_evenements_interactor.dart';
 import 'package:app_lecocon_ssbe/ui/common/widgets/inputs/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/di/di.dart';
 import '../../../domain/entity/evenements.dart';
 import '../../../theme.dart';
 import '../../common/widgets/buttoms/custom_buttom.dart';
@@ -26,6 +27,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
   Uint8List? selectedFileBytes;
   String? fileName;
   String? fileType;
+  String? folderId;
 
   @override
   void dispose() {
@@ -96,9 +98,8 @@ class AddEvenementViewState extends State<AddEvenementView> {
       ),
     );
   }
-  Future<void> _pickFile() async {
-    final evenementsInteractor = EvenementsInteractor();
 
+  Future<void> _pickFile() async {
     try {
       FilePickerResult? result;
       if (kIsWeb) {
@@ -120,13 +121,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
           fileName = result?.files.first.name;
           String extension = result?.files.first.extension?.toLowerCase() ?? '';
 
-          if (extension == 'pdf') {
-            fileType = 'pdf';
-          } else if (['png', 'jpg', 'jpeg'].contains(extension)) {
-            fileType = 'image';
-          } else {
-            throw Exception('Type de fichier non supporté');
-          }
+          fileType = _getFileType(extension);
         });
       } else {
         debugPrint("Aucun fichier sélectionné.");
@@ -139,9 +134,11 @@ class AddEvenementViewState extends State<AddEvenementView> {
     }
   }
 
-
-
-// ...
+  String _getFileType(String extension) {
+    if (extension == 'pdf') return 'pdf';
+    if (['png', 'jpg', 'jpeg'].contains(extension)) return 'image';
+    throw Exception('Type de fichier non supporté');
+  }
 
   Widget _buildFilePreview() {
     return Column(
@@ -158,46 +155,42 @@ class AddEvenementViewState extends State<AddEvenementView> {
         else if (fileType == 'image')
           kIsWeb
               ? Builder(
-            builder: (BuildContext context) {
-              final blob = html.Blob([selectedFileBytes!]);
-              final url = html.Url.createObjectUrlFromBlob(blob);
-              return Image.network(
-                url,
-                height: 150,
-                width: 150,
-                fit: BoxFit.cover,
-              );
-            },
-          )
+                  builder: (BuildContext context) {
+                    final blob = html.Blob([selectedFileBytes!]);
+                    final url = html.Url.createObjectUrlFromBlob(blob);
+                    return Image.network(
+                      url,
+                      height: 150,
+                      width: 150,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                )
               : Image.memory(
-            selectedFileBytes!,
-            height: 150,
-            width: 150,
-            fit: BoxFit.cover,
-          ),
+                  selectedFileBytes!,
+                  height: 150,
+                  width: 150,
+                  fit: BoxFit.cover,
+                ),
       ],
     );
   }
-
-
-
-
 
   bool _isValidInput() {
     return selectedFileBytes != null && titleController.text.isNotEmpty;
   }
 
   Future<void> _addEvent() async {
-    final interactor = EvenementsInteractor();
+    final interactor = getIt<EvenementsInteractor>();
 
     if (_isValidInput() && selectedFileBytes != null) {
       try {
         final uploadResult = await interactor.uploadFileWithThumbnail(
-          selectedFileBytes!,
-          fileName!,
-          fileType!,
-          DateTime.now().millisecondsSinceEpoch.toString(),
-        );
+            selectedFileBytes!,
+            fileName!,
+            fileType!,
+            DateTime.now().millisecondsSinceEpoch.toString(),
+            folderId! as FirebaseStorage);
 
         final evenement = Evenement(
           id: DateTime.now().millisecondsSinceEpoch.toString(),

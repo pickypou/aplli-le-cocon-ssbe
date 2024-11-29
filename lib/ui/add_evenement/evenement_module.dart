@@ -8,45 +8,43 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class EvenementModule implements UIModule {
-
   final AppRouter _appRouter;
 
   EvenementModule(this._appRouter);
+
   @override
   void configure() {
     _appRouter.addRoutes(getRoutes());
   }
+
   @override
   List<RouteBase> getRoutes() {
     return [
       GoRoute(
-          path: '/evenement',
+        path: '/evenement',
         pageBuilder: (context, state) {
-            return MaterialPage(
-                child: _buildEvenementPage(),
-                );
-        }
-
-      )
+          return MaterialPage(
+            child: _buildEvenementPage(),
+          );
+        },
+      ),
     ];
   }
 
   Widget _buildEvenementPage() {
-  return BlocProvider<AddEvenementsBloc>(
-    create: (context) {
+    // Créez le TextEditingController ici
+    final TextEditingController titleController = TextEditingController();
 
-
-      return AddEvenementsBloc();
-    },
-
-    child: AddEvenementView(),
-  );
+    return BlocProvider<AddEvenementsBloc>(
+      create: (context) {
+        return AddEvenementsBloc();
+      },
+      child: AddEvenementView(),
+    );
   }
 
   @override
   Map<String, WidgetBuilder> getSharedWidgets() {
     return {};
   }
-
-
 }
