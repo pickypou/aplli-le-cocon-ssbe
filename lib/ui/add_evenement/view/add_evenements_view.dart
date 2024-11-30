@@ -155,23 +155,23 @@ class AddEvenementViewState extends State<AddEvenementView> {
         else if (fileType == 'image')
           kIsWeb
               ? Builder(
-                  builder: (BuildContext context) {
-                    final blob = html.Blob([selectedFileBytes!]);
-                    final url = html.Url.createObjectUrlFromBlob(blob);
-                    return Image.network(
-                      url,
-                      height: 150,
-                      width: 150,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                )
+            builder: (BuildContext context) {
+              final blob = html.Blob([selectedFileBytes!]);
+              final url = html.Url.createObjectUrlFromBlob(blob);
+              return Image.network(
+                url,
+                height: 150,
+                width: 150,
+                fit: BoxFit.cover,
+              );
+            },
+          )
               : Image.memory(
-                  selectedFileBytes!,
-                  height: 150,
-                  width: 150,
-                  fit: BoxFit.cover,
-                ),
+            selectedFileBytes!,
+            height: 150,
+            width: 150,
+            fit: BoxFit.cover,
+          ),
       ],
     );
   }
@@ -190,7 +190,7 @@ class AddEvenementViewState extends State<AddEvenementView> {
             fileName!,
             fileType!,
             DateTime.now().millisecondsSinceEpoch.toString(),
-            folderId! as FirebaseStorage);
+        );
 
         final evenement = Evenement(
           id: DateTime.now().millisecondsSinceEpoch.toString(),

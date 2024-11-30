@@ -34,7 +34,7 @@ class AddEvenementsBloc extends Bloc<AddEvenementEvent, AddEvenementsState> {
       // Génération de la vignette uniquement si le fichier est un PDF
       if (event.fileType == 'pdf') {
         thumbnail =
-        await generateThumbnailUseCase.generateThumbnail(event.file.path);
+        await generateThumbnailUseCase.generateThumbnail(event.file.path as Uint8List);
       }
 
       String evenementId =

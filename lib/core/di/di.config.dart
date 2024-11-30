@@ -53,6 +53,7 @@ _i174.GetIt init(
     environmentFilter,
   );
   final appModule = _$AppModule();
+  gh.factory<_i310.EvenementsInteractor>(() => _i310.EvenementsInteractor());
   gh.factory<_i703.FirebaseClient>(() => _i703.FirebaseClient());
   gh.factory<_i700.GenerateThumbnailUseCase>(
       () => _i700.GenerateThumbnailUseCase());
@@ -63,19 +64,19 @@ _i174.GetIt init(
   gh.singleton<_i718.AppRouterConfig>(() => _i718.AppRouterConfig());
   gh.lazySingleton<_i977.AuthService>(
       () => _i977.AuthService(gh<_i59.FirebaseAuth>()));
-  gh.singleton<_i356.AddAvisClientsModule>(
-      () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i402.EvenementModule>(
-      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i787.AddUserModule>(
-      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i863.LoginModule>(
-      () => _i863.LoginModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i692.AccountModule>(
-      () => _i692.AccountModule(gh<_i573.AppRouter>()));
   gh.singleton<_i181.EvenementListModule>(
       () => _i181.EvenementListModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i402.EvenementModule>(
+      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i863.LoginModule>(
+      () => _i863.LoginModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i787.AddUserModule>(
+      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i356.AddAvisClientsModule>(
+      () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i692.AccountModule>(
+      () => _i692.AccountModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
       () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
   gh.factory<_i151.UsersRepository>(() => _i304.UsersRepositoryImpl(
@@ -98,12 +99,6 @@ _i174.GetIt init(
       () => _i552.AvisClientsRepositoryImpl(gh<_i746.FirestoreService>()));
   gh.factory<_i57.FetchAvisClientDataUseCase>(
       () => _i57.FetchAvisClientDataUseCase(gh<_i684.AvisClientsRepository>()));
-  gh.factory<_i310.EvenementsInteractor>(() => _i310.EvenementsInteractor(
-        gh<_i590.EvenementsRepository>(),
-        gh<_i914.FetchEvenementDataUseCase>(),
-        gh<_i717.StorageService>(),
-        gh<_i746.FirestoreService>(),
-      ));
   return getIt;
 }
 

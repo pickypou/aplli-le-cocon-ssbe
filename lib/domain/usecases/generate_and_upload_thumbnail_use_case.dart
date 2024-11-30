@@ -5,16 +5,12 @@ import 'package:flutter/material.dart';
 
 @injectable
 class GenerateThumbnailUseCase {
-  Future<Uint8List?> generateThumbnail(String pdfPath) async {
-    if (!await _hasPdfSupport()) {
-      throw Exception('PDF rendering not supported on this platform');
-    }
-
+  Future<Uint8List?> generateThumbnail(Uint8List pdfBytes) async {
     try {
-      final document = await PdfDocument.openFile(pdfPath);
-      final page = await document.getPage(1);  // Ouvrir la première page
+      final document = await PdfDocument.openData(pdfBytes);
+      final page = await document.getPage(1);  // Open the first page
 
-      // Rendre la page comme une image PNG avec une taille doublée pour plus de qualité
+      // Render the page as a PNG image with doubled size for better quality
       final pageImage = await page.render(
         width: page.width * 2,
         height: page.height * 2,
@@ -24,17 +20,17 @@ class GenerateThumbnailUseCase {
       await page.close();
       await document.close();
 
-      return pageImage?.bytes;  // Retourner l'image sous forme d'Uint8List
+      if (pageImage == null || pageImage.bytes == null) {
+        debugPrint('Failed to generate thumbnail: pageImage or bytes is null');
+        return null;
+      }
+
+      debugPrint('Thumbnail generated successfully. Size: ${pageImage.bytes!.length} bytes');
+      return pageImage.bytes;
     } catch (e) {
       debugPrint('Error generating thumbnail for PDF: $e');
-      rethrow;
+      return null;
     }
   }
-
-  // Méthode privée pour vérifier le support PDF
-  Future<bool> _hasPdfSupport() async {
-    // Votre logique ici pour vérifier le support des PDF
-    // Par exemple, vous pouvez vérifier les plateformes ou les versions
-    return true;  // Exemple simplifié
-  }
 }
+
