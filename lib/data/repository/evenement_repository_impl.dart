@@ -17,14 +17,15 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
   @override
   Stream<Iterable<Evenement>> getEvenementStream() {
     return _firestore.collection('evenement').snapshots().asyncMap(
-          (querySnapshot) async {
+      (querySnapshot) async {
         final evenements = await Future.wait(
           querySnapshot.docs.map((doc) async {
             final data = doc.data();
             final evenement = Evenement.fromMap(data, doc.id);
 
             try {
-              final eventRef = _storage.ref().child('evenement/${evenement.id}');
+              final eventRef =
+                  _storage.ref().child('evenement/${evenement.id}');
 
               // Lister tous les fichiers dans le dossier de l'événement
               final ListResult result = await eventRef.listAll();
@@ -35,7 +36,10 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
               // Chercher le fichier principal
               for (Reference ref in result.items) {
                 final String name = ref.name.toLowerCase();
-                if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png') || name.endsWith('.pdf')) {
+                if (name.endsWith('.jpg') ||
+                    name.endsWith('.jpeg') ||
+                    name.endsWith('.png') ||
+                    name.endsWith('.pdf')) {
                   fileUrl = await ref.getDownloadURL();
                   break;
                 }
@@ -50,7 +54,8 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
                   }
                 }
               } else {
-                thumbnailUrl = fileUrl; // Pour les images, utiliser le fichier principal comme vignette
+                thumbnailUrl =
+                    fileUrl; // Pour les images, utiliser le fichier principal comme vignette
               }
 
               if (fileUrl != null) {
@@ -64,10 +69,12 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
                 );
               }
 
-              debugPrint('Aucun fichier trouvé pour l\'événement ${evenement.id}');
+              debugPrint(
+                  'Aucun fichier trouvé pour l\'événement ${evenement.id}');
               return evenement;
             } catch (e) {
-              debugPrint('Erreur lors de la récupération des fichiers pour l\'événement ${evenement.id}: $e');
+              debugPrint(
+                  'Erreur lors de la récupération des fichiers pour l\'événement ${evenement.id}: $e');
               return evenement;
             }
           }),
@@ -85,7 +92,6 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
         .doc(evenementDto.id)
         .set(evenementDto.toJson());
   }
-
   @override
   Future<void> deleteEvenement(String evenementId) async {
     await _firestore.collection('evenement').doc(evenementId).delete();
@@ -112,7 +118,10 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
         // Chercher le fichier principal
         for (Reference ref in result.items) {
           final String name = ref.name.toLowerCase();
-          if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png') || name.endsWith('.pdf')) {
+          if (name.endsWith('.jpg') ||
+              name.endsWith('.jpeg') ||
+              name.endsWith('.png') ||
+              name.endsWith('.pdf')) {
             fileUrl = await ref.getDownloadURL();
             break;
           }
@@ -135,7 +144,8 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
           data['thumbnailUrl'] = thumbnailUrl ?? fileUrl;
         }
       } catch (e) {
-        debugPrint('Erreur lors de la récupération des fichiers pour l\'événement $evenementId: $e');
+        debugPrint(
+            'Erreur lors de la récupération des fichiers pour l\'événement $evenementId: $e');
       }
 
       return data;
@@ -150,5 +160,6 @@ class EvenementsRepositoryImpl extends EvenementsRepository {
       fieldName: newValue,
     });
   }
-}
 
+
+}

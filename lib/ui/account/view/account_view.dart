@@ -13,11 +13,11 @@ class AccountView extends StatefulWidget {
   const AccountView({super.key, required this.userData});
 
   @override
-  _AccountViewState createState() => _AccountViewState();
+  AccountViewState createState() => AccountViewState();
 }
 
-class _AccountViewState extends State<AccountView> {
-  bool isAdmin = false; // Par défaut, l'utilisateur n'est pas admin
+class AccountViewState extends State<AccountView> {
+  bool isAdmin = false; // Par défaut, l'utilisateur n'est pas administrateur
   bool isLoading = true; // Indique si la vérification est en cours
 
   @override
@@ -66,15 +66,13 @@ class _AccountViewState extends State<AccountView> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          // Ajout de marges latérales
+          padding: const EdgeInsets.symmetric(horizontal: 16.0), // Ajout de marges latérales
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            // Étirer les enfants sur toute la largeur
+            crossAxisAlignment: CrossAxisAlignment.stretch, // Étire les enfants sur toute la largeur
             children: [
               const SizedBox(height: 20),
               Text(
-                "Bonjour ${widget.userData['userName']} ",
+                "Bonjour ${widget.userData['userName']}",
                 style: titleStyleLarge(context),
                 textAlign: TextAlign.center,
               ),

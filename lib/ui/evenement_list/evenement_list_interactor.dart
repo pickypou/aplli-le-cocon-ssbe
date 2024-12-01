@@ -2,15 +2,15 @@ import 'package:app_lecocon_ssbe/data/repository/evenement_repository_impl.dart'
 import 'package:app_lecocon_ssbe/domain/usecases/fetch_evenement_data_usecase.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/di/di.dart';
+import '../../data/repository/evenement_repository.dart';
 import '../../domain/entity/evenements.dart';
 
 class EvenementListInteractor {
-  final FetchEvenementDataUseCase fetchEvenementDataUseCase;
-  final EvenementsRepositoryImpl evenementsRepositoryImpl;
+  final  fetchEvenementDataUseCase = getIt<FetchEvenementDataUseCase>();
+  final  evenementsRepository = getIt<EvenementsRepository>();
 
   EvenementListInteractor(
-    this.fetchEvenementDataUseCase,
-    this.evenementsRepositoryImpl,
   );
 
   Future<Iterable<Evenement>> fetchEvenementData() async {
@@ -35,7 +35,7 @@ class EvenementListInteractor {
 
   Future<void> removeEvenement(String evenementId) async {
     try {
-      await evenementsRepositoryImpl.deleteEvenement(evenementId);
+      await evenementsRepository.deleteEvenement(evenementId, );
       debugPrint('Événement supprimé : $evenementId');
     } catch (e) {
       debugPrint('Erreur lors de la suppression de l\'événement : $e');

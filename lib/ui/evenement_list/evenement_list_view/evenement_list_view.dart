@@ -1,69 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+
+import '../evenement_list_interactor.dart';
 
 class EvenementListView extends StatelessWidget {
   final auth = GetIt.instance<FirebaseAuth>();
 
   EvenementListView({super.key});
 
-  Future<void> deleteEvent(BuildContext context, String eventId) async {
-    try {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) => const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-
-      try {
-        await FirebaseStorage.instance.ref('evenement/$eventId').delete();
-      } catch (storageError) {
-        print('Erreur lors de la suppression du fichier Storage : $storageError');
-      }
-
-      await FirebaseFirestore.instance.collection('evenement').doc(eventId).delete();
-      Navigator.of(context).pop();
-    } catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur : Impossible de supprimer l\'événement')),
-      );
-    }
-  }
-
-  Future<void> _confirmDelete(BuildContext context, String eventId) async {
-    final shouldDelete = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmer la suppression'),
-          content: const Text('Voulez-vous vraiment supprimer cet événement ?'),
-          actions: [
-            TextButton(
-              child: const Text('Annuler'),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            ElevatedButton(
-              child: const Text('Supprimer'),
-              onPressed: () => Navigator.of(context).pop(true),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (shouldDelete == true) {
-      await deleteEvent(context, eventId);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final interactor = EvenementListInteractor();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Liste des événements'),
@@ -78,9 +29,7 @@ class EvenementListView extends StatelessWidget {
             icon: const Icon(Icons.logout),
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
-              auth.signOut().then((_) {
-                context.go('/');
-              });
+              auth.signOut().then((_) => context.go('/'));
             },
           )
         ],
@@ -105,11 +54,11 @@ class EvenementListView extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
-              spacing: 8.0, // Espacement horizontal entre les cartes
-              runSpacing: 8.0, // Espacement vertical entre les cartes
+              spacing: 8.0,
+              runSpacing: 8.0,
               children: evenements.map((doc) {
                 return SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.45, // Largeur des cartes
+                  width: MediaQuery.of(context).size.width * 0.45,
                   child: Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -120,6 +69,15 @@ class EvenementListView extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              doc['thumbnailUrl'] ?? doc['fileUrl'],
+                              height: 80.0,
+                              width: 80,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           Text(
                             doc['title'],
                             style: const TextStyle(
@@ -132,7 +90,23 @@ class EvenementListView extends StatelessWidget {
                           IconButton(
                             icon: const Icon(Icons.delete),
                             color: Colors.red,
-                            onPressed: () => _confirmDelete(context, doc.id),
+                            onPressed: () async {
+                              final confirm = await _confirmDelete(context);
+                              if (confirm) {
+                                try {
+                                  await interactor.removeEvenement(doc.id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Événement supprimé avec succès')),
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Erreur : $e')),
+                                  );
+                                }
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -145,5 +119,29 @@ class EvenementListView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<bool> _confirmDelete(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Confirmer la suppression'),
+              content:
+                  const Text('Voulez-vous vraiment supprimer cet événement ?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Annuler'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text('Supprimer'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 }

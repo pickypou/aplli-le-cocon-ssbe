@@ -48,8 +48,8 @@ class EvenementListModule implements UIModule {
         FetchEvenementDataUseCase fetchEvenementDataUseCase =
             getIt<FetchEvenementDataUseCase>();
         final String evenementId = '';
-        var interactor = EvenementListInteractor(
-            fetchEvenementDataUseCase, evenementsRepository);
+        var interactor = EvenementListInteractor();
+
 
         return EvenementListBloc(interactor, evenementId: evenementId);
       },
