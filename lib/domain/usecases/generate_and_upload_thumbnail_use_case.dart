@@ -8,11 +8,10 @@ class GenerateThumbnailUseCase {
   Future<Uint8List?> generateThumbnail(Uint8List pdfBytes) async {
     try {
       final document = await PdfDocument.openData(pdfBytes);
-      final page = await document.getPage(1);  // Open the first page
+      final page = await document.getPage(1);  // Première page
 
-      // Render the page as a PNG image with doubled size for better quality
       final pageImage = await page.render(
-        width: page.width * 2,
+        width: page.width * 2,  // Taille doublée pour une meilleure qualité
         height: page.height * 2,
         format: PdfPageImageFormat.png,
       );
@@ -21,16 +20,17 @@ class GenerateThumbnailUseCase {
       await document.close();
 
       if (pageImage == null || pageImage.bytes == null) {
-        debugPrint('Failed to generate thumbnail: pageImage or bytes is null');
+        debugPrint('Erreur : miniature ou octets absents.');
         return null;
       }
 
-      debugPrint('Thumbnail generated successfully. Size: ${pageImage.bytes!.length} bytes');
+      debugPrint('Miniature générée avec succès. Taille : ${pageImage.bytes!.length} octets');
       return pageImage.bytes;
     } catch (e) {
-      debugPrint('Error generating thumbnail for PDF: $e');
+      debugPrint('Erreur lors de la génération de la miniature : $e');
       return null;
     }
   }
 }
+
 

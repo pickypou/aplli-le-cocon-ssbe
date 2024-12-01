@@ -146,31 +146,47 @@ class AddEvenementViewState extends State<AddEvenementView> {
         Text('Fichier sélectionné : $fileName'),
         const SizedBox(height: 10),
         if (fileType == 'pdf')
-          Container(
-            height: 150,
-            width: 150,
-            color: Colors.grey[300],
-            child: const Center(child: Text('Aperçu PDF indisponible')),
-          )
-        else if (fileType == 'image')
-          kIsWeb
-              ? Builder(
-            builder: (BuildContext context) {
+          GestureDetector(
+            onTap: () {
               final blob = html.Blob([selectedFileBytes!]);
               final url = html.Url.createObjectUrlFromBlob(blob);
-              return Image.network(
-                url,
-                height: 150,
-                width: 150,
-                fit: BoxFit.cover,
-              );
+              html.window.open(url, '_blank'); // Ouvrir dans un nouvel onglet
             },
+            child: Container(
+              height: 150,
+              width: 150,
+              color: Colors.grey[300],
+              child: const Center(
+                child: Text('Aperçu PDF indisponible. Cliquez pour ouvrir.'),
+              ),
+            ),
           )
-              : Image.memory(
-            selectedFileBytes!,
-            height: 150,
-            width: 150,
-            fit: BoxFit.cover,
+        else if (fileType == 'image')
+          GestureDetector(
+            onTap: () {
+              final blob = html.Blob([selectedFileBytes!]);
+              final url = html.Url.createObjectUrlFromBlob(blob);
+              html.window.open(url, '_blank'); // Ouvrir dans un nouvel onglet
+            },
+            child: kIsWeb
+                ? Builder(
+              builder: (BuildContext context) {
+                final blob = html.Blob([selectedFileBytes!]);
+                final url = html.Url.createObjectUrlFromBlob(blob);
+                return Image.network(
+                  url,
+                  height: 150,
+                  width: 150,
+                  fit: BoxFit.cover,
+                );
+              },
+            )
+                : Image.memory(
+              selectedFileBytes!,
+              height: 150,
+              width: 150,
+              fit: BoxFit.cover,
+            ),
           ),
       ],
     );
