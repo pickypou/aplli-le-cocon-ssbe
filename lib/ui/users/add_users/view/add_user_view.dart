@@ -164,7 +164,18 @@ class AddUserView extends StatelessWidget {
                           navigateToAccount: () =>
                               GoRouter.of(context).go('/account')));
                     },
-                    label: 'Je valide mon compte')
+                    label: 'Je valide mon compte'),
+                const SizedBox(
+                  height: 85,
+                ),
+                Image.asset(
+                  'assets/images/logo_cocon.png',
+                  fit: BoxFit.contain,
+                  width: size.width / 2,
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
               ],
             ),
           )));

@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
     Size size = MediaQuery.sizeOf(context);
     if (size.width < 749) {
       return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: const Text('Accueil'),
           actions: [
@@ -30,58 +31,43 @@ class HomePage extends StatelessWidget {
               },
             )
           ],
-        ), // Ajoutez une AppBar si nécessaire
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Container(
-                    width: constraints.maxWidth,
-                    color: theme.primaryColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 40),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Image.asset(
-                              'assets/images/logo_cocon.png',
-                              fit: BoxFit.contain,
-                              width: constraints.maxWidth / 2,
-                            ),
-                          ),
-                          const SizedBox(height: 70),
-                          Text(
-                            'Bienvenue sur l\'aplication',
-                            style: titleStyleLarge(context),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            'Du Cocon SSBE',
-                            style: titleStyleLarge(context),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 70),
-                          CustomButton(
-                              onPressed: () => GoRouter.of(context).go('/addUser'),
-                              label: 'Je crée un compte'),
-                          const SizedBox(height: 70),
-                          CustomButton(
-                            onPressed: () {
-                              checkUserConnection(context);
-                            },
-                            label: 'Connexion',
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/logo_cocon.png',
+                fit: BoxFit.contain,
+                width: MediaQuery.sizeOf(context).width / 2,
               ),
-            );
-          },
+              const SizedBox(height: 70),
+              Text(
+                'Bienvenue sur l\'application',
+                style: titleStyleLarge(context),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                'Du Cocon SSBE',
+                style: titleStyleLarge(context),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 70),
+              CustomButton(
+                onPressed: () => GoRouter.of(context).go('/addUser'),
+                label: 'Je crée un compte',
+              ),
+              const SizedBox(height: 70), // Remplacez par :
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),
+              CustomButton(
+                onPressed: () {
+                  checkUserConnection(context);
+                },
+                label: 'Connexion',
+              ),
+            ],
+          ),
         ),
       );
     } else {
