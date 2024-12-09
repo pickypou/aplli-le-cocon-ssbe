@@ -88,7 +88,9 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
-        body: Container(
+        body: SingleChildScrollView(
+    child:
+        Container(
           width: double.infinity,
           color: theme.primaryColor,
           child: Center(
@@ -138,6 +140,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
+        )
       );
     }
   }

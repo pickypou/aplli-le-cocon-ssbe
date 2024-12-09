@@ -51,14 +51,7 @@ class AddUserView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/logo_cocon.png',
-                  fit: BoxFit.contain,
-                  width: size.width / 2,
-                ),
-                const SizedBox(
-                  height: 35,
-                ),
+
                 Text(
                   'Je crée un compte',
                   style: titleStyleLarge(context),
@@ -114,18 +107,6 @@ class AddUserView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/logo_cocon.png',
-                  fit: BoxFit.contain,
-                  width: size.width / 4,
-                ),
-                const SizedBox(
-                  height: 35,
-                ),
-                Text(
-                  'Je crée un compte',
-                  style: titleStyleLarge(context),
-                ),
                 const SizedBox(
                   height: 35,
                 ),
@@ -167,14 +148,6 @@ class AddUserView extends StatelessWidget {
                     label: 'Je valide mon compte'),
                 const SizedBox(
                   height: 85,
-                ),
-                Image.asset(
-                  'assets/images/logo_cocon.png',
-                  fit: BoxFit.contain,
-                  width: size.width / 2,
-                ),
-                const SizedBox(
-                  height: 35,
                 ),
               ],
             ),
