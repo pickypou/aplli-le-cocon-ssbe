@@ -11,7 +11,7 @@ void setupEntityModule() {
         id: '', // Provide a default or generate a unique ID
         categories: '', // Provide default categories or an empty list
         text: '', // Provide a default text
-        firsname: '',// Provide a default firstname
+        firstname: '',// Provide a default firstname
         publishDate: DateTime.now(), // Use current date as default
       ));
 

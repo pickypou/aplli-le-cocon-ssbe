@@ -4,14 +4,14 @@ class AvisClients {
   final String id;
   final String categories;
   final String text;
-  final String firsname;
+  final String firstname;
   final DateTime publishDate;
 
   AvisClients(
       {required this.id,
       required this.categories,
       required this.text,
-      required this.firsname,
+      required this.firstname,
       required this.publishDate});
   //Formatte la date au format (DD/MM/YYYY)
   String get formattedPublishDate {
@@ -23,7 +23,7 @@ class AvisClients {
       id: id,
       categories: data?['categories'] ?? '',
       text: data?['text'] ?? '',
-      firsname: data?['firstname'] ?? '',
+      firstname: data?['firstname'] ?? '',
       publishDate: data?['publishDate'],
     );
   }

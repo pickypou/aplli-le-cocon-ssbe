@@ -119,7 +119,7 @@ class AddAvisClientsView extends StatelessWidget {
                                 id: 'someId', // Remplacez par un vrai ID si nécessaire
                                 categories: categoriesController.text,
                                 text: textController.text,
-                                firstname: textController.text,
+                                firstname: firstnameController.text,
                                 publishDate: publishDate,
                                 navigateToAccount: () =>
                                     GoRouter.of(context).go('/account'),

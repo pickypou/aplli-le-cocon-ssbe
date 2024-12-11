@@ -28,6 +28,7 @@ class AvisClientsInteractor {
       await avisClientsRepository.add({
         'categories': avisClients.categories,
         'text': avisClients.text,
+        'firstname': avisClients.firstname,
         'publishDate': avisClients.publishDate
       });
     } catch (error) {

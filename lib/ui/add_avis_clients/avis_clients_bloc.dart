@@ -25,7 +25,7 @@ class AddAvisClientsBloc
               id: event.id,
               categories: event.categories,
               text: event.text,
-              firsname: event.firstname,
+              firstname: event.firstname,
               publishDate: event.publishDate);
           await avisClientsInteractor.addAvisClients(avisClients);
           emit(AddAvisClientsSignUpSuccessState(addAvisClientsId: event.id));
