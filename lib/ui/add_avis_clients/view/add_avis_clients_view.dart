@@ -15,6 +15,7 @@ import '../../common/widgets/inputs/custom_text_field.dart';
 class AddAvisClientsView extends StatelessWidget {
   final TextEditingController categoriesController = TextEditingController();
   final TextEditingController textController = TextEditingController();
+  final TextEditingController firstnameController = TextEditingController();
   final TextEditingController publishDateController = TextEditingController();
 
   AddAvisClientsView({super.key});
@@ -100,24 +101,30 @@ class AddAvisClientsView extends StatelessWidget {
                     controller: textController,
                     maxLines: 5,
                   ),
+                  CustomTextField(
+                    labelText: 'Mon Prénom', 
+                    controller: firstnameController,
+                    maxLines: 1
+                    ),
                   const SizedBox(height: 20),
                   CustomButton(
                     onPressed: () {
                       try {
                         DateFormat format = DateFormat('dd/MM/yyyy');
                         DateTime publishDate =
-                        format.parse(publishDateController.text);
+                            format.parse(publishDateController.text);
 
                         context.read<AddAvisClientsBloc>().add(
-                          AddAvisClientsSignUpEvent(
-                            id: 'someId', // Remplacez par un vrai ID si nécessaire
-                            categories: categoriesController.text,
-                            text: textController.text,
-                            publishDate: publishDate,
-                            navigateToAccount: () =>
-                                GoRouter.of(context).go('/account'),
-                          ),
-                        );
+                              AddAvisClientsSignUpEvent(
+                                id: 'someId', // Remplacez par un vrai ID si nécessaire
+                                categories: categoriesController.text,
+                                text: textController.text,
+                                firstname: textController.text,
+                                publishDate: publishDate,
+                                navigateToAccount: () =>
+                                    GoRouter.of(context).go('/account'),
+                              ),
+                            );
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

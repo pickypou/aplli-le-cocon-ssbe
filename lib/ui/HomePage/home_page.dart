@@ -54,10 +54,10 @@ class HomePage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 70),
-              CustomButton(
+             /* CustomButton(
                 onPressed: () => GoRouter.of(context).go('/addUser'),
                 label: 'Je crée un compte',
-              ),
+              ),*/
               const SizedBox(height: 70), // Remplacez par :
               SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),
               CustomButton(
@@ -121,12 +121,12 @@ class HomePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomButton(
+                     /*  CustomButton(
                           onPressed: () => GoRouter.of(context).go('/addUser'),
                           label: 'Je crée un compte'),
                       const SizedBox(
                         width: 35,
-                      ),
+                      ),*/
                       CustomButton(
                         onPressed: () {
                           checkUserConnection(context);
