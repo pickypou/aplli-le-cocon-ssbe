@@ -32,6 +32,18 @@ class AvisClientsRepositoryImpl extends AvisClientsRepository {
   }
 
   @override
+  Future<void> deleteAvisClients(String avisClientsId) async {
+    try {
+      // Supprime uniquement le document spécifique dans Firestore
+      await _firestore.collection('avis_clients').doc(avisClientsId).delete();
+      print('Avis supprimé avec succès : $avisClientsId');
+    } catch (e) {
+      print('Erreur lors de la suppression de l\'avis : $e');
+      rethrow; // Vous pouvez choisir de gérer l'erreur différemment si nécessaire
+    }
+  }
+
+  @override
   Future<void> updateField(
       String avisClientsId, String fieldName, String newValue) async {
     await _firestore

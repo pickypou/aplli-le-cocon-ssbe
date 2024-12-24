@@ -66,9 +66,11 @@ class AccountViewState extends State<AccountView> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0), // Ajout de marges latérales
+          padding: const EdgeInsets.symmetric(
+              horizontal: 16.0), // Ajout de marges latérales
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch, // Étire les enfants sur toute la largeur
+            crossAxisAlignment: CrossAxisAlignment
+                .stretch, // Étire les enfants sur toute la largeur
             children: [
               const SizedBox(height: 20),
               Text(
@@ -103,6 +105,13 @@ class AccountViewState extends State<AccountView> {
                   label: 'Je supprime un événement',
                   onPressed: () {
                     GoRouter.of(context).go('/evenementList');
+                  },
+                ),
+                const SizedBox(height: 50),
+                CustomButton(
+                  label: 'Je supprime un avis',
+                  onPressed: () {
+                    GoRouter.of(context).go('/avisClientsList');
                   },
                 ),
               ],

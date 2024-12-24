@@ -29,6 +29,7 @@ import '../../ui/account/account_module.dart' as _i692;
 import '../../ui/add_avis_clients/add_avis_clients_module.dart' as _i356;
 import '../../ui/add_evenement/add_evenements_interactor.dart' as _i310;
 import '../../ui/add_evenement/evenement_module.dart' as _i402;
+import '../../ui/avis_clients_list/avis_clients_list_module.dart' as _i58;
 import '../../ui/evenement_list/evenement_list_module.dart' as _i181;
 import '../../ui/HomePage/home_module.dart' as _i587;
 import '../../ui/ui_module.dart' as _i573;
@@ -64,19 +65,21 @@ _i174.GetIt init(
   gh.singleton<_i718.AppRouterConfig>(() => _i718.AppRouterConfig());
   gh.lazySingleton<_i977.AuthService>(
       () => _i977.AuthService(gh<_i59.FirebaseAuth>()));
-  gh.singleton<_i181.EvenementListModule>(
-      () => _i181.EvenementListModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i402.EvenementModule>(
-      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i863.LoginModule>(
-      () => _i863.LoginModule(gh<_i573.AppRouter>()));
-  gh.singleton<_i787.AddUserModule>(
-      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
   gh.singleton<_i356.AddAvisClientsModule>(
       () => _i356.AddAvisClientsModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i58.AvisClientsListModule>(
+      () => _i58.AvisClientsListModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i402.EvenementModule>(
+      () => _i402.EvenementModule(gh<_i573.AppRouter>()));
   gh.singleton<_i587.HomeModule>(() => _i587.HomeModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i787.AddUserModule>(
+      () => _i787.AddUserModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i863.LoginModule>(
+      () => _i863.LoginModule(gh<_i573.AppRouter>()));
   gh.singleton<_i692.AccountModule>(
       () => _i692.AccountModule(gh<_i573.AppRouter>()));
+  gh.singleton<_i181.EvenementListModule>(
+      () => _i181.EvenementListModule(gh<_i573.AppRouter>()));
   gh.factory<_i746.FirestoreService>(
       () => _i746.FirestoreService(gh<_i974.FirebaseFirestore>()));
   gh.factory<_i151.UsersRepository>(() => _i304.UsersRepositoryImpl(
